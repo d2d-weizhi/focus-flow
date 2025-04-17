@@ -9,7 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        stop: "bg-red-500 text-white hover:bg-red-600",
+        default: "bg-white/20 text-background hover:bg-white/30",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
@@ -36,15 +37,25 @@ const buttonVariants = cva(
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
+  isStarted?: boolean;
 }
-
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  ({ className, variant, size, asChild = false, isStarted = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    
+    let currentVariant = variant;
+    let disabled = props.disabled;
+    if (variant === "stop") {
+      currentVariant = isStarted ? "stop" : "stop";
+      disabled = !isStarted;
+    } else {
+        currentVariant = isStarted ? "default" : "outline";
+    }
+    
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+      <Comp        
+        className={cn(buttonVariants({ variant: currentVariant, size, className }))}
         ref={ref}
         {...props}
       />

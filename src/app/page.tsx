@@ -1,254 +1,280 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogFooter } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Slider } from '@/components/ui/slider';
-import { cn } from '@/lib/utils';
-import { ArrowRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogHeader, DialogFooter, } from "@/components/ui/dialog";
+import { Slider } from "@/components/ui/slider";
+import { DoorOpen } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
-const calculateBreakTime = (focusTime: number) => {
-  return focusTime < 30 ? 30 - focusTime : 60 - focusTime;
-};
-
-const CircularProgress: React.FC<{ progress: number }> = ({ progress }) => {
-  const radius = 120;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (progress / 100) * circumference;
-
-  return (
-    <svg
-      width="300"
-      height="300"
-      viewBox="0 0 300 300"
-      style={{ transform: 'rotate(-90deg)' }}
-    >
-      <circle
-        cx="150"
-        cy="150"
-        r={radius}
-        fill="none"
-        stroke="rgba(128, 128, 128, 0.3)"
-        strokeWidth="20"
-      />
-      <circle
-        cx="150"
-        cy="150"
-        r={radius}
-        fill="none"
-        stroke="white"
-        strokeWidth="20"
-        strokeDasharray={circumference}
-        strokeDashoffset={strokeDashoffset}
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-};
-
-const TimerDisplay: React.FC<{ time: number }> = ({ time }) => {
+const formatTime = (time: number) => {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
-  const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-
-  return (
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-5xl font-bold">
-      {formattedTime}
-    </div>
-  );
+  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
 
-const CycleIndicator: React.FC<{ focusTime: number; breakTime: number; elapsedTime: number }> = ({ focusTime, breakTime, elapsedTime }) => {
-  const totalCycleTime = focusTime + breakTime;
-  const focusPercentage = (focusTime / totalCycleTime) * 100;
-  const breakPercentage = (breakTime / totalCycleTime) * 100;
-  const cycleProgress = (elapsedTime % totalCycleTime) / totalCycleTime * 100;
-
-  const segments = [
-    { percentage: focusPercentage, color: 'white' },
-    { percentage: breakPercentage, color: 'teal' },
-    { percentage: focusPercentage, color: 'white' },
-    { percentage: breakPercentage, color: 'teal' },
-  ];
-
-  return (
-    <div className="relative w-full h-2 flex items-center mb-4 rounded-full bg-gray-700/40 overflow-hidden">
-      {segments.map((segment, index) => {
-        return (
-          <div
-            key={index}
-            style={{
-              width: `calc(${segment.percentage}% - 1px)`,
-              height: '100%',
-              backgroundColor: segment.color,
-              opacity: 0.5,
-            }}
-          />
-        );
-      })}
-      <div
-        className="absolute top-0 left-0 h-full bg-accent/50 opacity-50"
-        style={{
-          width: `${cycleProgress > 100 ? 100 : cycleProgress}%`,
-        }}
-      ></div>
-    </div>
-  );
+const calculatePercentage = (elapsedTime: number, totalTime: number) => {
+  return (elapsedTime / totalTime) * 100;
 };
+
+const getElapsedTime = (initialTime: number, remainingTime: number) => initialTime - remainingTime;
 
 export default function Home() {
-  const [focusTime, setFocusTime] = useState(25);
-  const [breakTime, setBreakTime] = useState(calculateBreakTime(focusTime));
-  const [time, setTime] = useState(focusTime * 60);
+  const [focusTime, setFocusTime] = useState(25 * 60); // Default 25 minutes
+  const [remainingTime, setRemainingTime] = useState(focusTime);
   const [isRunning, setIsRunning] = useState(false);
-  const [isFocus, setIsFocus] = useState(true);
-  const [elapsedCycles, setElapsedCycles] = useState(0);
-  const [open, setOpen] = React.useState(false);
-  const [customFocusTime, setCustomFocusTime] = useState<number>(25);
-  const timerId = useRef<NodeJS.Timeout | null>(null);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [isPause, setIsPause] = useState(false);
+  const [isBreak, setIsBreak] = useState(false); // State to track if it's a break
+  const [currentCycle, setCurrentCycle] = useState(0); // State to track the current cycle
+  const [breakDuration, setBreakDuration] = useState(calculateBreakDuration(25 * 60)); // Default break duration
+  const [initialFocusTime, setInitialFocusTime] = useState(focusTime);
+  const [cycleInterval, setCycleInterval] = useState(focusTime + breakDuration);
+  
+  function calculateBreakDuration(focusTimeSeconds: number) {
+    const focusTimeMinutes = focusTimeSeconds / 60;
+    if (focusTimeMinutes < 30) {
+      return (30 - focusTimeMinutes) * 60;
+    } else {
+        return (60 - focusTimeMinutes) * 60;
+      }
+  }
+  const [open, setOpen] = useState(false);
+  const [animationClass, setAnimationClass] = useState("");
 
-  const progress = (time / (isFocus ? focusTime * 60 : breakTime * 60)) * 100;
+  const timerId = useRef<number | null>(null);
 
-  const startTimer = useCallback(() => {
-    if (timerId.current) return;
+  const totalCycles = 4; // 4-hour cycle
+  // const cycleInterval = focusTime + breakDuration;
+  const totalTime = totalCycles * cycleInterval;
 
-    timerId.current = setInterval(() => {
-      setTime((prevTime) => {
+  const startTimer = () => {
+    if (timerId.current !== null) {
+      return; // Prevent starting multiple timers
+    }
+
+    timerId.current = window.setInterval(() => {
+      setRemainingTime((prevTime) => {
         if (prevTime <= 0) {
+          setCurrentCycle((prevCycle) => (prevCycle + 1) % (totalCycles * 2));
           clearInterval(timerId.current!);
-          timerId.current = null;
-          setElapsedTime(0);
+          timerId.current = null; // Clear the timer ID
 
-          if (isFocus) {
-            setIsFocus(false);
-            setTime(breakTime * 60);
-          } else {
-            setIsFocus(true);
-            setTime(focusTime * 60);
-            setElapsedCycles(prevCycles => prevCycles + 1);
+          if (!isBreak) {
+            toast({
+              title: "Focus time ended!",
+              description: "Time for a break.",
+            });
+            setIsBreak(true);
+            setRemainingTime(breakDuration);
+            setInitialFocusTime(breakDuration);
+
+            setIsRunning(false); // Pause after focus time
+          } else { 
+            toast({
+              title: "Break time ended!",
+              description: "Back to work!",
+            });
+            setIsBreak(false);
+            setRemainingTime(focusTime);
+            setInitialFocusTime(focusTime);
+            setIsRunning(false); // Pause after break time
           }
-
           return 0;
-        } else {
-          setElapsedTime(prevElapsedTime => prevElapsedTime + 1);
-          return prevTime - 1;
         }
+
+        if (prevTime === 10) {
+          setAnimationClass("animate-blink-once");
+          setTimeout(() => {
+            setAnimationClass("");
+          }, 1000);
+        } else if (prevTime === 5) {
+          setAnimationClass("animate-blink-twice");
+          setTimeout(() => {
+            setAnimationClass("");
+          }, 1500);
+        }
+
+        return prevTime - 1;
       });
     }, 1000);
-  }, [isFocus, focusTime, breakTime]);
+    setIsRunning(true);
+    setIsPause(false);
+  };
 
   const pauseTimer = () => {
     if (timerId.current) {
       clearInterval(timerId.current);
-      timerId.current = null;
+      timerId.current = null; // Clear the timer ID
+      setIsRunning(false);
+      setIsPause(true);
     }
   };
 
   const stopTimer = () => {
     if (timerId.current) {
       clearInterval(timerId.current);
-      timerId.current = null;
+      timerId.current = null; // Clear the timer ID
     }
     setIsRunning(false);
-    setIsFocus(true);
-    setTime(focusTime * 60);
-    setElapsedCycles(0);
-    setElapsedTime(0);
+    setIsPause(false);
+    setIsBreak(false);
+    setRemainingTime(focusTime);
+    setInitialFocusTime(focusTime);
   };
 
-  const toggleTimer = () => {
-    setIsRunning((prevIsRunning) => {
-      if (!prevIsRunning) {
-        startTimer();
-      } else {
-        pauseTimer();
-      }
-      return !prevIsRunning;
-    });
-  };
-
+  // Update remaining time when focus time changes
   useEffect(() => {
-    setTime(focusTime * 60);
-    setBreakTime(calculateBreakTime(focusTime));
+    setRemainingTime(focusTime);
+    setInitialFocusTime(focusTime);
+    setBreakDuration(calculateBreakDuration(focusTime));
   }, [focusTime]);
 
-  useEffect(() => {
-    if (time === 0) {
-      stopTimer();
-    }
-  }, [time]);
+  const percentage = calculatePercentage(remainingTime, initialFocusTime);
+  const strokeDashoffset = 283-(283 * percentage) / 100;
+  console.log(strokeDashoffset);
 
-  const applyCustomTime = () => {
-    setFocusTime(customFocusTime);
-    setOpen(false);
-  };
-
-  return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen p-4">
-      <a href="#" className="absolute top-4 right-4 text-foreground hover:text-accent">
-        <ArrowRight className="h-6 w-6" />
-      </a>
+  return (    
+    <div className="fixed inset-0 flex flex-col items-center justify-center p-4 bg-gradient-to-b from-gray-900/60 to-background text-foreground">
+      <div className="absolute top-4 right-4">
+        <Button variant="ghost" size="icon" onClick={() => window.close()}>
+          <DoorOpen className="h-4 w-4" />
+          <span className="sr-only">Close</span>
+        </Button>
+      </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger className="absolute top-4 left-1/2 -translate-x-1/2 text-foreground hover:text-accent">
-          <Button variant="ghost" size="sm">
-            Settings
-          </Button>
+        <DialogTrigger asChild>
+          <Button variant="outline">Edit Focus Time</Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Timer Settings</DialogTitle>
+            <DialogTitle>Edit Focus Time</DialogTitle>
             <DialogDescription>
-              Set a custom focus time. The break time will be calculated automatically.
+              Adjust the focus duration for your Pomodoro sessions.
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="focusTime" className="text-right">
-                Focus Time
+                Focus Time (minutes)
               </Label>
-              <Input id="focusTime" value={customFocusTime} className="col-span-3" onChange={(e) => {
-                const value = parseInt(e.target.value);
-                if (!isNaN(value)) {
-                  setCustomFocusTime(value);
-                }
-              }} />
+              <Input
+                type="number"
+                id="focusTime"
+                value={focusTime / 60}
+                onChange={(e) => {
+                  const newFocusTime = parseInt(e.target.value);
+                  setFocusTime(newFocusTime * 60);
+                }}
+                className="col-span-3"
+              />
             </div>
-            <Slider
-              defaultValue={[customFocusTime]}
-              max={59}
-              step={1}
-              onValueChange={(value) => {
-                setCustomFocusTime(value[0]);
-              }}
-            />
           </div>
           <DialogFooter>
-            <Button type="button" onClick={applyCustomTime}>
-              Apply
-            </Button>
+            <Button type="submit" onClick={() => setOpen(false)}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      <div className="relative">
-        <CircularProgress progress={100 - progress} />
-        <TimerDisplay time={time} />
+      <div className="relative w-80 h-80 mt-4">
+        <svg className="w-full h-full" viewBox="0 0 100 100">
+          <circle
+            transform="rotate(-90, 50, 50)"
+            cx="50" cy="50" r="45"
+            stroke="#565656"
+            strokeWidth="4"
+            fill="none"
+          />          
+          <circle
+            cx="50" cy="50" r="45"
+            transform="rotate(-90, 50, 50)"
+            stroke="hsl(var(--foreground)/100)"
+            className={`${animationClass}`}
+            strokeWidth="4"
+            fill="none"
+            style={{
+              strokeDasharray: 283, strokeDashoffset: strokeDashoffset,
+              transition: 'stroke-dashoffset 0.3s ease 0s',
+            }}            
+          />
+          <text
+            x="50"
+            y="50"
+            textAnchor="middle"
+            dominantBaseline="middle"
+            className="text-2xl font-bold"
+            style={{ fill: "#f0f0f0" }}
+          >
+            {formatTime(remainingTime)}
+          </text>
+        </svg>
       </div>
 
-      <CycleIndicator focusTime={focusTime} breakTime={breakTime} elapsedTime={elapsedTime} />
+      <div className="mt-4 flex items-center space-x-2 opacity-60">
+        {Array.from({ length: totalCycles }).map((_, index) => (
+          <React.Fragment key={index}>
+            <div className="h-1 w-20 rounded-full bg-white/30 relative">            
+              {(isRunning || isPause) && currentCycle === index * 2 && (                
+                <div
+                  className="absolute top-0 left-0 h-full bg-white/50"
+                  style={{
+                    width: `${calculatePercentage(
+                      getElapsedTime(focusTime, remainingTime), focusTime
+                    )}%`,
+                    transition: "width 0.3s ease-in-out",
+                  }}
+                />
+              )}            
+            </div>
+            {index < totalCycles - 1 && (
+              <div className="h-1 w-5 rounded-full bg-white/30 relative">
+              {(isRunning || isPause) && currentCycle === index * 2 + 1 && (
+                <div
+                  className="absolute top-0 left-0 h-full bg-white/50"
+                  style={{
+                    width: `${calculatePercentage(
+                      getElapsedTime(breakDuration, remainingTime), breakDuration
+                    )}%`,
+                    transition: "width 0.3s ease-in-out",
+                  }}
+                />
+              )}
+              </div>
+            )}
+          </React.Fragment>
+        ))}
+      </div>
 
-      <div className="flex gap-4 mt-8">
-        <Button onClick={toggleTimer} className="w-32">
-          {isRunning ? 'Pause' : 'Start'}
+      <div className="mt-8 flex space-x-4">
+      <Button
+          variant="default"
+          onClick={isRunning ? pauseTimer : startTimer}
+        >        
+          {isPause ? "Resume" : isRunning ? "Pause" : "Start"}
         </Button>
-        <Button variant="destructive" onClick={stopTimer} className="w-32">
-          Stop
-        </Button>
+
+
+        <Button variant="stop" className={`${(isRunning || isBreak || isPause) ? "" : "hidden"}`} onClick={stopTimer}>Stop</Button>
       </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
