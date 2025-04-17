@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
-import { DoorRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 const calculateBreakTime = (focusTime: number) => {
   return focusTime < 30 ? 30 - focusTime : 60 - focusTime;
@@ -188,7 +188,7 @@ export default function Home() {
   return (
     <div className="relative flex flex-col items-center justify-center min-h-screen p-4">
       <a href="#" className="absolute top-4 right-4 text-foreground hover:text-accent">
-        <DoorRight className="h-6 w-6" />
+        <ArrowRight className="h-6 w-6" />
       </a>
 
       <Dialog open={open} onOpenChange={setOpen}>
@@ -251,4 +251,3 @@ export default function Home() {
     </div>
   );
 }
-
