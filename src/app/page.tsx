@@ -74,21 +74,22 @@ const CycleIndicator: React.FC<{ focusTime: number; breakTime: number; elapsedTi
   ];
 
   return (
-    <div className="relative w-full h-4 flex items-center mb-4 rounded-full bg-gray-700/40 overflow-hidden">
+    <div className="relative w-full h-2 flex items-center mb-4 rounded-full bg-gray-700/40 overflow-hidden">
       {segments.map((segment, index) => {
         return (
           <div
             key={index}
             style={{
-              width: `${segment.percentage}%`,
+              width: `calc(${segment.percentage}% - 1px)`,
               height: '100%',
               backgroundColor: segment.color,
+              opacity: 0.5,
             }}
           />
         );
       })}
       <div
-        className="absolute top-0 left-0 h-full bg-accent/50"
+        className="absolute top-0 left-0 h-full bg-accent/50 opacity-50"
         style={{
           width: `${cycleProgress > 100 ? 100 : cycleProgress}%`,
         }}
