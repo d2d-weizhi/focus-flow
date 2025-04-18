@@ -1,0 +1,40 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Dev (Turbopack)",
+      "runtimeExecutable": "npm", // Or "yarn" if you use Yarn
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "${workspaceFolder}" 
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Start",
+      "runtimeExecutable": "npm", // Or "yarn" if you use Yarn
+      "runtimeArgs": ["run", "start"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Build",
+      "runtimeExecutable": "npm", // Or "yarn" if you use Yarn
+      "runtimeArgs": ["run", "build"],
+      "cwd": "${workspaceFolder}" 
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Lint",
+      "runtimeExecutable": "npm", // Or "yarn" if you use Yarn
+      "runtimeArgs": ["run", "lint"],
+      "cwd": "${workspaceFolder}" 
+    }
+  ]
+}

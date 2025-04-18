@@ -63,6 +63,25 @@ for the user.
 - I want an exit button (just an icon with outlined button) at the top-right corner of the page. It 
 always sticks to that corner.
 
+## Colour Scheme:
+
+The colour scheme that I have decided upon is an off shoot of the
+default KendoReact Material theme.
+
+**Light Theme**
+
+Primary     : `#3f51b5` (same primary colour, no change)
+Secondary   : `#D1D5DC` or `bg-gray-300` in tailwindcss
+Background  : `#FAF9F6` (off-white with slight yellow tones to
+              give it a more paper-like feel.)
+Text        : `#141414` (slightly lighter tone of black so it 
+              doesn't come off too strongly)
+
+**Dark Theme**
+
+To be determined. But likely an inverse of the light theme.
+
+
 ### Setting Focus Time
 
 - At the top-center of the app, there will be a button that will trigger a dialog for entering the 
