@@ -1,18 +1,18 @@
-import { DoorOpen } from "lucide-react";
+/* import { DoorOpen } from "lucide-react";
 import { Button } from "@progress/kendo-react-buttons";
-import { Window } from "@progress/kendo-react-dialogs";
+import { Window } from "@progress/kendo-react-dialogs"; */
 
 export default function Home() {
 	return (
 		<div className="relative h-screen w-screen flex items-center justify-center">
 			{/* Exit Button */}
-			<Button 
+			{/* <Button 
 				type="button" 
 				fillMode={'outline'}
 				style={{ position: 'absolute', top: '1rem', right: '1rem' }}
 			>
 				<DoorOpen stroke="#141414" strokeWidth={1.5} />
-			</Button>
+			</Button> */}
 			
 			{/*
 				Our Pomodoro Time and controls will be placed inside the container below.
@@ -31,12 +31,12 @@ export default function Home() {
 				{/*
 					A button for the user to set their focus time in minutes.
 				*/}
-				<Button
+				{/* <Button
 					id="btnSetFocusTime"
 					fillMode={"outline"}
 				>
 					Set Focus Time
-				</Button>
+				</Button> */}
 				
 				{/* We will use a <div /> to act as a spacer between our content items. This helps to maintain a consistent layout. */}
 				<div className="w-full h-6" />
@@ -45,7 +45,7 @@ export default function Home() {
 					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
 				*/}
-				<Window id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
+				{/* <Window id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
 					<form className="k-form">
 						<fieldset>
 							<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
@@ -59,7 +59,7 @@ export default function Home() {
 							</Button>
 						</div>
 					</form>
-				</Window>
+				</Window> */}
 				
 				<div className="flex flex-col items-center justify-center relative w-full h-full">
 					{/* Progress Circle Wrapper */}
@@ -114,7 +114,7 @@ export default function Home() {
 
 				{/* Control Buttons */}
 				<div className="flex items-center justify-center space-x-4"> 
-					<Button 
+					{/* <Button 
 						fillMode={'solid'}
 						themeColor={'info'}
 					>
@@ -126,7 +126,7 @@ export default function Home() {
 						disabled={true}
 					> 
 						Stop
-					</Button>
+					</Button> */}
 				</div>
 			</div>
 		</div>
