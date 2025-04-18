@@ -50,8 +50,11 @@ controls.
 - We also created a `<div />` tag as a separator between the contents for consistency.
 - We have added our circular progress bar and timer. I manually set the offset so I can 
 visualize the progress bar in motion when the timer starts counting down.
-- After lunch, we will begin adding the control buttons at the bottom (inside) of the app container.
-- Rest of the afternoon, we will add in the necessary coding logic for our app.
+- I have replaced the buttons in the UI with KendoReact Buttons.
+- Identified potential issues/workarounds especially when we need to toggle the colour of the "Start/Pause/Resume" button. The `themeColor={''}` prop doesn't have an option for grey background. So we will need to cater for that in our coding logic later.
+- I've added the KendoReact Window control (part of the dialog library).
+- I still need to replace the input field, perhaps use a NumericTextBox for 
+entering and setting the minutes.
 
 ## Features
 

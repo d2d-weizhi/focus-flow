@@ -1,13 +1,18 @@
 import { DoorOpen } from "lucide-react";
+import { Button } from "@progress/kendo-react-buttons";
+import { Window } from "@progress/kendo-react-dialogs";
 
 export default function Home() {
 	return (
 		<div className="relative h-screen w-screen flex items-center justify-center">
 			{/* Exit Button */}
-			<button className="absolute top-4 right-4 border border-gray-400 rounded-md p-2 hover:bg-gray-200">
-				{/* Your Exit Icon here */}
-				<DoorOpen />
-			</button>
+			<Button 
+				type="button" 
+				fillMode={'outline'}
+				style={{ position: 'absolute', top: '1rem', right: '1rem' }}
+			>
+				<DoorOpen stroke="#141414" strokeWidth={1.5} />
+			</Button>
 			
 			{/*
 				Our Pomodoro Time and controls will be placed inside the container below.
@@ -26,26 +31,35 @@ export default function Home() {
 				{/*
 					A button for the user to set their focus time in minutes.
 				*/}
-				<button
+				<Button
 					id="btnSetFocusTime"
-					className="mt-4 px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+					fillMode={"outline"}
 				>
 					Set Focus Time
-				</button>
+				</Button>
 				
 				{/* We will use a <div /> to act as a spacer between our content items. This helps to maintain a consistent layout. */}
 				<div className="w-full h-6" />
 				
 				{/*
-					A modal dialog for the user to set their focus time in minutes.
+					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
 				*/}
-				<div id="dlgFocusTime" className="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-					<div className="bg-white p-4 rounded shadow-md">
-						<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" />
-						<button id="btnSaveFocusTime">Save</button>
-					</div>
-				</div>
+				<Window id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
+					<form className="k-form">
+						<fieldset>
+							<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
+						</fieldset>
+						<div className="flex w-full justify-center mt-4">
+							<Button type="submit" fillMode={'solid'} themeColor={'secondary'} className="mr-4">
+								Save Time
+							</Button>
+							<Button type="button">
+								Cancel
+							</Button>
+						</div>
+					</form>
+				</Window>
 				
 				<div className="flex flex-col items-center justify-center relative w-full h-full">
 					{/* Progress Circle Wrapper */}
@@ -100,18 +114,19 @@ export default function Home() {
 
 				{/* Control Buttons */}
 				<div className="flex items-center justify-center space-x-4"> 
-					<button className="bg-blue-500 hover:bg-blue-700 font-bold py-2 px-4 rounded"
-						style={{ color: "#FAF9F6" }}
+					<Button 
+						fillMode={'solid'}
+						themeColor={'info'}
 					>
-						Start
-					</button>
-					<button 
-						className="bg-red-400 hover:bg-red-600 font-bold py-2 px-4 rounded" 
-						id="btnStop"
-						style={{ color: "#FAF9F6" }}
+						Pause
+					</Button>
+					<Button 
+						fillMode={'solid'}
+						themeColor={'error'}
+						disabled={true}
 					> 
 						Stop
-					</button>
+					</Button>
 				</div>
 			</div>
 		</div>
