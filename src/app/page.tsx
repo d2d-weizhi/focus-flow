@@ -1,103 +1,76 @@
-import Image from "next/image";
+import { DoorOpen } from "lucide-react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+	return (
+		<div className="relative h-screen w-screen flex items-center justify-center">
+			{/* Exit Button */}
+			<button className="absolute top-4 right-4 border border-gray-400 rounded-md p-2 hover:bg-gray-200">
+				{/* Your Exit Icon here */}
+				<DoorOpen />
+			</button>
+			
+			{/*
+				Our Pomodoro Time and controls will be placed inside the container below.
+				Always remember, when we want to layout items vertically inside a container,
+				we need to use flex-col.
+			*/}
+			<div
+				className="flex flex-col bg-white items-center justify-center rounded-lg shadow-md p-8 max-w-[90%] w-full mx-auto"
+				style={{ minWidth: '600px', maxWidth: '900px' }}
+			>
+				{/*
+					Our app container will have a min-height of 600px, and max-height of 900px.
+					This is to ensure that it will still look good on screens with smaller height dimensions.
+				*/}
+				
+				{/*
+					A button for the user to set their focus time in minutes.
+				*/}
+				<button
+					id="btnSetFocusTime"
+					className="mt-4 px-4 py-2 border border-gray-400 rounded-md hover:bg-gray-100 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"
+				>
+					Set Focus Time
+				</button>
+				
+				{/* We will use a <div /> to act as a spacer between our content items. This helps to maintain a consistent layout. */}
+				<div className="w-full h-6" />
+				
+				{/*
+					A modal dialog for the user to set their focus time in minutes.
+					We will later replace this with a KendoReact Dialog component.
+				*/}
+				<div id="dlgFocusTime" className="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+					<div className="bg-white p-4 rounded shadow-md">
+						<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" />
+						<button id="btnSaveFocusTime">Save</button>
+					</div>
+				</div>
+				
+				<div className="flex flex-col items-center justify-center relative w-full h-full">
+					{/* Progress Circle Wrapper */}
+					<div className="w-[75%] max-w-[300px] aspect-square">
+						<svg className="w-full h-full" viewBox="0 0 100 100">
+							<circle cx="50" cy="50" r="45" stroke="#ccc" strokeWidth="10" fill="none" />
+							<circle
+								cx="50"
+								cy="50"
+								r="45"
+								stroke="#3f51b5"
+								strokeWidth="10"
+								fill="none"
+								strokeDasharray="282.6"
+								strokeDashoffset="50"
+								style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
+							/>
+						</svg>
+					</div>
+					{/* Timer display */}
+					<div className="absolute inset-0 flex items-center justify-center text-4xl font-bold" id="timerDisplay">
+						25:00
+					</div>
+				</div>
+			</div>
+		</div>
+	);
 }
