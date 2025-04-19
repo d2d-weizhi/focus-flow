@@ -75,18 +75,18 @@ entering and setting the minutes.
 - Instead of nesting complicated ternary logic operations in a single UI component, we will separate it into 3 code segments.
 ```
 {
-	!isRunning && 
-	/* Start button */
+  !isRunning && 
+  /* Start button */
 }
 
 {
   isRunning && !isPaused &&
-	/* Pause button */
+  /* Pause button */
 }
 
 {
   isRunning && isPaused &&
-	/* Resume button */
+  /* Resume button */
 }
 ```
 - Note that they are still considered the same component, just separated by the different state values and logic.
