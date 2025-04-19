@@ -38,23 +38,32 @@ dark mode.
 controls.
 - Start by using the included tailwindcss and standard HTML input and buttons.
 
-## (19 Apr, Sat) Today's progress & recap
+## Today's progress & recap
 
-- Yesterday (18th, Fri), we have started laying out the contents of the app.
-- We have centered our app's main container inside the `<body></body>` tag.
-- We have set the container's fixed width to 600px.
-- We don't have to set the height because it will automatically wrap our contents.
-- We have made the app container a flex-column in order to achieve a top-down layout.
-- We also created a `<div />` tag as a separator between the contents for consistency.
-- We have added our circular progress bar and timer. I manually set the offset so I can 
+**18th, Fri**:
+
+- Started laying out the contents of the app.
+- Centered our app's main container inside the `<body></body>` tag.
+- Set the container's fixed width to 600px.
+- Don't have to set the height because it will automatically wrap our contents.
+- Made the app container a flex-column in order to achieve a top-down layout.
+- Created a `<div />` tag as a separator between the contents for consistency.
+- Added our circular progress bar and timer. I manually set the offset so I can 
 visualize the progress bar in motion when the timer starts counting down.
-- I have replaced the buttons in the UI with KendoReact Buttons.
+- Replaced the buttons in the UI with KendoReact Buttons.
 - Identified potential issues/workarounds especially when we need to toggle the colour of the "Start/Pause/Resume" button. The `themeColor={''}` prop doesn't have an option for grey background. So we will need to cater for that in our coding logic later.
-- I've added the KendoReact Window control (part of the dialog library).
-- I still need to replace the input field, perhaps use a NumericTextBox for 
+- Added the KendoReact Window control (part of the dialog library).
+- Still need to replace the input field, perhaps use a NumericTextBox for 
 entering and setting the minutes.
-- This morning (19th, Sat), we have begun exporting the Button control by KR into a separate FC that I've named `KRButton`. This method of importing our control to the 
-app worked. Now, I will continue to replace the rest of the Buttons on the UI.
+
+**19th, Sat**:
+
+- Begun exporting the Button control by KR into a separate FC that I've named `KRButton`. This method of importing our control to the app worked.
+- Decided to move both `KRButton` and `KRNumericTextBox` into a consolidated file called 
+`./components/FFComponents.tsx`. 'FF' represents our project title "FocusFlow".
+- Learned something new this morning: using dynamic imports for the `KRWindow` component (wrapped around 
+the KendoReact Window component). 
+- UI rapid prototyping is completed. Next stage is to add the application logic.
 
 ## Features
 
