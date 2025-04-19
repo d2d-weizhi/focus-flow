@@ -55,6 +55,7 @@ visualize the progress bar in motion when the timer starts counting down.
 - I've added the KendoReact Window control (part of the dialog library).
 - I still need to replace the input field, perhaps use a NumericTextBox for 
 entering and setting the minutes.
+- Deployment will fail because KendoReact's components need to be imported separately with the "use client"; statement
 
 ## Features
 
