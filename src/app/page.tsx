@@ -2,7 +2,8 @@
 
 import { createRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { DoorOpen } from "lucide-react";
+import { DoorOpen, PlayIcon } from "lucide-react";
+import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
 import { KRNumericTextBox, KRButton } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
@@ -47,7 +48,7 @@ export default function Home() {
 	 * @type {string} - Possible values are "light" | "dark"
 	 * @default {"light"}
 	 */
-	const [sessTheme, setSessTheme] = useState<string>("light");
+	// const [sessTheme, setSessTheme] = useState<string>("light");
 
 	/**
 	 * @description - A flag value for toggling our Window dialog.
@@ -70,6 +71,31 @@ export default function Home() {
 
 	function onCloseFocusTimeWindow() {
 		setIsShowWindow(false);
+	}
+
+	function onStartClicked() {
+		setIsRunning(true);
+	}
+
+	function onPauseClicked() {
+		setIsPaused(true);
+	}
+
+	function onResumeClicked() {
+		setIsPaused(false);
+	}
+
+	function onStopClicked() {
+		setIsRunning(false);
+		setIsPaused(false);
+		/** 
+		 * TODO: When the timer is stopped, we should reset the following:
+		 * 	- reset timeLeft state value.
+		 *  - reset the currentCycle state value.
+		 *  - reset the countdown timer value.
+		 *  - reset the circular progress bar.
+		 *  - reset the time period/time elapsed indicator bar
+		 */ 
 	}
 
 	return (
@@ -212,16 +238,50 @@ export default function Home() {
 
 				{/* Control Buttons */}
 				<div className="flex items-center justify-center space-x-4"> 
+					{
+						!isRunning && 
+						<KRButton 
+							id="btnStart"
+							fillMode={'solid'}
+							themeColor={'primary'}
+							svgIcon={playSmIcon}
+							onClick={onStartClicked}
+						>
+							Start
+						</KRButton>
+					}
+
+					{isRunning && !isPaused &&
+						<KRButton 
+							id="btnStart"
+							fillMode={'solid'}
+							themeColor={'light'}
+							svgIcon={pauseSmIcon}
+							onClick={onPauseClicked}
+						>
+							Pause
+						</KRButton>
+					}
+
+					{isRunning && isPaused &&
+						<KRButton 
+							id="btnStart"
+							fillMode={'solid'}
+							themeColor={'success'}
+							svgIcon={playSmIcon}
+							onClick={onResumeClicked}
+						>
+							Resume
+						</KRButton>
+					}
+
 					<KRButton 
-						fillMode={'solid'}
-						themeColor={'primary'}
-					>
-						Start
-					</KRButton>
-					<KRButton 
+						id="btnStop"
 						fillMode={'solid'}
 						themeColor={'error'}
-						disabled={true}
+						disabled={!isRunning}
+						svgIcon={stopSmIcon}
+						onClick={onStopClicked}
 					>
 						Stop
 					</KRButton>
