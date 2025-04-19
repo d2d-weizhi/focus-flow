@@ -1,7 +1,7 @@
 "use client";
 
-import React, { forwardRef, ComponentPropsWithoutRef, ElementRef } from "react";
-import { NumericTextBox, NumericTextBoxHandle, NumericTextBoxProps } from "@progress/kendo-react-inputs";
+import React, { forwardRef, ComponentPropsWithoutRef } from "react";
+import { NumericTextBox } from "@progress/kendo-react-inputs";
 import { Button, ButtonProps } from "@progress/kendo-react-buttons";
 import { Window, WindowProps } from "@progress/kendo-react-dialogs";
 
