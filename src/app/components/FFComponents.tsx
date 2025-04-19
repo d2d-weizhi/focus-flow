@@ -13,7 +13,8 @@ interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<typeof NumericT
   placeholder?: string;
 }
 
-const KRNumericTextBox = forwardRef<any, KRNumericTextBoxProps>(
+
+const KRNumericTextBox = forwardRef<typeof NumericTextBox, KRNumericTextBoxProps>(
   ({ ...rest }, ref) => {
     return <NumericTextBox ref={ref} {...rest} />; 
   }
