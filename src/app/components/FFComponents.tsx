@@ -13,6 +13,11 @@ interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<typeof NumericT
   placeholder?: string;
 }
 
+/* 
+  Must be careful when disabling linting. Should only do it when we are aware of the potential 
+  type implications. In this situation, we know exactly what we will be passing, so this is still 
+  acceptable.
+*/
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 const KRNumericTextBox = forwardRef<any, KRNumericTextBoxProps>(
   ({ ...rest }, ref) => {

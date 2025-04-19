@@ -141,6 +141,9 @@ function onSaveFocusTimeClicked() {
 }
 ```
 
+- When deploying to Vercel, there were linting issues. Current workaround is to use the commenting statement `// eslint-disable-next-line  @typescript-eslint/no-explicit-any`.
+- Note: Only use it when we know the exact types that we're trying to pass.
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 
