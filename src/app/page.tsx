@@ -1,18 +1,18 @@
-/* import { DoorOpen } from "lucide-react";
-import { Button } from "@progress/kendo-react-buttons";
-import { Window } from "@progress/kendo-react-dialogs"; */
+import { DoorOpen } from "lucide-react";
+import KRButton from "./KRButton";
+import { Window } from "@progress/kendo-react-dialogs";
 
 export default function Home() {
 	return (
 		<div className="relative h-screen w-screen flex items-center justify-center">
 			{/* Exit Button */}
-			{/* <Button 
+			<KRButton 
 				type="button" 
 				fillMode={'outline'}
 				style={{ position: 'absolute', top: '1rem', right: '1rem' }}
 			>
 				<DoorOpen stroke="#141414" strokeWidth={1.5} />
-			</Button> */}
+			</KRButton>
 			
 			{/*
 				Our Pomodoro Time and controls will be placed inside the container below.

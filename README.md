@@ -24,14 +24,12 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 
 # FocusFlow: A Pomodoro-inspired Showcase
 
-To avoid losing focus, I will explain the core features of this simple app in point form. I have also 
-been using Gemini, the AI tool to assist me with building this showcase project. So everything here 
-also serves as our daily recap and notes.
+To avoid losing focus, I will explain the core features of this simple app in point form. I have also been using Gemini, the AI tool to assist me with building this showcase project. So everything here also serves as our daily recap and notes.
 
 ## Thought-process
 
 - The app will always be at the center of the page/screen, even if the user resizes the web page.
-- It will have a height of 900px, so that will be fixed.
+- It will have a width of 600px, so that will be fixed.
 - I want to provide the user with an option of using either a light/dark theme.
 - I will integrate KendoReact into this project later into the development process.
 - We will use the default material theme that comes with KendoReact. It already has both the light and 
@@ -40,11 +38,11 @@ dark mode.
 controls.
 - Start by using the included tailwindcss and standard HTML input and buttons.
 
-## (18 Apr, Fri) Today's progress & recap
+## (19 Apr, Sat) Today's progress & recap
 
 - In the morning, we have started laying out the contents of the app.
 - We have centered our app's main container inside the `<body></body>` tag.
-- We have set the container's minWidth to 600px and maxWidth to 900px.
+- We have set the container's fixed width to 600px.
 - We don't have to set the height because it will automatically wrap our contents.
 - We have made the app container a flex-column in order to achieve a top-down layout.
 - We also created a `<div />` tag as a separator between the contents for consistency.
@@ -55,7 +53,7 @@ visualize the progress bar in motion when the timer starts counting down.
 - I've added the KendoReact Window control (part of the dialog library).
 - I still need to replace the input field, perhaps use a NumericTextBox for 
 entering and setting the minutes.
-- Deployment will fail because KendoReact's components need to be imported separately with the "use client"; statement
+- Deployment will fail because KendoReact's components need to be imported separately with the `"use client";` statement. I think. Need to confirm this on Saturday.
 
 ## Features
 
@@ -75,7 +73,10 @@ default KendoReact Material theme.
 **Light Theme**
 
 Primary     : `#3f51b5` (same primary colour, no change)
-Secondary   : `#D1D5DC` or `bg-gray-300` in tailwindcss
+Secondary   : `#D1D5DC` or `bg-gray-300` in tailwindcss. (Note: KR's default Material
+              theme has a pink-like secondary colour in it's palette. It also has a 
+              tertiary colour. We will need to decipher about theming later in the 
+              development process.)
 Background  : `#FAF9F6` (off-white with slight yellow tones to
               give it a more paper-like feel.)
 Text        : `#141414` (slightly lighter tone of black so it 
