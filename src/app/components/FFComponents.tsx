@@ -19,6 +19,9 @@ const KRNumericTextBox = forwardRef<HTMLInputElement, KRNumericTextBoxProps>(
   }
 );
 
+// ESLint has an issue when the component doesn't have a displayName.
+KRNumericTextBox.displayName = "KRNumericTextBox";
+
 export { KRNumericTextBox };
 
 export function KRButton({ onClickEvent, children, ...rest }: KRButtonProps) {
