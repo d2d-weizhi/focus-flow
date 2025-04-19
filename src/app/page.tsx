@@ -48,7 +48,7 @@ export default function Home() {
 					We will later replace this with a KendoReact Dialog component.
 				*/}
 				<KRWindow id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
-					<form className="k-form">
+					{/* <form className="k-form">
 						<fieldset>
 							<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
 						</fieldset>
@@ -65,7 +65,7 @@ export default function Home() {
 								Cancel
 							</KRButton>
 						</div>
-					</form>
+					</form> */}
 				</KRWindow>
 				
 				<div className="flex flex-col items-center justify-center relative w-full h-full">
