@@ -9,9 +9,7 @@ interface KRButtonProps extends ButtonProps {
   onClickEvent ?: () => void;
 }
 
-interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<any> {
-  // ... any other custom props you might need for KRNumericTextBox
-}
+interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<any> {}
 
 const KRNumericTextBox = forwardRef<any, KRNumericTextBoxProps>(
   ({ ...rest }, ref) => {

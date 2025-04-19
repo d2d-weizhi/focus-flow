@@ -2,7 +2,7 @@
 
 import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { DoorOpen, PlayIcon } from "lucide-react";
+import { DoorOpen } from "lucide-react";
 import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
 import { KRNumericTextBox, KRButton } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
