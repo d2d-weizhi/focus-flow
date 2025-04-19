@@ -103,30 +103,29 @@ const [currCycle, setCurrCycle] = useState<number>(1);
 
 ```
 useEffect(() => {
-	// The user as started the clock, and it's not paused.
-	if (isRunning && !isPaused && timeLeft > 0) {
-		timer.current = setTimeout(() => {
-			// We will count our time down every second.
-			setTimeLeft(prevTime => prevTime - 1);
-		}, 1000);
-	} else {
-		clearTimeout(timer.current!);
-	}
+  // The user as started the clock, and it's not paused.
+  if (isRunning && !isPaused && timeLeft > 0) {
+    timer.current = setTimeout(() => {
+      // We will count our time down every second.
+      setTimeLeft(prevTime => prevTime - 1);
+    }, 1000);
+  } else {
+    clearTimeout(timer.current!);
+  }
 
-	// Handle cycle or timer completion
-	if (timeLeft == 0) {
-		if (activePeriod === 'focus') {
-			setActivePeriod('break');
-			setTimeLeft(calcBreakTime(focusTime));
-		} else if (activePeriod === 'break' && currCycle < TOTAL_CYCLES) {
-			setActivePeriod('focus');
-			setCurrCycle(prevCycle => prevCycle + 1);
-			setTimeLeft(focusTime * 60);
-		} else {
-			setIsRunning(false);
-		}
-	}
-
+  // Handle cycle or timer completion
+  if (timeLeft == 0) {
+    if (activePeriod === 'focus') {
+      setActivePeriod('break');
+      setTimeLeft(calcBreakTime(focusTime));
+    } else if (activePeriod === 'break' && currCycle < TOTAL_CYCLES) {
+      setActivePeriod('focus');
+      setCurrCycle(prevCycle => prevCycle + 1);
+      setTimeLeft(focusTime * 60);
+    } else {
+      setIsRunning(false);
+    }
+  }
 }, [isRunning, isPaused, timeLeft, focusTime]);
 ```
 
@@ -135,9 +134,9 @@ useEffect(() => {
 
 ```
 function onSaveFocusTimeClicked() {
-	setFocusTime(parseInt(focusTimeRef.current!.value));
-	setTimeLeft(parseInt(focusTimeRef.current!.value) * 60);
-	setIsShowWindow(false);
+  setFocusTime(parseInt(focusTimeRef.current!.value));
+  setTimeLeft(parseInt(focusTimeRef.current!.value) * 60);
+  setIsShowWindow(false);
 }
 ```
 
