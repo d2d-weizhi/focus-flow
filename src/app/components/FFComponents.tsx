@@ -9,11 +9,11 @@ interface KRButtonProps extends ButtonProps {
   onClickEvent ?: () => void;
 }
 
-interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<HTMLInputElement> {
+interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<typeof NumericTextBox> {
   placeholder?: string;
 }
 
-const KRNumericTextBox = forwardRef<HTMLInputElement, KRNumericTextBoxProps>(
+const KRNumericTextBox = forwardRef<any, KRNumericTextBoxProps>(
   ({ ...rest }, ref) => {
     return <NumericTextBox ref={ref} {...rest} />; 
   }
