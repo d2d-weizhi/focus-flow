@@ -1,6 +1,6 @@
 import { DoorOpen } from "lucide-react";
 import KRButton from "./KRButton";
-import { Window } from "@progress/kendo-react-dialogs";
+// import { Window } from "@progress/kendo-react-dialogs";
 
 export default function Home() {
 	return (
