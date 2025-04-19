@@ -40,7 +40,7 @@ controls.
 
 ## (19 Apr, Sat) Today's progress & recap
 
-- In the morning, we have started laying out the contents of the app.
+- Yesterday (18th, Fri), we have started laying out the contents of the app.
 - We have centered our app's main container inside the `<body></body>` tag.
 - We have set the container's fixed width to 600px.
 - We don't have to set the height because it will automatically wrap our contents.
@@ -53,7 +53,8 @@ visualize the progress bar in motion when the timer starts counting down.
 - I've added the KendoReact Window control (part of the dialog library).
 - I still need to replace the input field, perhaps use a NumericTextBox for 
 entering and setting the minutes.
-- Deployment will fail because KendoReact's components need to be imported separately with the `"use client";` statement. I think. Need to confirm this on Saturday.
+- This morning (19th, Sat), we have begun exporting the Button control by KR into a separate FC that I've named `KRButton`. This method of importing our control to the 
+app worked. Now, I will continue to replace the rest of the Buttons on the UI.
 
 ## Features
 

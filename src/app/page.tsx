@@ -7,6 +7,7 @@ export default function Home() {
 		<div className="relative h-screen w-screen flex items-center justify-center">
 			{/* Exit Button */}
 			<KRButton 
+				id="btnExitApp"
 				type="button" 
 				fillMode={'outline'}
 				style={{ position: 'absolute', top: '1rem', right: '1rem' }}
@@ -31,12 +32,12 @@ export default function Home() {
 				{/*
 					A button for the user to set their focus time in minutes.
 				*/}
-				{/* <Button
+				<KRButton
 					id="btnSetFocusTime"
 					fillMode={"outline"}
 				>
 					Set Focus Time
-				</Button> */}
+				</KRButton>
 				
 				{/* We will use a <div /> to act as a spacer between our content items. This helps to maintain a consistent layout. */}
 				<div className="w-full h-6" />
@@ -114,19 +115,19 @@ export default function Home() {
 
 				{/* Control Buttons */}
 				<div className="flex items-center justify-center space-x-4"> 
-					{/* <Button 
+					<KRButton 
 						fillMode={'solid'}
-						themeColor={'info'}
+						themeColor={'primary'}
 					>
-						Pause
-					</Button>
-					<Button 
+						Start
+					</KRButton>
+					<KRButton 
 						fillMode={'solid'}
 						themeColor={'error'}
 						disabled={true}
-					> 
+					>
 						Stop
-					</Button> */}
+					</KRButton>
 				</div>
 			</div>
 		</div>
