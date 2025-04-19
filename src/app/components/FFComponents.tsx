@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { NumericTextBox, NumericTextBoxProps } from "@progress/kendo-react-inputs";
+import React, { forwardRef, ComponentPropsWithoutRef, ElementRef } from "react";
+import { NumericTextBox, NumericTextBoxHandle, NumericTextBoxProps } from "@progress/kendo-react-inputs";
 import { Button, ButtonProps } from "@progress/kendo-react-buttons";
 import { Window, WindowProps } from "@progress/kendo-react-dialogs";
 
@@ -9,11 +9,17 @@ interface KRButtonProps extends ButtonProps {
   onClickEvent ?: () => void;
 }
 
-export function KRNumericTextBox({...rest}: NumericTextBoxProps) {
-  return (
-    <NumericTextBox {...rest} />
-  );
+interface KRNumericTextBoxProps extends ComponentPropsWithoutRef<any> {
+  // ... any other custom props you might need for KRNumericTextBox
 }
+
+const KRNumericTextBox = forwardRef<any, KRNumericTextBoxProps>(
+  ({ ...rest }, ref) => {
+    return <NumericTextBox ref={ref} {...rest} />; 
+  }
+);
+
+export { KRNumericTextBox };
 
 export function KRButton({ onClickEvent, children, ...rest }: KRButtonProps) {
   return (

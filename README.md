@@ -38,7 +38,7 @@ dark mode.
 controls.
 - Start by using the included tailwindcss and standard HTML input and buttons.
 
-## Today's progress & recap
+## Daily Progress & Recap
 
 **18th, Fri**:
 
@@ -59,11 +59,15 @@ entering and setting the minutes.
 **19th, Sat**:
 
 - Begun exporting the Button control by KR into a separate FC that I've named `KRButton`. This method of importing our control to the app worked.
-- Decided to move both `KRButton` and `KRNumericTextBox` into a consolidated file called 
-`./components/FFComponents.tsx`. 'FF' represents our project title "FocusFlow".
-- Learned something new this morning: using dynamic imports for the `KRWindow` component (wrapped around 
-the KendoReact Window component). 
+- Decided to move both `KRButton` and `KRNumericTextBox` into a consolidated file called `./components/FFComponents.tsx`. 'FF' represents our project title "FocusFlow".
+- Learned something new this morning: using dynamic imports for the `KRWindow` component (wrapped around the KendoReact Window component). 
 - UI rapid prototyping is completed. Next stage is to add the application logic.
+- When implementing our state management, I've decided it would keep things simple by using the out-of-the-box state management. It won't overcomplicate things.
+- When building the application logic, I will attempt to break it down into individual sections (although there may be some overlaps between some of the features and how they work, so I'll need to keep it all in mind and add TODOs when needed.)
+- We will start building our application logic using individual state values. After everything has been coded and tested, we can switch over to using a single `appState` object (i.e. `ffState`). This will reduce the likelihood of making unintended coding errors.
+- When retrieving the input value from KRNumericTextBox, we need to use the `ref` prop. That way, we can get its value by using `setFocusTime(parseInt(focusTimeRef.current!.value));`.
+- We need to use `forwardRef` to correctly pass refs to wrapped components and `ComponentPropsWithoutRef` to exclude the ref prop from the wrapped component's prop types.
+- Discovered that `React.ElementRef` is deprecated and no longer necessary for typing refs in functional components that use `forwardRef`.
 
 ## Features
 

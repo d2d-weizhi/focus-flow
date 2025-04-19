@@ -1,12 +1,77 @@
 "use client";
 
+import { createRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DoorOpen } from "lucide-react";
 import { KRNumericTextBox, KRButton } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
 
+const TOTAL_CYCLES = 4;
+
 export default function Home() {
+	/**
+	 * @description - Indicates whether or not the user has started a new Focus session, 
+	 * 								or when the session has resumed.
+	 * @type {boolean}
+	 * @default {false}
+	 */
+	const [isRunning, setIsRunning] = useState<boolean>(false);
+
+	/**
+	 * @description - Indicates whether or not the user has hit pause.
+	 * @type {boolean}
+	 * @default {false}
+	 */
+	const [isPaused, setIsPaused] = useState<boolean>(false);
+
+	/**
+	 * @description - The amount of focus time period in minutes. This is the 
+	 * 								user-friendly version. The maximum value is 60 (minutes), 
+	 * 								and the minimum is 10 (minutes).
+	 * @type {number}
+	 * @default {25}
+	 */
+	const [focusTime, setFocusTime] = useState<number>(25);
+
+	/**
+	 * @description - Amount of focus time period in seconds. Used for internal
+	 * 								calculations and application logic.
+	 * @type {number}
+	 * @default {25 * 60}
+	 */
+	const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
+
+	/**
+	 * @description - By default, this app will start in a light material theme.
+	 * @type {string} - Possible values are "light" | "dark"
+	 * @default {"light"}
+	 */
+	const [sessTheme, setSessTheme] = useState<string>("light");
+
+	/**
+	 * @description - A flag value for toggling our Window dialog.
+	 * @type {boolean}
+	 * @default {false}
+	 */
+	const [isShowWindow, setIsShowWindow] = useState<boolean>(false);
+
+	const focusTimeRef = createRef<HTMLInputElement>();
+
+	function onSetFocusTimeClicked() {
+		setIsShowWindow(true);
+	}
+
+	function onSaveFocusTimeClicked() {
+		setFocusTime(parseInt(focusTimeRef.current!.value));
+		setTimeLeft(focusTime * 60);
+		setIsShowWindow(false);
+	}
+
+	function onCloseFocusTimeWindow() {
+		setIsShowWindow(false);
+	}
+
 	return (
 		<div className="relative h-screen w-screen flex items-center justify-center">
 			{/* Exit Button */}
@@ -39,6 +104,7 @@ export default function Home() {
 				<KRButton
 					id="btnSetFocusTime"
 					fillMode={"outline"}
+					onClick={onSetFocusTimeClicked}
 				>
 					Set Focus Time
 				</KRButton>
@@ -50,26 +116,48 @@ export default function Home() {
 					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
 				*/}
-				<KRWindow id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
-				  <form className="k-form">
-						<fieldset>
-							<KRNumericTextBox defaultValue={25.00} max={60} min={10} placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
-						</fieldset>
-						<div className="flex w-full justify-center mt-4">
-							<KRButton 
-								type="submit" 
-								fillMode={'solid'} 
-								themeColor={'secondary'} 
-								className="mr-4"
-							>
-								Save Time
-							</KRButton>
-							<KRButton type="button">
-								Cancel
-							</KRButton>
-						</div>
-					</form>
-				</KRWindow>
+				{
+					isShowWindow && 
+					<KRWindow 
+						id="winFocusTime" 
+						resizable={false}
+						onClose={onCloseFocusTimeWindow}
+						title={'Set Focus Time'} 
+						initialHeight={200} 
+						className="flex flex-col">
+						<form className="k-form">
+							<fieldset>
+								<KRNumericTextBox 
+									defaultValue={focusTime} 
+									max={60} 
+									min={10} 
+									placeholder="Minutes" 
+									ref={focusTimeRef}
+									id="tbFocusTimeMin" 
+									className="w-full" 
+								/>
+							</fieldset>
+							<div className="flex w-full justify-center mt-4">
+								<KRButton 
+									id="btnSaveFocusTime"
+									type="submit" 
+									fillMode={'solid'} 
+									themeColor={'secondary'} 
+									className="mr-4"
+									onClick={onSaveFocusTimeClicked}
+								>
+									Save Time
+								</KRButton>
+								<KRButton 
+									type="button"
+									onClick={onCloseFocusTimeWindow}
+								>
+									Cancel
+								</KRButton>
+							</div>
+						</form>
+					</KRWindow>
+				}
 				
 				<div className="flex flex-col items-center justify-center relative w-full h-full">
 					{/* Progress Circle Wrapper */}
@@ -83,8 +171,8 @@ export default function Home() {
 								stroke="#3f51b5"
 								strokeWidth="10"
 								fill="none"
-								strokeDasharray="282.6"
-								strokeDashoffset="50"
+								strokeDasharray="283"
+								strokeDashoffset="0"
 								style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
 							/>
 						</svg>
