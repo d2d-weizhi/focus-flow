@@ -160,14 +160,14 @@ default KendoReact Material theme.
 
 **Light Theme**
 
-Primary     : `#3f51b5` (same primary colour, no change)
-Secondary   : `#D1D5DC` or `bg-gray-300` in tailwindcss. (Note: KR's default Material
+- Primary     : `#3f51b5` (same primary colour, no change)
+- Secondary   : `#D1D5DC` or `bg-gray-300` in tailwindcss. (Note: KR's default Material
               theme has a pink-like secondary colour in it's palette. It also has a 
               tertiary colour. We will need to decipher about theming later in the 
               development process.)
-Background  : `#FAF9F6` (off-white with slight yellow tones to
+- Background  : `#FAF9F6` (off-white with slight yellow tones to
               give it a more paper-like feel.)
-Text        : `#141414` (slightly lighter tone of black so it 
+- Text        : `#141414` (slightly lighter tone of black so it 
               doesn't come off too strongly)
 
 **Dark Theme**
