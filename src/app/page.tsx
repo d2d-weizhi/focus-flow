@@ -1,6 +1,6 @@
 "use client";
 
-import { createRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DoorOpen, PlayIcon } from "lucide-react";
 import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
@@ -44,6 +44,20 @@ export default function Home() {
 	const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
 
 	/**
+	 * @description - Indicates if the current time period if a Focus or Break period.
+	 * @type {string} - "focus" | "focus"
+	 * @default {"focus"} - The app will always start with the first "focus" period.
+	 */
+	const [activePeriod, setActivePeriod] = useState<"focus" | "break">("focus");
+
+	/**
+	 * @description - Indicates if the current cycle the timer is in.
+	 * @type {number}
+	 * @default {1} - The app will always start in the first cycle (1 of 4).
+	 */
+	const [currCycle, setCurrCycle] = useState<number>(1);
+
+	/**
 	 * @description - By default, this app will start in a light material theme.
 	 * @type {string} - Possible values are "light" | "dark"
 	 * @default {"light"}
@@ -57,7 +71,24 @@ export default function Home() {
 	 */
 	const [isShowWindow, setIsShowWindow] = useState<boolean>(false);
 
+	const timer = useRef<NodeJS.Timeout | null>(null);
 	const focusTimeRef = createRef<HTMLInputElement>();
+
+	/**
+	 * @description - We need to calculate the breakTime in seconds so that we can pass it to the timeLeft state 
+	 * 								variable.
+	 * @param focusTime - Time for each focus period.
+	 * @returns {number} - Total number of seconds for the break period.
+	 */
+	const calcBreakTime = (focusTime: number) => {
+		return focusTime < 30 
+			? (30 - focusTime) * 60		// focusTime < 30 minutes, break will be (30 - focusTime) * 60 seconds.
+			: (60 - focusTime) * 60;	// focusTime < 60 minutes, break will be (60 - focusTime) * 60 seconds.
+	};
+
+	// Calculate minutes and seconds
+	const minutes = Math.floor(timeLeft / 60);
+	const seconds = timeLeft % 60;
 
 	function onSetFocusTimeClicked() {
 		setIsShowWindow(true);
@@ -65,7 +96,7 @@ export default function Home() {
 
 	function onSaveFocusTimeClicked() {
 		setFocusTime(parseInt(focusTimeRef.current!.value));
-		setTimeLeft(focusTime * 60);
+		setTimeLeft(parseInt(focusTimeRef.current!.value) * 60);
 		setIsShowWindow(false);
 	}
 
@@ -96,7 +127,40 @@ export default function Home() {
 		 *  - reset the circular progress bar.
 		 *  - reset the time period/time elapsed indicator bar
 		 */ 
+
+		setTimeLeft(focusTime * 60); // Reset to initial focus time
+		setActivePeriod('focus');
+		setCurrCycle(1); 
+		// ... (And clear the timeout if it's active)
+		clearTimeout(timer.current!); 
 	}
+
+	useEffect(() => {
+		// The user as started the clock, and it's not paused.
+		if (isRunning && !isPaused && timeLeft > 0) {
+			timer.current = setTimeout(() => {
+				// We will count our time down every second.
+				setTimeLeft(prevTime => prevTime - 1);
+			}, 1000);
+		} else {
+			clearTimeout(timer.current!);
+		}
+
+		// Handle cycle or timer completion
+		if (timeLeft == 0) {
+			if (activePeriod === 'focus') {
+				setActivePeriod('break');
+				setTimeLeft(calcBreakTime(focusTime));
+			} else if (activePeriod === 'break' && currCycle < TOTAL_CYCLES) {
+				setActivePeriod('focus');
+				setCurrCycle(prevCycle => prevCycle + 1);
+				setTimeLeft(focusTime * 60);
+			} else {
+				setIsRunning(false);
+			}
+		}
+
+	}, [isRunning, isPaused, timeLeft, focusTime]);
 
 	return (
 		<div className="relative h-screen w-screen flex items-center justify-center">
@@ -205,7 +269,7 @@ export default function Home() {
 					</div>
 					{/* Timer display */}
 					<div className="absolute inset-0 flex items-center justify-center text-5xl font-bold" id="timerDisplay">
-						25:00
+						{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
 					</div>
 				</div>
 

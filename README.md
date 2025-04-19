@@ -90,6 +90,56 @@ entering and setting the minutes.
 }
 ```
 - Note that they are still considered the same component, just separated by the different state values and logic.
+- Added the `currCycle` and `activePeriod` state variables so that the application can keep track of the current time period & cycle.
+
+```
+const [activePeriod, setActivePeriod] = useState<"focus" | "break">("focus");
+
+const [currCycle, setCurrCycle] = useState<number>(1);
+```
+
+- Implemented a closure called `calcBreakTime` so that it can return the break time in seconds. This is used purely for updating the value of `timeLeft` when we're doing the countdown.
+- Implemented `useEffect(() => {}, [])` to handle our time countdown operations.
+
+```
+useEffect(() => {
+	// The user as started the clock, and it's not paused.
+	if (isRunning && !isPaused && timeLeft > 0) {
+		timer.current = setTimeout(() => {
+			// We will count our time down every second.
+			setTimeLeft(prevTime => prevTime - 1);
+		}, 1000);
+	} else {
+		clearTimeout(timer.current!);
+	}
+
+	// Handle cycle or timer completion
+	if (timeLeft == 0) {
+		if (activePeriod === 'focus') {
+			setActivePeriod('break');
+			setTimeLeft(calcBreakTime(focusTime));
+		} else if (activePeriod === 'break' && currCycle < TOTAL_CYCLES) {
+			setActivePeriod('focus');
+			setCurrCycle(prevCycle => prevCycle + 1);
+			setTimeLeft(focusTime * 60);
+		} else {
+			setIsRunning(false);
+		}
+	}
+
+}, [isRunning, isPaused, timeLeft, focusTime]);
+```
+
+- **TODO:** Conduct a thorough testing tomorrow morning. Set `focusTime` to 25 and let it run the full cycle (total start to finish: 2 hours).
+- Realised that the `timeLeft` state variable wasn't updated properly when saving Focus Time value in the Window. Turns out, I needed to pass the KRNumericTextBox's value to the state function as well.
+
+```
+function onSaveFocusTimeClicked() {
+	setFocusTime(parseInt(focusTimeRef.current!.value));
+	setTimeLeft(parseInt(focusTimeRef.current!.value) * 60);
+	setIsShowWindow(false);
+}
+```
 
 ## Features
 
