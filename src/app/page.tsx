@@ -1,5 +1,6 @@
 import { DoorOpen } from "lucide-react";
-import KRButton from "./KRButton";
+import KRButton from "./components/KRButton";
+import KRWindow from "./components/KRWindow";
 // import { Window } from "@progress/kendo-react-dialogs";
 
 export default function Home() {
@@ -46,21 +47,26 @@ export default function Home() {
 					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
 				*/}
-				{/* <Window id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
+				<KRWindow id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
 					<form className="k-form">
 						<fieldset>
 							<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
 						</fieldset>
 						<div className="flex w-full justify-center mt-4">
-							<Button type="submit" fillMode={'solid'} themeColor={'secondary'} className="mr-4">
+							<KRButton 
+								type="submit" 
+								fillMode={'solid'} 
+								themeColor={'secondary'} 
+								className="mr-4"
+							>
 								Save Time
-							</Button>
-							<Button type="button">
+							</KRButton>
+							<KRButton type="button">
 								Cancel
-							</Button>
+							</KRButton>
 						</div>
 					</form>
-				</Window> */}
+				</KRWindow>
 				
 				<div className="flex flex-col items-center justify-center relative w-full h-full">
 					{/* Progress Circle Wrapper */}
