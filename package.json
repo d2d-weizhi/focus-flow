@@ -12,6 +12,7 @@
     "@progress/kendo-licensing": "^1.5.1",
     "@progress/kendo-react-buttons": "^10.1.0",
     "@progress/kendo-react-dialogs": "^10.1.0",
+    "@progress/kendo-react-inputs": "^10.1.0",
     "@progress/kendo-svg-icons": "^4.1.0",
     "@progress/kendo-theme-material": "^10.5.0",
     "lucide-react": "^0.488.0",

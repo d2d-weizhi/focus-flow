@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { DoorOpen } from "lucide-react";
-import KRButton from "./components/KRButton";
+import { KRNumericTextBox, KRButton } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
 
@@ -53,7 +53,7 @@ export default function Home() {
 				<KRWindow id="dlgFocusTime" title={'Set Focus Time'} initialHeight={200} className="flex flex-col">
 				  <form className="k-form">
 						<fieldset>
-							<input type="number" min="1" max="60" placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
+							<KRNumericTextBox defaultValue={25.00} max={60} min={10} placeholder="Minutes" id="tbFocusTimeMin" className="w-full" />
 						</fieldset>
 						<div className="flex w-full justify-center mt-4">
 							<KRButton 
