@@ -4,7 +4,7 @@ import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DoorOpen } from "lucide-react";
 import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
-import { KRNumericTextBox, KRButton, CircularProgressBar } from "./components/FFComponents";
+import { KRNumericTextBox, KRButton, CircularProgressBar, TimePeriodIndicators, TimePeriodType } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
 
@@ -44,11 +44,26 @@ export default function Home() {
 	const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
 
 	/**
+	 * @description - Indicating how much time has passed since the start of a time period.
+	 * @type {number}
+	 * @default {0} - We always start with 0 seconds.
+	 */
+	const [timeElapsed, setTimeElapsed] = useState(0);
+
+	/**
 	 * @description - Indicates if the current time period if a Focus or Break period.
 	 * @type {string} - "focus" | "focus"
 	 * @default {"focus"} - The app will always start with the first "focus" period.
 	 */
-	const [activePeriod, setActivePeriod] = useState<"focus" | "break">("focus");
+	const [activePeriodType, setActivePeriodType] = useState<"focus" | "break">("focus");
+
+	/**
+	 * @description - indicates which time period is currently active. It also 
+	 * 								corresponds with the index of the periods array.
+	 * @type {number} - 0 to 7 (8 time periods)
+	 * @default {0} - Index of array always begins with 0.
+	 */
+	const [activePeriod, setActivePeriod] = useState<number>(0);
 
 	/**
 	 * @description - Indicates if the current cycle the timer is in.
@@ -71,8 +86,9 @@ export default function Home() {
 	 */
 	const [isShowWindow, setIsShowWindow] = useState<boolean>(false);
 
-	const timer = useRef<NodeJS.Timeout | null>(null);
+	let timerId = useRef<NodeJS.Timeout | null>(null);
 	const focusTimeRef = createRef<HTMLInputElement>();
+  const periodStartTimeRef = useRef<number | null>(null);
 
 	/**
 	 * @description - We need to calculate the breakTime in seconds so that we can pass it to the timeLeft state 
@@ -97,7 +113,7 @@ export default function Home() {
 	/**
 	 * 1 cycle = 1 focus period + 1 break period
 	 */
-	const periods = [
+	const periods : TimePeriodType[] = [
 		{ periodType: "focus", duration: focusTimeInSec(focusTime) },
 		{ periodType: "break", duration: breakTimeInSec(focusTime) },
 		{ periodType: "focus", duration: focusTimeInSec(focusTime) },
@@ -138,6 +154,10 @@ export default function Home() {
 		appReset();
 	}
 
+	function resetTimeElapsed() {
+		
+	}
+
 	function appReset() {
 		setIsRunning(false);
 		setIsPaused(false);
@@ -151,36 +171,58 @@ export default function Home() {
 		 */ 
 
 		setTimeLeft(focusTimeInSec(focusTime)); // Reset to initial focus time
-		setActivePeriod('focus');
+		setActivePeriodType('focus');
+		setActivePeriod(0);
 		setCurrCycle(1); 
+		setTimeElapsed(0);
 		// ... (And clear the timeout if it's active)
-		clearTimeout(timer.current!); 
+		clearTimeout(timerId.current!); 
 	}
 
 	useEffect(() => {
 		// The user as started the clock, and it's not paused.
 		if (isRunning && !isPaused && timeLeft > 0) {
-			timer.current = setTimeout(() => {
-				// We will count our time down every second.
-				setTimeLeft(prevTime => prevTime - 1);
+			timerId.current = setTimeout(() => {
+				setTimeLeft((prevTime) => prevTime - 1);
+				setTimeElapsed(timeElapsed => timeElapsed + 1); // Update elapsed time
 			}, 1000);
-		} else {
-			clearTimeout(timer.current!);
-		}
+		} else if (timerId.current) {
+      clearTimeout(timerId.current);
+      timerId.current = null;
+    }
 
 		// Handle cycle or timer completion
 		if (timeLeft == 0) {
-			if (activePeriod === 'focus') {
-				setActivePeriod('break');
+			if (activePeriodType === 'focus') {
+				setActivePeriodType('break');
 				setTimeLeft(breakTimeInSec(focusTime));
-			} else if (activePeriod === 'break' && currCycle < TOTAL_CYCLES) {
-				setActivePeriod('focus');
+
+				// Increment activePeriod if not the last break period
+				if (activePeriod < periods.length - 1) {
+					setActivePeriod(activePeriod + 1); 
+					setTimeElapsed(0);	// Reset with each period switch.
+				}
+			} else if (activePeriodType === 'break' && currCycle < TOTAL_CYCLES) {
+				setActivePeriodType('focus');
 				setCurrCycle(prevCycle => prevCycle + 1);
 				setTimeLeft(focusTimeInSec(focusTime));
+
+				// Increment activePeriod unless it's the very last period
+				if (activePeriod < periods.length - 1) {
+					setActivePeriod(activePeriod + 1);
+					setTimeElapsed(0);	// Reset with each period switch.
+				} 
 			} else {
 				appReset();
 			}
 		}
+
+		// Cleanup function to clear the timeout when the effect runs again
+    return () => {
+      if (timerId.current !== null) {
+        clearTimeout(timerId.current);
+      }
+    };
 
 	}, [isRunning, isPaused, timeLeft, focusTime]);
 
@@ -276,50 +318,21 @@ export default function Home() {
 					<CircularProgressBar 
 						isPaused={isPaused} 
 						timeLeft={timeLeft} 
-						totalTime={activePeriod === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
-						activePeriod={activePeriod}	
+						totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
+						activePeriod={activePeriodType}	
 					/>
 					{/* Timer display */}
-					<div className="absolute inset-0 flex items-center justify-center text-5xl font-bold" id="timerDisplay">
+					<div className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay">
 						{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
 					</div>
 				</div>
 
 				<div className="w-full h-6" /> {/* Separator */}
 				
-				{/* 
-					Time Period Indicators 
-						- These are a set of long-short bars to depict our Focus and Break 
-							times.
-						- We will turn this into a dynamic section when we put in the 
-							coding logic.
-						- I've set the width to 80% because it will look more natural.
-						- The height has been set to h-1.5, which is 6px 
-							(1rem * 1.5 * 0.25 = 6px)
-						- This indicators will consist of the gutters (translucent) and 
-							their corresponding indicators (opaque off-white).
-				*/}
-				<div className="flex w-[80%] max-w-[350px] h-1.5">
-					{periods.map((period, index) => (
-						<div 
-							key={index} // Always add a unique key when rendering with .map()
-							className={`h-full rounded-full ${
-								period.periodType === 'focus' ? 'bg-gray-300 w-1/4' : 'bg-gray-300 w-1/8'
-							} ${
-								index !== 0 && 'ml-2'
-							}`} 
-							style={{ opacity: 0.4 }} 
-						>
-							<div 
-								className="period-indicator h-1.5 rounded-full" // Add a class for styling
-								style={{ 
-									width: '0%', // Initial width of 0% 
-									backgroundColor: '#454545',
-									opacity: 1.0
-								}} />
-						</div>
-					))}
-				</div>
+				<TimePeriodIndicators 
+					arrPeriods={periods} 
+					activePeriodIndex={activePeriod} 
+					timeElapsed={timeElapsed} />
 				
 				<div className="w-full h-6" /> {/* Separator */}
 

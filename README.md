@@ -178,6 +178,12 @@ function onSaveFocusTimeClicked() {
 - We picked a good secondary colour, `#F59E0B` to signify our "break time" period.
 - Named the secondary colour as "Spiced Honey".
 - To simplify and prevent potential error when it comes to calculating the time period in seconds, I have renamed and added `breakTimeInSec(focusTime)` and `focusTimeInSec(focusTime)` functions.
+- Refactored part of the code to make calculating the timeElapse simpler. All that is needed is `setTimeElapsed(timeElapsed => timeElapsed + 1);`
+- We only reset our `timeElapsed` state variable to 0 whenever a time period switches between 'focus' and 'break'.
+- Learned that `timerId` serves as a unique identifier for each instance of `setTimeout()`. The "coat checking" analogy helps. We store its value as a reference using `timerId.current`. 
+- Remember to always clear the timeout when it is no longer needed (stopping or pausing it).Use the `clearTimeout(timerId)` function.
+- Added two separate gradient effects for our `CircularProgressBar` with a 45% diagonal effect. This provides a natural lighting effect in accordance to material design guidelines.
+- Added a slight animation to the `CircularProgressBar` so it will have a "refilling" CSS animation when a time period finishes and transitions, `transition-all duration-500`.
 
 ## Features
 

@@ -24,3 +24,10 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.countdown-timer {
+  font-family: 'Roboto Condensed', sans-serif;
+  letter-spacing: 2px;
+  font-weight: 200;
+  font-size: 3.5rem;
+}
