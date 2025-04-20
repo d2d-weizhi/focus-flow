@@ -86,9 +86,9 @@ export default function Home() {
 	 */
 	const [isShowWindow, setIsShowWindow] = useState<boolean>(false);
 
-	let timerId = useRef<NodeJS.Timeout | null>(null);
+	const timerId = useRef<NodeJS.Timeout | null>(null);
 	const focusTimeRef = createRef<HTMLInputElement>();
-  const periodStartTimeRef = useRef<number | null>(null);
+  // const periodStartTimeRef = useRef<number | null>(null);
 
 	/**
 	 * @description - We need to calculate the breakTime in seconds so that we can pass it to the timeLeft state 
@@ -152,10 +152,6 @@ export default function Home() {
 
 	function onStopClicked() {
 		appReset();
-	}
-
-	function resetTimeElapsed() {
-		
 	}
 
 	function appReset() {
