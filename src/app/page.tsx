@@ -4,7 +4,7 @@ import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DoorOpen } from "lucide-react";
 import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
-import { KRNumericTextBox, KRButton } from "./components/FFComponents";
+import { KRNumericTextBox, KRButton, CircularProgressBar } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
 
@@ -80,15 +80,33 @@ export default function Home() {
 	 * @param focusTime - Time for each focus period.
 	 * @returns {number} - Total number of seconds for the break period.
 	 */
-	const calcBreakTime = (focusTime: number) => {
+	const breakTimeInSec = (focusTime: number) => {
 		return focusTime < 30 
 			? (30 - focusTime) * 60		// focusTime < 30 minutes, break will be (30 - focusTime) * 60 seconds.
 			: (60 - focusTime) * 60;	// focusTime < 60 minutes, break will be (60 - focusTime) * 60 seconds.
 	};
 
+	const focusTimeInSec = (focusTime: number) => {
+		return focusTime * 60;
+	};
+
 	// Calculate minutes and seconds
 	const minutes = Math.floor(timeLeft / 60);
 	const seconds = timeLeft % 60;
+
+	/**
+	 * 1 cycle = 1 focus period + 1 break period
+	 */
+	const periods = [
+		{ periodType: "focus", duration: focusTimeInSec(focusTime) },
+		{ periodType: "break", duration: breakTimeInSec(focusTime) },
+		{ periodType: "focus", duration: focusTimeInSec(focusTime) },
+		{ periodType: "break", duration: breakTimeInSec(focusTime) },
+		{ periodType: "focus", duration: focusTimeInSec(focusTime) },
+		{ periodType: "break", duration: breakTimeInSec(focusTime) },
+		{ periodType: "focus", duration: focusTimeInSec(focusTime) },
+		{ periodType: "break", duration: breakTimeInSec(focusTime) }
+	];
 
 	function onSetFocusTimeClicked() {
 		setIsShowWindow(true);
@@ -96,7 +114,7 @@ export default function Home() {
 
 	function onSaveFocusTimeClicked() {
 		setFocusTime(parseInt(focusTimeRef.current!.value));
-		setTimeLeft(parseInt(focusTimeRef.current!.value) * 60);
+		setTimeLeft(focusTimeInSec(parseInt(focusTimeRef.current!.value)));
 		setIsShowWindow(false);
 	}
 
@@ -117,6 +135,10 @@ export default function Home() {
 	}
 
 	function onStopClicked() {
+		appReset();
+	}
+
+	function appReset() {
 		setIsRunning(false);
 		setIsPaused(false);
 		/** 
@@ -128,7 +150,7 @@ export default function Home() {
 		 *  - reset the time period/time elapsed indicator bar
 		 */ 
 
-		setTimeLeft(focusTime * 60); // Reset to initial focus time
+		setTimeLeft(focusTimeInSec(focusTime)); // Reset to initial focus time
 		setActivePeriod('focus');
 		setCurrCycle(1); 
 		// ... (And clear the timeout if it's active)
@@ -150,13 +172,13 @@ export default function Home() {
 		if (timeLeft == 0) {
 			if (activePeriod === 'focus') {
 				setActivePeriod('break');
-				setTimeLeft(calcBreakTime(focusTime));
+				setTimeLeft(breakTimeInSec(focusTime));
 			} else if (activePeriod === 'break' && currCycle < TOTAL_CYCLES) {
 				setActivePeriod('focus');
 				setCurrCycle(prevCycle => prevCycle + 1);
-				setTimeLeft(focusTime * 60);
+				setTimeLeft(focusTimeInSec(focusTime));
 			} else {
-				setIsRunning(false);
+				appReset();
 			}
 		}
 
@@ -251,22 +273,12 @@ export default function Home() {
 				
 				<div className="flex flex-col items-center justify-center relative w-full h-full">
 					{/* Progress Circle Wrapper */}
-					<div className="w-[75%] max-w-[300px] aspect-square">
-						<svg className="w-full h-full" viewBox="0 0 100 100">
-							<circle cx="50" cy="50" r="45" stroke="#D1D5DC" strokeWidth="10" style={{ opacity: 0.4 }} fill="none" />
-							<circle
-								cx="50"
-								cy="50"
-								r="45"
-								stroke="#3f51b5"
-								strokeWidth="10"
-								fill="none"
-								strokeDasharray="283"
-								strokeDashoffset="0"
-								style={{ transform: 'rotate(-90deg)', transformOrigin: '50% 50%' }}
-							/>
-						</svg>
-					</div>
+					<CircularProgressBar 
+						isPaused={isPaused} 
+						timeLeft={timeLeft} 
+						totalTime={activePeriod === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
+						activePeriod={activePeriod}	
+					/>
 					{/* Timer display */}
 					<div className="absolute inset-0 flex items-center justify-center text-5xl font-bold" id="timerDisplay">
 						{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
@@ -288,14 +300,25 @@ export default function Home() {
 							their corresponding indicators (opaque off-white).
 				*/}
 				<div className="flex w-[80%] max-w-[350px] h-1.5">
-					<div className="h-full bg-gray-300 rounded-full w-1/4" style={{ opacity: .4 }}></div> {/* Focus - Long */}
-					<div className="h-full bg-gray-300 rounded-full w-1/8 ml-2" style={{ opacity: .4 }}></div> {/* Break - Short */}
-					<div className="h-full bg-gray-300 rounded-full w-1/4 ml-2" style={{ opacity: .4 }}></div> {/* Focus - Long */}
-					<div className="h-full bg-gray-300 rounded-full w-1/8 ml-2" style={{ opacity: .4 }}></div> {/* Break - Short */}
-					<div className="h-full bg-gray-300 rounded-full w-1/4 ml-2" style={{ opacity: .4 }}></div> {/* Focus - Long */}
-					<div className="h-full bg-gray-300 rounded-full w-1/8 ml-2" style={{ opacity: .4 }}></div> {/* Break - Short */}
-					<div className="h-full bg-gray-300 rounded-full w-1/4 ml-2" style={{ opacity: .4 }}></div> {/* Focus - Long */}
-					<div className="h-full bg-gray-300 rounded-full w-1/8 ml-2" style={{ opacity: .4 }}></div> {/* Break - Short */}
+					{periods.map((period, index) => (
+						<div 
+							key={index} // Always add a unique key when rendering with .map()
+							className={`h-full rounded-full ${
+								period.periodType === 'focus' ? 'bg-gray-300 w-1/4' : 'bg-gray-300 w-1/8'
+							} ${
+								index !== 0 && 'ml-2'
+							}`} 
+							style={{ opacity: 0.4 }} 
+						>
+							<div 
+								className="period-indicator h-1.5 rounded-full" // Add a class for styling
+								style={{ 
+									width: '0%', // Initial width of 0% 
+									backgroundColor: '#454545',
+									opacity: 1.0
+								}} />
+						</div>
+					))}
 				</div>
 				
 				<div className="w-full h-6" /> {/* Separator */}

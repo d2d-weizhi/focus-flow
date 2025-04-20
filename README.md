@@ -40,7 +40,7 @@ controls.
 
 ## Daily Progress & Recap
 
-**18th, Fri**:
+### 18th, Fri
 
 - Started laying out the contents of the app.
 - Centered our app's main container inside the `<body></body>` tag.
@@ -56,7 +56,9 @@ visualize the progress bar in motion when the timer starts counting down.
 - Still need to replace the input field, perhaps use a NumericTextBox for 
 entering and setting the minutes.
 
-**19th, Sat (Part One: Finishing up the UI prototyping)**:
+### 19th, Sat
+
+#### Part One: Finishing up the UI prototyping
 
 - Begun exporting the Button control by KR into a separate FC that I've named `KRButton`. This method of importing our control to the app worked.
 - Decided to move both `KRButton` and `KRNumericTextBox` into a consolidated file called `./components/FFComponents.tsx`. 'FF' represents our project title "FocusFlow".
@@ -64,7 +66,7 @@ entering and setting the minutes.
 - UI rapid prototyping is completed. Next stage is to add the application logic.
 - When implementing our state management, I've decided it would keep things simple by using the out-of-the-box state management. It won't overcomplicate things.
 
-**19th, Sat (Part Two: Adding Application Logic)**:
+#### Part Two: Adding Application Logic
 
 - When building the application logic, I will attempt to break it down into individual sections (although there may be some overlaps between some of the features and how they work, so I'll need to keep it all in mind and add TODOs when needed.)
 - We will start building our application logic using individual state values. After everything has been coded and tested, we can switch over to using a single `appState` object (i.e. `ffState`). This will reduce the likelihood of making unintended coding errors.
@@ -143,6 +145,40 @@ function onSaveFocusTimeClicked() {
 - When deploying to Vercel, there were linting issues. Current workaround is to use the commenting statement `// eslint-disable-next-line  @typescript-eslint/no-explicit-any`.
 - Note: Only use it when we know the exact types that we're trying to pass.
 
+### 20th, Sun
+
+#### Part One: Implementing Circular Progress Bar Animation
+
+**Key Learnings:**
+
+- Decided to externalize the Circular Progress Bar as a distinct component because this would be inline with reusability best practice.
+- For simpler animations, it is more performant to use CSS animation.
+- Took a few tries before we could figure out the correct way to calculate the value for animating the progress bar in a counterclockwise direction.
+- Added a single level ternary operation for feeding the total focus/break time to the component.
+- **TODO:** I will need to set up another test for making sure that the circular progress bar is working and behaving correctly (i.e. when switching between focus and break time periods).
+
+**Challenges & Solutions:**
+
+1. Initial `strokeDashoffset` Calculation: 
+  **Problem:** The first calculation was inverting the progress.
+  **Solution:** Inverted the percentage calculation to `100 - (timeLeft / totalTime) * 100`
+
+
+1. Progress Bar Starting Empty:
+  **Problem:** The progress bar was completely empty at the beginning of a time period.
+  **Solution:**  Gemini, the AI tool's answers were not 100% wrong, they were mostly half right. The answers were spread out across a few of the responses, so I used a manual output/desired results to test and work backwards. Found the proper solution: `const strokeDashoffset = (283 * progressPercent) / 100;`
+
+
+3. Incorrect `totalTime` Unit: 
+  **Problem:** The `totalTime` prop was being passed in minutes, not seconds.
+  **Solution:** Converted focusTime to seconds within the `CircularProgressBar` component:  `totalTime={activePeriod === "focus" ? focusTime * 60 : calcBreakTime(focusTime)}`
+
+#### Part Two: Circular Progress Bar + Time Period Cycles Indicator
+
+- We picked a good secondary colour, `#F59E0B` to signify our "break time" period.
+- Named the secondary colour as "Spiced Honey".
+- To simplify and prevent potential error when it comes to calculating the time period in seconds, I have renamed and added `breakTimeInSec(focusTime)` and `focusTimeInSec(focusTime)` functions.
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 
@@ -161,7 +197,9 @@ default KendoReact Material theme.
 **Light Theme**
 
 - Primary     : `#3f51b5` (same primary colour, no change)
-- Secondary   : `#D1D5DC` or `bg-gray-300` in tailwindcss. (Note: KR's default Material
+- Secondary   : `#F59E0B` (name: Spiced Honey, vibe: warm, relaxing, sunset, )
+- Tertiary    :
+- Inactive    : `#D1D5DC` or `bg-gray-300` in tailwindcss. (Note: KR's default Material
               theme has a pink-like secondary colour in it's palette. It also has a 
               tertiary colour. We will need to decipher about theming later in the 
               development process.)
