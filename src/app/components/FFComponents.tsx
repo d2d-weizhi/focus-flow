@@ -87,13 +87,13 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
             <stop offset="90%" stopColor="#facc15" /> {/* Lighter shade colour */}
           </linearGradient>
         </defs>
-        <circle cx="55" cy="55" r="46" stroke="#D1D5DC" strokeWidth="14" style={{ opacity: 0.4 }} fill="none" />
+        <circle cx="55" cy="55" r="45" stroke="#D1D5DC" strokeWidth="15" style={{ opacity: 0.4 }} fill="none" />
         <circle
 					cx="55"
 					cy="55"
-					r="46"
+					r="45"
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
-					strokeWidth="14"
+					strokeWidth="15"
 					fill="none"
 					strokeDasharray="289"
 					strokeDashoffset={strokeDashoffset}
