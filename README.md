@@ -191,6 +191,8 @@ function onSaveFocusTimeClicked() {
 - Additional note on gradient manipulation, when `offset="0%"`, it refers to the bottom of your SVG. `offset="100%"` is the top.
 - If for some reason you need to rotate your gradient, you use `gradientTransform="rotate(angle/degrees)"`.
 - Added a slight animation to the `CircularProgressBar` so it will have a "refilling" CSS animation when a time period finishes and transitions, `transition-all duration-500`.
+- When tweaking the dimensions of the `CircularProgressBar`, I also realized that I need to adjust both the 
+radius and the center point of the circle. That way, it will remain centered in the `viewPort`.
 
 ## Features
 
