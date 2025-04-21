@@ -40,7 +40,7 @@ body {
 
 @media (max-width: 768px) { /* Adjust the breakpoint as needed */
   .countdown-timer {
-    font-size: 2.25rem;
+    font-size: 2rem;
     letter-spacing: 1px;
   }
 }
