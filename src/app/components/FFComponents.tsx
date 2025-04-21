@@ -71,31 +71,29 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
   const strokeDashoffset = (283 * progressPercent) / 100;
   
   return (
-    <div className="w-[75%] max-w-[300px] aspect-square relative">
-      {/* Shadow Element */}
-      <div className="absolute inset-0 rounded-full bg-white shadow-[inset_0_2px_4px_rgba(0,0,0,0.15)] -z-10" />
+    <div className="w-[75%] max-w-[400px] aspect-square relative">
 			<svg className="w-full h-full" viewBox="0 0 100 100">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
           {/* Focus Gradient */}
-          <linearGradient id="focusGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="100%" stopColor="#2563eb" /> {/* Slightly lighter shade of focus */}
-            <stop offset="0%" stopColor="#3f51b5" /> {/* Main focus color */}
+          <linearGradient id="focusGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#3f51b5" /> {/* Main focus colouur - bottom/end stop */}
+            <stop offset="90%" stopColor="#2563eb" /> {/* Lighter shade colour - top/starting stop */}
           </linearGradient>
 
           {/* Break Gradient */}
-          <linearGradient id="breakGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="100%" stopColor="#facc15" /> {/* Slightly lighter shade of break */}
-            <stop offset="0%" stopColor="#F59E0B" /> {/* Main break color */}
+          <linearGradient id="breakGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#F59E0B" /> {/* Main break colour */}
+            <stop offset="90%" stopColor="#facc15" /> {/* Lighter shade colour */}
           </linearGradient>
         </defs>
-        <circle cx="50" cy="50" r="45" stroke="#D1D5DC" strokeWidth="10" style={{ opacity: 0.4 }} fill="none" />
+        <circle cx="50" cy="50" r="36" stroke="#D1D5DC" strokeWidth="14" style={{ opacity: 0.4 }} fill="none" />
         <circle
 					cx="50"
 					cy="50"
-					r="45"
+					r="36"
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
-					strokeWidth="10"
+					strokeWidth="14"
 					fill="none"
 					strokeDasharray="283"
 					strokeDashoffset={strokeDashoffset}

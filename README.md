@@ -183,6 +183,13 @@ function onSaveFocusTimeClicked() {
 - Learned that `timerId` serves as a unique identifier for each instance of `setTimeout()`. The "coat checking" analogy helps. We store its value as a reference using `timerId.current`. 
 - Remember to always clear the timeout when it is no longer needed (stopping or pausing it).Use the `clearTimeout(timerId)` function.
 - Added two separate gradient effects for our `CircularProgressBar` with a 45% diagonal effect. This provides a natural lighting effect in accordance to material design guidelines.
+- When working with gradient effects within SVGs, we need to remember the following steps:
+    1. Identify your colour to start with (`offset="0%"`)
+    2. Where does the colour begin, coordinate-wise (e.g. `x1="100%", y1="0%"`, that is bottom-right)
+    3. Identify your next colour stop (`offset="100%"`)
+    4. Finally, where does this colour end (e.g. `x2="0%", y2="100%"`, that is top-left)
+- Additional note on gradient manipulation, when `offset="0%"`, it refers to the bottom of your SVG. `offset="100%"` is the top.
+- If for some reason you need to rotate your gradient, you use `gradientTransform="rotate(angle/degrees)"`.
 - Added a slight animation to the `CircularProgressBar` so it will have a "refilling" CSS animation when a time period finishes and transitions, `transition-all duration-500`.
 
 ## Features
