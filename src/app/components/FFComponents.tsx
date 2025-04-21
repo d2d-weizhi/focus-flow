@@ -68,11 +68,11 @@ export function KRWindow({ children, ...rest }: WindowProps) {
 
 export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePeriod }: CircularProgressBarProps) {
   const progressPercent = 100 - (timeLeft / totalTime) * 100;
-  const strokeDashoffset = (283 * progressPercent) / 100;
+  const strokeDashoffset = (289 * progressPercent) / 100;
   
   return (
-    <div className="w-[75%] max-w-[400px] aspect-square relative">
-			<svg className="w-full h-full" viewBox="0 0 100 100">
+    <div className="w-[75%] max-w-[440px] aspect-square relative">
+			<svg className="w-full h-full" viewBox="0 0 110 110">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
           {/* Focus Gradient */}
@@ -87,15 +87,15 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
             <stop offset="90%" stopColor="#facc15" /> {/* Lighter shade colour */}
           </linearGradient>
         </defs>
-        <circle cx="50" cy="50" r="36" stroke="#D1D5DC" strokeWidth="14" style={{ opacity: 0.4 }} fill="none" />
+        <circle cx="55" cy="55" r="46" stroke="#D1D5DC" strokeWidth="14" style={{ opacity: 0.4 }} fill="none" />
         <circle
-					cx="50"
-					cy="50"
-					r="36"
+					cx="55"
+					cy="55"
+					r="46"
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
 					strokeWidth="14"
 					fill="none"
-					strokeDasharray="283"
+					strokeDasharray="289"
 					strokeDashoffset={strokeDashoffset}
 					style={{ 
             transform: 'rotate(-90deg)', 

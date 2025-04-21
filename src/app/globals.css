@@ -29,5 +29,12 @@ body {
   font-family: 'Roboto Condensed', sans-serif;
   letter-spacing: 2px;
   font-weight: 200;
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-size: 3.5rem;
+}
+
+@media (max-width: 768px) { /* Adjust the breakpoint as needed */
+  .countdown-timer {
+    font-size: 2.5rem;
+    letter-spacing: 1px;
+  }
 }
