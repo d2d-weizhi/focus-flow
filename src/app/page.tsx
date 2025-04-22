@@ -2,7 +2,6 @@
 
 import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { DoorOpen } from "lucide-react";
 import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
 import { KRNumericTextBox, KRButton, CircularProgressBar, TimePeriodIndicators, TimePeriodType } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
@@ -11,6 +10,14 @@ const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false })
 const TOTAL_CYCLES = 4;
 
 export default function Home() {
+
+	/**
+	 * @description - our countdown timer needs time to load.
+	 * @type {boolean}
+	 * @default {true}
+	 */
+	const [isLoading, setIsLoading] = useState<boolean>(true);
+
 	/**
 	 * @description - Indicates whether or not the user has started a new Focus session, 
 	 * 								or when the session has resumed.
@@ -39,7 +46,7 @@ export default function Home() {
 	 * @description - Amount of focus time period in seconds. Used for internal
 	 * 								calculations and application logic.
 	 * @type {number}
-	 * @default {25 * 60}
+	 * @default {25}
 	 */
 	const [timeLeft, setTimeLeft] = useState<number>(25 * 60);
 
@@ -71,13 +78,6 @@ export default function Home() {
 	 * @default {1} - The app will always start in the first cycle (1 of 4).
 	 */
 	const [currCycle, setCurrCycle] = useState<number>(1);
-
-	/**
-	 * @description - By default, this app will start in a light material theme.
-	 * @type {string} - Possible values are "light" | "dark"
-	 * @default {"light"}
-	 */
-	// const [sessTheme, setSessTheme] = useState<string>("light");
 
 	/**
 	 * @description - A flag value for toggling our Window dialog.
@@ -129,6 +129,7 @@ export default function Home() {
 	}
 
 	function onSaveFocusTimeClicked() {
+		localStorage.setItem("userFocusTime", focusTimeRef.current!.value);
 		setFocusTime(parseInt(focusTimeRef.current!.value));
 		setTimeLeft(focusTimeInSec(parseInt(focusTimeRef.current!.value)));
 		setIsShowWindow(false);
@@ -176,7 +177,18 @@ export default function Home() {
 	}
 
 	useEffect(() => {
-		// The user as started the clock, and it's not paused.
+		// Get user's sessTheme and focusTime
+		const sessTheme = localStorage.getItem("sessTheme");
+		
+		if (isLoading) {
+			setTimeout(() => {
+				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
+				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
+				setIsLoading(false);
+			}, 3000);
+		}
+
+		// The user has started the clock, and it's not paused.
 		if (isRunning && !isPaused && timeLeft > 0) {
 			timerId.current = setTimeout(() => {
 				setTimeLeft((prevTime) => prevTime - 1);
@@ -223,29 +235,16 @@ export default function Home() {
 	}, [isRunning, isPaused, timeLeft, focusTime]);
 
 	return (
-		<div className="relative h-screen w-screen flex items-center justify-center">
-			{/* Exit Button */}
-			<KRButton 
-				id="btnExitApp"
-				type="button" 
-				fillMode={'outline'}
-				style={{ position: 'absolute', top: '1rem', right: '1rem' }}
-			>
-				<DoorOpen stroke="#141414" strokeWidth={1.5} />
-			</KRButton>
-			
-			{/*
-				Our Pomodoro Time and controls will be placed inside the container below.
-				Always remember, when we want to layout items vertically inside a container,
-				we need to use flex-col.
-			*/}
 			<div
 				className="flex flex-col items-center justify-center rounded-lg shadow-md p-8 mx-8 my-16 w-600"
 				style={{ maxWidth: "600px", backgroundColor: "#FAF9F6" }}
 			>
-				{/*
-					Our app container will have a min-height of 500px, and max-height of 700px.
-					This is to ensure that it will still look good on screens with smaller height dimensions.
+					{/*
+					Our Pomodoro Time and controls will be placed inside this container.
+					Always remember, when we want to layout items vertically inside a container,
+					we need to use flex-col.
+
+					Our app container will have a maxWidth of 600px. Height will wrap around contents.
 				*/}
 				
 				{/*
@@ -255,6 +254,9 @@ export default function Home() {
 					id="btnSetFocusTime"
 					fillMode={"outline"}
 					onClick={onSetFocusTimeClicked}
+					style={{
+						fontSize: "1.1rem"
+					}}
 				>
 					Set Focus Time
 				</KRButton>
@@ -285,6 +287,12 @@ export default function Home() {
 									ref={focusTimeRef}
 									id="tbFocusTimeMin" 
 									className="w-full" 
+									style={{
+										fontSize: "1.1rem",
+										fontWeight: "400",
+										fontFamily: "Roboto",
+										letterSpacing: "1px"
+									}}
 								/>
 							</fieldset>
 							<div className="flex w-full justify-center mt-4">
@@ -295,12 +303,24 @@ export default function Home() {
 									themeColor={'secondary'} 
 									className="mr-4"
 									onClick={onSaveFocusTimeClicked}
+									style={{
+										fontSize: "1.1rem",
+										fontWeight: "500",
+										fontFamily: "Roboto",
+										letterSpacing: "1px"
+									}}
 								>
 									Save Time
 								</KRButton>
 								<KRButton 
 									type="button"
 									onClick={onCloseFocusTimeWindow}
+									style={{
+										fontSize: "1.1rem",
+										fontWeight: "500",
+										fontFamily: "Roboto",
+										letterSpacing: "1px"
+									}}
 								>
 									Cancel
 								</KRButton>
@@ -318,9 +338,16 @@ export default function Home() {
 						activePeriod={activePeriodType}	
 					/>
 					{/* Timer display */}
-					<div className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay">
-						{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
-					</div>
+					{isLoading ? (
+						<div className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500" id="timerDisplay">
+							00:00
+						</div>
+					) : (
+						<div className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay">
+							{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+						</div>
+					)}
+					
 				</div>
 
 				<div className="w-full h-6" /> {/* Separator */}
@@ -342,6 +369,12 @@ export default function Home() {
 							themeColor={'primary'}
 							svgIcon={playSmIcon}
 							onClick={onStartClicked}
+							style={{
+								fontSize: "1.1rem",
+								fontWeight: "500",
+								fontFamily: "Roboto",
+								letterSpacing: "1px"
+							}}
 						>
 							Start
 						</KRButton>
@@ -354,6 +387,12 @@ export default function Home() {
 							themeColor={'light'}
 							svgIcon={pauseSmIcon}
 							onClick={onPauseClicked}
+							style={{
+								fontSize: "1.1rem",
+								fontWeight: "500",
+								fontFamily: "Roboto",
+								letterSpacing: "1px"
+							}}
 						>
 							Pause
 						</KRButton>
@@ -366,6 +405,12 @@ export default function Home() {
 							themeColor={'success'}
 							svgIcon={playSmIcon}
 							onClick={onResumeClicked}
+							style={{
+								fontSize: "1.1rem",
+								fontWeight: "500",
+								fontFamily: "Roboto",
+								letterSpacing: "1px"
+							}}
 						>
 							Resume
 						</KRButton>
@@ -378,11 +423,16 @@ export default function Home() {
 						disabled={!isRunning}
 						svgIcon={stopSmIcon}
 						onClick={onStopClicked}
+						style={{
+							fontSize: "1.1rem",
+							fontWeight: "500",
+							fontFamily: "Roboto",
+							letterSpacing: "1px"
+						}}
 					>
 						Stop
 					</KRButton>
 				</div>
 			</div>
-		</div>
 	);
 }

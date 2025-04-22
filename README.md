@@ -180,6 +180,18 @@ function onSaveFocusTimeClicked() {
 - When tweaking the dimensions of the `CircularProgressBar`, I also realized that I need to adjust both the 
 radius and the center point of the circle. That way, it will remain centered in the `viewPort`.
 
+### 22nd, Tue: Setting Unique User Sessions
+
+- Implemented unique user-specific sessions without the use of a user account, or logins.
+- Used `localStorage` technique because it's the simplest for the current use-case.
+- Added `isLoading` state variable in the `Home` component.
+- Created a `timeout` of 3s within the `useEffect` hook so that the UI has time to load the `userFocusTime` from `localStorage`.
+- When user saves a new focus time, it will be updated to the `userFocusTime` storage.
+- Added the pulsing animation to the countdown timer "00:00" when `isLoading==true`.
+- Display new countdown timer once loading is finished.
+- When user presses the exit button (top-left), display a translucant white overlay that says the session has ended and they can close the tab/window.
+- Injected "Roboto" font via Google fonts CDN. So the UI now has a consistent font family.
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 

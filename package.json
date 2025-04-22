@@ -15,10 +15,12 @@
     "@progress/kendo-react-inputs": "^10.1.0",
     "@progress/kendo-svg-icons": "^4.1.0",
     "@progress/kendo-theme-material": "^10.5.0",
+    "@types/uuid": "^10.0.0",
     "lucide-react": "^0.488.0",
     "next": "15.3.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
