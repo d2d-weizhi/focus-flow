@@ -192,6 +192,17 @@ radius and the center point of the circle. That way, it will remain centered in 
 - When user presses the exit button (top-left), display a translucant white overlay that says the session has ended and they can close the tab/window.
 - Injected "Roboto" font via Google fonts CDN. So the UI now has a consistent font family.
 
+#### Part Two: Laying Some Groundwork for Tomorrow
+
+- I've decided to add a new (but temporary) dimension tabs at the top-left corner of the web page.
+- My goal and mission when it comes to creating a truly responsive design is to make all the dimensions of UI elements relative to the actual page/screen estate size.
+- media queries may have been the way to create responsive web design in the early days, but they are not the best way to create a seamless UX these days.
+- I've been testing this web app at 150% magnification for days (it is my browser's default mode).
+- It also made me realize that my assumptions are not going to be a reliable way to make decision in the ideal dimensions.
+- I need to default my magnification to 100% and use it as the baseline for everything that I want to achieve.
+- Regardless of whether a user's machine has been scaled by default (Windows does it, sometimes at 150%, sometimes 175%, or even 200%), we need to ensure that our UI is able to handle whatever scaling factor the user is having.
+- Are percentages a possible solution? Gemini did suggest using `rem` as a way to scale font sizes. It's something I'll need to explore tomorrow.
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 
