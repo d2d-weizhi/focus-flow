@@ -115,7 +115,7 @@ export default function RootLayout({
         </div>
         {/* Display the userSessId */}
         {userSessId && (
-          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 mb-2 text-center text-sm text-[#141414]">
+          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 mb-2 text-center text-sm text-[#141414] width-max">
             Session ID: {userSessId}
           </div>
         )}
