@@ -75,4 +75,8 @@ body {
     font-size: 2rem;
     letter-spacing: 1px;
   }
+
+  .session-id {
+    font-size: 1rem;
+  }
 }
