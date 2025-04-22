@@ -178,7 +178,7 @@ export default function Home() {
 
 	useEffect(() => {
 		// Get user's sessTheme and focusTime
-		const sessTheme = localStorage.getItem("sessTheme");
+		// const sessTheme = localStorage.getItem("sessTheme");
 		
 		if (isLoading) {
 			setTimeout(() => {
