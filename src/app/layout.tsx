@@ -7,7 +7,6 @@ import { DoorOpen } from "lucide-react";
 import { KRButton } from "./components/FFComponents";
 import "@progress/kendo-theme-material/dist/material-main.css";
 import "./globals.css";
-import Home from "./page";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,7 +35,7 @@ export default function RootLayout({
 	 */
 	const [sessTheme, setSessTheme] = useState<"light" | "dark">("light");
 
-  const [userFocusTime, setUserFocusTime] = useState<number>(25);
+  //const [userFocusTime, setUserFocusTime] = useState<number>(25);
 
   const [showOverlay, setShowOverlay] = useState(false);
 
@@ -47,7 +46,7 @@ export default function RootLayout({
       // continue with last session.
       setUserSessId(storedSessId);
       setSessTheme(localStorage.getItem("sessTheme") === "light" ? "light" : "dark");
-      setUserFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
+      //setUserFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
       console.log("userFocusTime is:", parseInt(localStorage.getItem("userFocusTime")!));
     } else {
       // new session.
@@ -55,7 +54,7 @@ export default function RootLayout({
       localStorage.setItem("userSessId", newSessId);
       localStorage.setItem("sessTheme", "light");   // default theme
       localStorage.setItem("userFocusTime", "25");  // default focus time
-      setUserFocusTime(25);
+      //setUserFocusTime(25);
     }
   }, []);
 
