@@ -128,7 +128,7 @@ export default function RootLayout({
                 opacity: 0.95
               }}  
             > 
-              <p className="text-lg text-gray-800">
+              <p className="text-lg text-gray-800 mx-6">
                 Your session has ended. You may now close this tab/window.
               </p>
             </div>
