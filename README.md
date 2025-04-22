@@ -1,24 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Building Something New, Something Different, Something Better.
 
-# Getting Started
+FocusFlow is the first of a series of mini-, small-scale app demos that I'm working on as part of a large mission to rebuild a better portfolio than the one I had lost years prior. These projects will range from web applications to mobile apps.
 
-First, run the development server:
+The reason for picking small-scale, limited-scoped project is because it helps to narrow the focus. Typically, a real-world project can take months to finish. But for a portfolio showcase, normally we only need to showcase the core features and functionalities. Also, after spending the first three days working on FocusFlow, I am now fully aware that most of these limited-scope projects can take anywhere between one to two weeks to fully complete.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+My main mission and top priority for working on this projects is to focus on producing the highest quality demos, not just proof-of-concepts. I want them to look like part of a polished real-world website/app.
 
 ---
 
