@@ -23,6 +23,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
+
   /**
    * @description - Acts as a unique identifier for each user's session.
    */
@@ -40,6 +45,16 @@ export default function RootLayout({
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
+    const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set initial dimensions on mount
+
     const storedSessId = localStorage.getItem("userSessId");
 
     if (storedSessId) {
@@ -56,6 +71,8 @@ export default function RootLayout({
       localStorage.setItem("userFocusTime", "25");  // default focus time
       //setUserFocusTime(25);
     }
+
+    return () => window.removeEventListener('resize', handleResize); // Cleanup
   }, []);
 
   function onExitClicked() {
@@ -67,12 +84,21 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet"></link>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-screen bg-gray-300`}
       >
+        <div id="dimensions-container" className="dimensions-container">
+          <div className="dimension-tab" id="width-tab">
+            <span className="dimension-text">Width: {windowDimensions.width}px</span>
+          </div>
+          <div className="dimension-tab" id="height-tab">
+            <span className="dimension-text">Height: {windowDimensions.height}px</span>
+          </div>
+        </div>
         {/* Page Wrapper */}
         <div className="relative h-screen w-screen flex items-center justify-center">
           {/* Exit Button */}

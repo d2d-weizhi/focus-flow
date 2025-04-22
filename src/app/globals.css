@@ -26,6 +26,37 @@ body {
   font-weight: 350;
 }
 
+#dimensions-container {
+  position: fixed;
+  top: 20px; 
+  left: 0;
+  z-index: 100; /* Ensure the tabs stay on top */
+  width: 180px;
+  height: 56px;
+}
+
+.dimension-tab {
+  background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+  color: white;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-left: -4px;
+  border-radius: 4px;
+  margin-bottom: 8px; /* Vertical spacing */
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.3); /* Shadow */
+  width: 170px;
+}
+
+.dimension-text {
+  font-size: 0.95rem;
+  line-height: 1.4rem;
+  font-family: "Roboto Mono";
+  font-weight: 350;
+  text-align: right;
+}
+
 .countdown-timer {
   font-family: 'Roboto Condensed', sans-serif;
   letter-spacing: 2px;
