@@ -113,26 +113,26 @@ export default function RootLayout({
           </KRButton>
           {children}
         </div>
-        {/* Overlay */}
-        {showOverlay && (
-          <div 
-            className="fixed top-0 left-0 w-screen h-screen bg-[#FAF9F6] flex items-center justify-center z-50"
-            style={{
-              opacity: 0.95
-            }}  
-          > 
-            <p className="text-lg text-gray-800 mx-6">
-              Your session has ended. You may now close this tab/window.
-            </p>
-          </div>
-        )}
-          
         {/* Display the userSessId */}
         {userSessId && (
-          <div className="sticky bottom-2 left-1/2 -translate-x-1/2 mb-4 text-center text-sm text-[#141414]">
+          <div className="absolute bottom-1 left-1/2 -translate-x-1/2 mb-4 text-center text-sm text-[#141414]">
             Session ID: {userSessId}
           </div>
         )}
+
+        {/* Overlay */}
+        {showOverlay && (
+            <div 
+              className="fixed top-0 left-0 w-screen h-screen bg-[#FAF9F6] flex items-center justify-center z-50"
+              style={{
+                opacity: 0.95
+              }}  
+            > 
+              <p className="text-lg text-gray-800 mx-6">
+                Your session has ended. You may now close this tab/window.
+              </p>
+            </div>
+          )}
       </body>
     </html>
   );
