@@ -203,6 +203,10 @@ radius and the center point of the circle. That way, it will remain centered in 
 - Regardless of whether a user's machine has been scaled by default (Windows does it, sometimes at 150%, sometimes 175%, or even 200%), we need to ensure that our UI is able to handle whatever scaling factor the user is having.
 - Are percentages a possible solution? Gemini did suggest using `rem` as a way to scale font sizes. It's something I'll need to explore tomorrow.
 
+### 23, Wed: Resetting the UI at 100% Magnification
+
+- Set all the font sizes to 16px (or 1rem)
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 

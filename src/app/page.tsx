@@ -254,9 +254,7 @@ export default function Home() {
 					id="btnSetFocusTime"
 					fillMode={"outline"}
 					onClick={onSetFocusTimeClicked}
-					style={{
-						fontSize: "1.1rem"
-					}}
+					className="kr-buttons"
 				>
 					Set Focus Time
 				</KRButton>
@@ -288,7 +286,7 @@ export default function Home() {
 									id="tbFocusTimeMin" 
 									className="w-full" 
 									style={{
-										fontSize: "1.1rem",
+										fontSize: "1rem",
 										fontWeight: "400",
 										fontFamily: "Roboto",
 										letterSpacing: "1px"
@@ -301,26 +299,15 @@ export default function Home() {
 									type="submit" 
 									fillMode={'solid'} 
 									themeColor={'secondary'} 
-									className="mr-4"
+									className="kr-buttons mr-4"
 									onClick={onSaveFocusTimeClicked}
-									style={{
-										fontSize: "1.1rem",
-										fontWeight: "500",
-										fontFamily: "Roboto",
-										letterSpacing: "1px"
-									}}
 								>
 									Save Time
 								</KRButton>
 								<KRButton 
 									type="button"
+									className="kr-buttons"
 									onClick={onCloseFocusTimeWindow}
-									style={{
-										fontSize: "1.1rem",
-										fontWeight: "500",
-										fontFamily: "Roboto",
-										letterSpacing: "1px"
-									}}
 								>
 									Cancel
 								</KRButton>
@@ -365,16 +352,11 @@ export default function Home() {
 						!isRunning && 
 						<KRButton 
 							id="btnStart"
+							className="kr-buttons"
 							fillMode={'solid'}
 							themeColor={'primary'}
 							svgIcon={playSmIcon}
 							onClick={onStartClicked}
-							style={{
-								fontSize: "1.1rem",
-								fontWeight: "500",
-								fontFamily: "Roboto",
-								letterSpacing: "1px"
-							}}
 						>
 							Start
 						</KRButton>
@@ -383,16 +365,11 @@ export default function Home() {
 					{isRunning && !isPaused &&
 						<KRButton 
 							id="btnStart"
+							className="kr-buttons"
 							fillMode={'solid'}
 							themeColor={'light'}
 							svgIcon={pauseSmIcon}
 							onClick={onPauseClicked}
-							style={{
-								fontSize: "1.1rem",
-								fontWeight: "500",
-								fontFamily: "Roboto",
-								letterSpacing: "1px"
-							}}
 						>
 							Pause
 						</KRButton>
@@ -401,16 +378,11 @@ export default function Home() {
 					{isRunning && isPaused &&
 						<KRButton 
 							id="btnStart"
+							className="kr-buttons"
 							fillMode={'solid'}
 							themeColor={'success'}
 							svgIcon={playSmIcon}
 							onClick={onResumeClicked}
-							style={{
-								fontSize: "1.1rem",
-								fontWeight: "500",
-								fontFamily: "Roboto",
-								letterSpacing: "1px"
-							}}
 						>
 							Resume
 						</KRButton>
@@ -418,17 +390,12 @@ export default function Home() {
 
 					<KRButton 
 						id="btnStop"
+						className="kr-buttons"
 						fillMode={'solid'}
 						themeColor={'error'}
 						disabled={!isRunning}
 						svgIcon={stopSmIcon}
 						onClick={onStopClicked}
-						style={{
-							fontSize: "1.1rem",
-							fontWeight: "500",
-							fontFamily: "Roboto",
-							letterSpacing: "1px"
-						}}
 					>
 						Stop
 					</KRButton>
