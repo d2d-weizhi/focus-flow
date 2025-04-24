@@ -17,7 +17,7 @@ export default function Home() {
 			height: window.innerHeight,
 		});
 
-	const [deviceType, setDeviceType] = useState<"Mobile" | "Tablet" | "PC/Laptop">("PC/Laptop");
+	const [deviceType, setDeviceType] = useState<DeviceTypes>(DeviceTypes.PC_LAPTOP);
 
   const [orientation, setOrientation] = useState<string>("unknown");
 
@@ -206,7 +206,7 @@ export default function Home() {
           setDeviceType(deviceType)
         } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
           (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
-          setDeviceType("Tablet");
+          setDeviceType(DeviceTypes.TABLET);
         }
 
 				if (orientation.indexOf("landscape") != -1)
@@ -285,12 +285,12 @@ export default function Home() {
 			<div
 				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-8"
 				style={{
-					height: `${deviceType === "Tablet" 
+					height: `${deviceType === DeviceTypes.TABLET 
 						? orientation === "landscape" 
 							? .8 * windowDimensions.height 
 							: .6 * windowDimensions.height
 						: .6 * windowDimensions.height }px`,
-					width: `${deviceType === "Tablet"
+					width: `${deviceType === DeviceTypes.TABLET
 						? orientation === "landscape"
 							? .75 * windowDimensions.width
 							: .9 * windowDimensions.width
