@@ -5,8 +5,8 @@ export function getDeviceInformation() {
       let orientation = "unknown";
 
       if (navigator.userAgent) {
-        isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|OperaMini/i.test(
-          navigator.userAgent
+        isMobile = /mobile|android|iPhone|iPad|iPod/.test(
+          navigator.userAgent.toLowerCase()
         );
         orientation = screen.orientation.type;
 
