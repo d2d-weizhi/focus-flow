@@ -96,7 +96,7 @@ export default function RootLayout({
       window.removeEventListener('orientationchange', getDeviceInfo);
       window.removeEventListener('resize', handleResize);
     };
-  }, [orientation]);
+  }, [orientation, deviceType]);
 
   function onExitClicked() {
     setShowOverlay(true);
