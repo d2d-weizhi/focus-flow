@@ -3,7 +3,6 @@ export function getDeviceInformation() {
     (resolve) => {
       let deviceType = "PC/Laptop";
       let orientation = "unknown";
-      let isAndroid = false;
 
       if (navigator.userAgent) {
         if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
