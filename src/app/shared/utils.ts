@@ -7,7 +7,7 @@ export function getDeviceInformation() {
       if (navigator.userAgent) {
         if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
           deviceType = "Mobile";
-        } else if (navigator.userAgent.toLowerCase().match(/android/i)) {
+        } else if (navigator.userAgent.toLowerCase().match(/(android)/i)) {
           deviceType = "Tablet";
         }
         orientation = screen.orientation.type;
