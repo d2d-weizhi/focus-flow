@@ -10,11 +10,6 @@ export function getDeviceInformation() {
         );
         orientation = screen.orientation.type;
 
-        window.addEventListener("orientationchange", () => {
-          orientation = screen.orientation.type;
-          resolve({ isMobile, orientation });
-        });
-
         resolve({ isMobile, orientation });
       }
     }
