@@ -57,7 +57,7 @@ export default function RootLayout({
           setDeviceType(deviceType)
         } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
           (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
-          deviceType = "Tablet";
+          setDeviceType("Tablet");
         }
         setOrientation(orientation);
       }); 
