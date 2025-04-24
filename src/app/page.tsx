@@ -13,8 +13,8 @@ const TOTAL_CYCLES = 4;
 export default function Home() {
 
 	const [windowDimensions, setWindowDimensions] = useState({
-			width: 0,
-			height: 0,
+			width: window.innerWidth,
+			height: window.innerHeight,
 		});
 
 	const [deviceType, setDeviceType] = useState<"Mobile" | "Tablet" | "PC/Laptop">("PC/Laptop");
