@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Geist, Geist_Mono } from "next/font/google";
 import { DoorOpen } from "lucide-react";
+import { getDeviceInformation } from "./shared/utils";
 import { KRButton } from "./components/FFComponents";
 import "@progress/kendo-theme-material/dist/material-main.css";
 import "./globals.css";
@@ -28,6 +29,10 @@ export default function RootLayout({
     height: 0,
   });
 
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+
+  const [orientation, setOrientation] = useState<string>("unknown");
+
   /**
    * @description - Acts as a unique identifier for each user's session.
    */
@@ -45,6 +50,11 @@ export default function RootLayout({
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
+    getDeviceInformation().then(({ isMobile, orientation }) => {
+      setIsMobile(isMobile);
+      setOrientation(orientation);
+    }); 
+
     const handleResize = () => {
       setWindowDimensions({
         width: window.innerWidth,
@@ -97,6 +107,12 @@ export default function RootLayout({
           </div>
           <div className="dimension-tab" id="height-tab">
             <span className="dimension-text">Height: {windowDimensions.height}px</span>
+          </div>
+          <div className="dimension-tab" id="height-tab">
+            <span className="dimension-text">Phone/Tablet: {isMobile ? "true" : "false"}</span>
+          </div>
+          <div className="dimension-tab" id="height-tab">
+            <span className="dimension-text">Orientation: {orientation}</span>
           </div>
         </div>
         {/* Page Wrapper */}
