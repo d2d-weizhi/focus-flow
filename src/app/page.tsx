@@ -3,6 +3,7 @@
 import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
+import { DeviceTypes, getDeviceInformation } from "./shared/utils";
 import { KRNumericTextBox, KRButton, CircularProgressBar, TimePeriodIndicators, TimePeriodType } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
@@ -10,6 +11,15 @@ const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false })
 const TOTAL_CYCLES = 4;
 
 export default function Home() {
+
+	const [windowDimensions, setWindowDimensions] = useState({
+			width: 0,
+			height: 0,
+		});
+
+	const [deviceType, setDeviceType] = useState<"Mobile" | "Tablet" | "PC/Laptop">("PC/Laptop");
+
+  const [orientation, setOrientation] = useState<string>("unknown");
 
 	/**
 	 * @description - our countdown timer needs time to load.
@@ -177,6 +187,39 @@ export default function Home() {
 	}
 
 	useEffect(() => {
+		/**
+		 * Our operation for checking browser innerWidth, innerHeight, deviceType and orientation.
+		 */
+		const handleResize = () => {
+      setWindowDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); 
+
+		const getDeviceInfo = () => {
+      getDeviceInformation().then(({ deviceType, orientation }) => {
+        if (deviceType == DeviceTypes.MOBILE_PHONE) {
+          setDeviceType(deviceType)
+        } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
+          (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
+          setDeviceType(DeviceTypes.TABLET);
+        }
+
+				if (orientation.indexOf("landscape") != -1)
+        	setOrientation("landscape");
+				else
+					setOrientation("portrait");
+      }); 
+    };
+
+    getDeviceInfo();
+
+    window.addEventListener("orientationchange", getDeviceInfo);
+
 		// Get user's sessTheme and focusTime
 		// const sessTheme = localStorage.getItem("sessTheme");
 		
@@ -230,13 +273,23 @@ export default function Home() {
       if (timerId.current !== null) {
         clearTimeout(timerId.current);
       }
+			
+			window.removeEventListener('resize', handleResize);
+			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
-	}, [isRunning, isPaused, timeLeft, focusTime]);
+	}, [isRunning, isPaused, timeLeft, focusTime, orientation]);
 
 	return (
 			<div
-				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-8 ff-container"
+				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-8"
+				style={{
+					height: `${deviceType === "Tablet" 
+						? orientation === "landscape" 
+							? "80%" 
+							: "60%"
+						: "60%" }`
+				}}
 			>
 					{/*
 					Our Pomodoro Time and controls will be placed inside this container.

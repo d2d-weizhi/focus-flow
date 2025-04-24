@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Geist, Geist_Mono } from "next/font/google";
 import { DoorOpen } from "lucide-react";
-import { getDeviceInformation } from "./shared/utils";
+// import { getDeviceInformation } from "./shared/utils";
 import { KRButton } from "./components/FFComponents";
 import "@progress/kendo-theme-material/dist/material-main.css";
 import "./globals.css";
@@ -24,14 +24,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [windowDimensions, setWindowDimensions] = useState({
+  /* const [windowDimensions, setWindowDimensions] = useState({
     width: 0,
     height: 0,
-  });
-
-  const [deviceType, setDeviceType] = useState<string>("PC/Laptop");
-
-  const [orientation, setOrientation] = useState<string>("unknown");
+  }); */
 
   /**
    * @description - Acts as a unique identifier for each user's session.
@@ -50,32 +46,6 @@ export default function RootLayout({
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-  
-    const getDeviceInfo = () => {
-      getDeviceInformation().then(({ deviceType, orientation }) => {
-        if (deviceType == "Mobile") {
-          setDeviceType(deviceType)
-        } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
-          (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
-          setDeviceType("Tablet");
-        }
-        setOrientation(orientation);
-      }); 
-    };
-
-    getDeviceInfo();
-
-    window.addEventListener("orientationchange", getDeviceInfo);
-
-    const handleResize = () => {
-      setWindowDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Set initial dimensions on mount
 
     const storedSessId = localStorage.getItem("userSessId");
 
@@ -93,13 +63,7 @@ export default function RootLayout({
       localStorage.setItem("userFocusTime", "25");  // default focus time
       //setUserFocusTime(25);
     }
-
-    return () => {
-      // Clearn up our event listeners
-      window.removeEventListener('orientationchange', getDeviceInfo);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [orientation, deviceType]);
+  }, []);
 
   function onExitClicked() {
     setShowOverlay(true);
@@ -117,6 +81,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-screen bg-gray-300`}
       >
+        {/* 
         <div id="dimensions-container" className="dimensions-container">
           <div className="dimension-tab" id="width-tab">
             <span className="dimension-text">Width: {windowDimensions.width}px</span>
@@ -131,6 +96,8 @@ export default function RootLayout({
             <span className="dimension-text">Orientation: {orientation}</span>
           </div>
         </div>
+         */}
+
         {/* Page Wrapper */}
         <div className="relative h-screen w-screen flex items-center justify-center">
           {/* Exit Button */}
