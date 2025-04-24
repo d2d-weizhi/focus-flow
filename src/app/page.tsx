@@ -197,7 +197,6 @@ export default function Home() {
       });
     };
 
-    window.addEventListener('resize', handleResize);
     handleResize(); 
 
 		const getDeviceInfo = () => {
@@ -207,7 +206,9 @@ export default function Home() {
         } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
           (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
           setDeviceType(DeviceTypes.TABLET);
-        }
+        } else {
+					window.addEventListener('resize', handleResize);
+				}
 
 				if (orientation.indexOf("landscape") != -1)
         	setOrientation("landscape");
@@ -275,7 +276,10 @@ export default function Home() {
         clearTimeout(timerId.current);
       }
 			
-			window.removeEventListener('resize', handleResize);
+			if (deviceType === DeviceTypes.PC_LAPTOP) {
+				window.removeEventListener('resize', handleResize);
+			}
+			
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
@@ -287,15 +291,16 @@ export default function Home() {
 				style={{
 					backgroundColor: "#FAF9F6",
 					height: `${deviceType === DeviceTypes.TABLET 
-						? orientation === "landscape" 
-							? .8 * windowDimensions.height 
-							: .6 * windowDimensions.height
-						: .6 * windowDimensions.height }px`,
+						? .7 * windowDimensions.height 
+						: deviceType ==  DeviceTypes.MOBILE_PHONE
+							? .6 * windowDimensions.height
+							: .7 * windowDimensions.height
+					}px`,
 					width: `${deviceType === DeviceTypes.TABLET
-						? orientation === "landscape"
-							? .75 * windowDimensions.width
-							: .9 * windowDimensions.width
-						: .6 * windowDimensions.width
+						? .6 * windowDimensions.width
+						: deviceType == DeviceTypes.MOBILE_PHONE
+							? .8 * windowDimensions.width
+							: .7 * windowDimensions.width
 					}px`
 				}}
 			>
