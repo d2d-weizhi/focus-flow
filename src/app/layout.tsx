@@ -31,6 +31,8 @@ export default function RootLayout({
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  const [fullUa, setFullUa] = useState<string>("");
+
   const [orientation, setOrientation] = useState<string>("unknown");
 
   /**
@@ -50,15 +52,17 @@ export default function RootLayout({
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-    getDeviceInformation().then(({ isMobile, orientation }) => {
+    getDeviceInformation().then(({ isMobile, orientation, fullUA }) => {
       setIsMobile(isMobile);
       setOrientation(orientation);
+      setFullUa(fullUA);
     }); 
 
     const getDeviceInfo = () => {
-      getDeviceInformation().then(({ isMobile, orientation }) => {
+      getDeviceInformation().then(({ isMobile, orientation, fullUA }) => {
         setIsMobile(isMobile);
         setOrientation(orientation);
+        setFullUa(fullUA);
       }); 
     };
 
@@ -146,6 +150,7 @@ export default function RootLayout({
         {userSessId && (
           <div className="absolute bottom-1 left-1/2 -translate-x-1/2 mb-2 session-id text-center text-sm text-[#141414] width-max">
             Session ID: {userSessId}
+            UA: {fullUa}
           </div>
         )}
 
