@@ -216,9 +216,7 @@ export default function Home() {
       }); 
     };
 
-		setTimeout(() => {
-			getDeviceInfo();
-		}, 2000);
+		getDeviceInfo();
     
 
     window.addEventListener("orientationchange", getDeviceInfo);
