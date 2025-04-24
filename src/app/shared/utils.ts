@@ -1,8 +1,6 @@
-import { UAParser } from "ua-parser-js";
+var platform = require("platform");
 
 export function getDeviceInformation() {
-  const parser = UAParser();
-
   return new Promise<{ deviceType: string, orientation: string }>(
     (resolve) => {
       let deviceType = "PC/Laptop";
@@ -11,8 +9,7 @@ export function getDeviceInformation() {
       if (navigator.userAgent) {
         if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
           deviceType = "Mobile";
-        } else if (parser.os.name! === "Android" || parser.os.name! === "iOS") {
-          alert(parser.os.name!);
+        } else if (platform.os.indexOf("iOS") != -1 || platform.os.indexOf("Android") != -1) {
           deviceType = "Tablet";
         }
         orientation = screen.orientation.type;
