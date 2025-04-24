@@ -283,8 +283,9 @@ export default function Home() {
 
 	return (
 			<div
-				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-8"
+				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-[2%]"
 				style={{
+					backgroundColor: "#FAF9F6",
 					height: `${deviceType === DeviceTypes.TABLET 
 						? orientation === "landscape" 
 							? .8 * windowDimensions.height 
