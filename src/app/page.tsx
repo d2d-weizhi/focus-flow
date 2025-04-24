@@ -206,7 +206,7 @@ export default function Home() {
           setDeviceType(deviceType)
         } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
           (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
-          setDeviceType(DeviceTypes.TABLET);
+          setDeviceType("Tablet");
         }
 
 				if (orientation.indexOf("landscape") != -1)
