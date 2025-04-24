@@ -71,7 +71,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
   const strokeDashoffset = (289 * progressPercent) / 100;
   
   return (
-    <div className="w-[75%] max-w-[440px] aspect-square relative">
+    <div className="w-[70%] aspect-square relative">
 			<svg className="w-full h-full" viewBox="0 0 110 110">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
@@ -124,7 +124,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
 */
 export function TimePeriodIndicators({ arrPeriods, activePeriodIndex, timeElapsed }: TimePeriodIndicatorsProps) {
   return (
-    <div className="flex w-[80%] max-w-[350px] h-1.5">
+    <div className="flex w-[75%]  h-[1.5%]">
       {arrPeriods.map((period, index) => {
         // 1. Determine if this is the active period
         const isActive = index === activePeriodIndex;
@@ -145,7 +145,7 @@ export function TimePeriodIndicators({ arrPeriods, activePeriodIndex, timeElapse
             style={{ opacity: 0.4 }} 
           >
             <div 
-              className="period-indicator h-1.5 rounded-full" // Add a class for styling
+              className="period-indicator h-full rounded-full" // Add a class for styling
               style={{ 
                 width: `${percentage}%`, // Initial width of 0% 
                 backgroundColor: '#454545',

@@ -236,8 +236,7 @@ export default function Home() {
 
 	return (
 			<div
-				className="flex flex-col items-center justify-center rounded-lg shadow-md p-8 mx-8 my-16 w-600"
-				style={{ maxWidth: "600px", backgroundColor: "#FAF9F6" }}
+				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-8 ff-container"
 			>
 					{/*
 					Our Pomodoro Time and controls will be placed inside this container.
@@ -255,12 +254,17 @@ export default function Home() {
 					fillMode={"outline"}
 					onClick={onSetFocusTimeClicked}
 					className="kr-buttons"
+					style={{
+						width: "300px",
+						height: "100px",
+						borderRadius: "8px",
+					}}
 				>
 					Set Focus Time
 				</KRButton>
 				
 				{/* We will use a <div /> to act as a spacer between our content items. This helps to maintain a consistent layout. */}
-				<div className="w-full h-6" />
+				<div className="w-full h-[5%]" />
 				
 				{/*
 					A modal dialog/window for the user to set their focus time in minutes.
@@ -337,17 +341,17 @@ export default function Home() {
 					
 				</div>
 
-				<div className="w-full h-6" /> {/* Separator */}
+				<div className="w-full h-[5%]" /> {/* Separator */}
 				
 				<TimePeriodIndicators 
 					arrPeriods={periods} 
 					activePeriodIndex={activePeriod} 
 					timeElapsed={timeElapsed} />
 				
-				<div className="w-full h-6" /> {/* Separator */}
+				<div className="w-full h-[8%]" /> {/* Separator */}
 
 				{/* Control Buttons */}
-				<div className="flex items-center justify-center space-x-4"> 
+				<div className="flex items-center justify-center space-x-[5%]"> 
 					{
 						!isRunning && 
 						<KRButton 
@@ -357,6 +361,11 @@ export default function Home() {
 							themeColor={'primary'}
 							svgIcon={playSmIcon}
 							onClick={onStartClicked}
+							style={{
+								width: "200px",
+								height: "70px",
+								borderRadius: "8px",
+							}}
 						>
 							Start
 						</KRButton>
@@ -370,6 +379,11 @@ export default function Home() {
 							themeColor={'light'}
 							svgIcon={pauseSmIcon}
 							onClick={onPauseClicked}
+							style={{
+								width: "200px",
+								height: "70px",
+								borderRadius: "8px",
+							}}
 						>
 							Pause
 						</KRButton>
@@ -383,6 +397,11 @@ export default function Home() {
 							themeColor={'success'}
 							svgIcon={playSmIcon}
 							onClick={onResumeClicked}
+							style={{
+								width: "200px",
+								height: "70px",
+								borderRadius: "8px",
+							}}
 						>
 							Resume
 						</KRButton>
@@ -396,10 +415,16 @@ export default function Home() {
 						disabled={!isRunning}
 						svgIcon={stopSmIcon}
 						onClick={onStopClicked}
+						style={{
+							width: "200px",
+							height: "70px",
+							borderRadius: "8px",
+						}}
 					>
 						Stop
 					</KRButton>
 				</div>
+
 			</div>
 	);
 }
