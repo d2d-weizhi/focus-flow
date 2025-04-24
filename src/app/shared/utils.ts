@@ -1,18 +1,18 @@
 export function getDeviceInformation() {
-  return new Promise<{ isMobile: boolean, orientation: string, fullUA: string }>(
+  return new Promise<{ deviceType: string, orientation: string }>(
     (resolve) => {
-      let isMobile = false;
+      let deviceType = "PC/Laptop";
       let orientation = "unknown";
-      let fullUA = "";
 
       if (navigator.userAgent) {
-        isMobile = /mobile|android|iPhone|iPad|iPod/.test(
-          navigator.userAgent.toLowerCase()
-        );
-        fullUA = navigator.userAgent.toString();
+        if (navigator.userAgent.toLowerCase().match(/mobile/i)) {
+          deviceType = "Mobile";
+        } else if (navigator.userAgent.toLowerCase().match(/tablet/i)) {
+          deviceType = "Tablet";
+        }
         orientation = screen.orientation.type;
 
-        resolve({ isMobile, orientation, fullUA });
+        resolve({ deviceType, orientation });
       }
     }
   );
