@@ -291,7 +291,7 @@ export default function Home() {
 				style={{
 					backgroundColor: "#FAF9F6",
 					height: `${deviceType === DeviceTypes.TABLET 
-						? .7 * windowDimensions.height 
+						? .8 * windowDimensions.height 
 						: deviceType ==  DeviceTypes.MOBILE_PHONE
 							? .6 * windowDimensions.height
 							: .7 * windowDimensions.height
