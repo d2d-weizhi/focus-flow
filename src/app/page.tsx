@@ -288,7 +288,13 @@ export default function Home() {
 						? orientation === "landscape" 
 							? "80%" 
 							: "60%"
-						: "60%" }`
+						: "60%" }`,
+					width: `${deviceType === "Tablet"
+						? orientation === "landscape"
+							? "75%"
+							: "90%"
+						: "60%"
+					}`
 				}}
 			>
 					{/*
