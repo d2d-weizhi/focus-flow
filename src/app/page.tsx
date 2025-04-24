@@ -216,7 +216,10 @@ export default function Home() {
       }); 
     };
 
-    getDeviceInfo();
+		setTimeout(() => {
+			getDeviceInfo();
+		}, 2000);
+    
 
     window.addEventListener("orientationchange", getDeviceInfo);
 
@@ -286,15 +289,15 @@ export default function Home() {
 				style={{
 					height: `${deviceType === "Tablet" 
 						? orientation === "landscape" 
-							? "80%" 
-							: "60%"
-						: "60%" }`,
+							? .8 * windowDimensions.height 
+							: .6 * windowDimensions.height
+						: .6 * windowDimensions.height }px`,
 					width: `${deviceType === "Tablet"
 						? orientation === "landscape"
-							? "75%"
-							: "90%"
-						: "60%"
-					}`
+							? .75 * windowDimensions.width
+							: .9 * windowDimensions.width
+						: .6 * windowDimensions.width
+					}px`
 				}}
 			>
 					{/*
