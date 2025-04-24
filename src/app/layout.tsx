@@ -50,17 +50,26 @@ export default function RootLayout({
   const [showOverlay, setShowOverlay] = useState(false);
 
   useEffect(() => {
-    getDeviceInformation().then(({ deviceType, orientation }) => {
-      setDeviceType(deviceType);
-      setOrientation(orientation);
-    }); 
-
+  
     const getDeviceInfo = () => {
       getDeviceInformation().then(({ deviceType, orientation }) => {
-        setDeviceType(deviceType);
+        if (deviceType === "Mobile") {
+          setDeviceType(deviceType);
+        } else {
+          if ((orientation.indexOf("landscape") != -1 && windowDimensions.width < 1500) 
+            || (orientation.indexOf("portrait") != -1 && windowDimensions.width > 400)) {
+            // Depending on the portrait mode, we also check the browser's width.
+            setDeviceType("Tablet");
+          } else {
+            setDeviceType("PC/Laptop")
+          }
+        }
+
         setOrientation(orientation);
       }); 
     };
+
+    getDeviceInfo();
 
     window.addEventListener("orientationchange", getDeviceInfo);
 
