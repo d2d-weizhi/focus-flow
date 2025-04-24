@@ -53,7 +53,12 @@ export default function RootLayout({
   
     const getDeviceInfo = () => {
       getDeviceInformation().then(({ deviceType, orientation }) => {
-        setDeviceType(deviceType);
+        if (deviceType == "Mobile") {
+          setDeviceType(deviceType)
+        } else if ((orientation.indexOf("landscape") != -1 && windowDimensions.width < 1600) ||
+          (orientation.indexOf("portrait") != -1 && windowDimensions.width > 400)) {
+          deviceType = "Tablet";
+        }
         setOrientation(orientation);
       }); 
     };
@@ -108,6 +113,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;&display=swap" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
+        <script src="./platform.js" type="javascript" />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-screen bg-gray-300`}
