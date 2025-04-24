@@ -55,6 +55,15 @@ export default function RootLayout({
       setOrientation(orientation);
     }); 
 
+    const getDeviceInfo = () => {
+      getDeviceInformation().then(({ isMobile, orientation }) => {
+        setIsMobile(isMobile);
+        setOrientation(orientation);
+      }); 
+    };
+
+    window.addEventListener("orientationchange", getDeviceInfo);
+
     const handleResize = () => {
       setWindowDimensions({
         width: window.innerWidth,
@@ -82,8 +91,12 @@ export default function RootLayout({
       //setUserFocusTime(25);
     }
 
-    return () => window.removeEventListener('resize', handleResize); // Cleanup
-  }, []);
+    return () => {
+      // Clearn up our event listeners
+      window.removeEventListener('orientationchange', getDeviceInfo);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [orientation]);
 
   function onExitClicked() {
     setShowOverlay(true);
