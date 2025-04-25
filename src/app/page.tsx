@@ -2,7 +2,7 @@
 
 import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { playSmIcon, pauseSmIcon, stopSmIcon } from '@progress/kendo-svg-icons';
+import { DoorOpen, CircleStop, CirclePlay, CirclePause, Timer } from "lucide-react";
 import { DeviceTypes, getDeviceInformation } from "./shared/utils";
 import { KRNumericTextBox, KRButton, CircularProgressBar, TimePeriodIndicators, TimePeriodType } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
@@ -17,9 +17,21 @@ export default function Home() {
 			height: 0,
 		});
 
+	/**
+	 * >= 1600px - 1.65rem, >= 1440px - 1.5rem, >= 1280px - 1.25rem, >= 1024px - 1.125rem, >= 768px - 1rem
+	 */
+	const [btnFontSettings, setBtnFontSettings] = useState({
+		fontSize: "1rem",
+		lineHeight: "1rem"
+	});
+
+	const [btnIconSize, setBtnIconSize] = useState<number>(20);
+
 	const [deviceType, setDeviceType] = useState<DeviceTypes>(DeviceTypes.PC_LAPTOP);
 
   const [orientation, setOrientation] = useState<string>("unknown");
+
+	const [showOverlay, setShowOverlay] = useState(false);
 
 	/**
 	 * @description - our countdown timer needs time to load.
@@ -134,6 +146,10 @@ export default function Home() {
 		{ periodType: "break", duration: breakTimeInSec(focusTime) }
 	];
 
+	function onExitClicked() {
+    setShowOverlay(true);
+  }
+
 	function onSetFocusTimeClicked() {
 		setIsShowWindow(true);
 	}
@@ -186,40 +202,53 @@ export default function Home() {
 		clearTimeout(timerId.current!); 
 	}
 
+	function  calcFontSettings(width: number): string {
+		if (width >= 1600) {
+			setBtnIconSize(Math.floor(1.65 * 20));
+			return "1.65rem";
+		} else if (width >= 768 && width < 1600) {
+			let currScaleFactor = 1 + (((width - 768) / (1600 - 768)) * .65);
+			setBtnIconSize(Math.round(currScaleFactor * 20));
+			return `${currScaleFactor}rem`;
+		} else {	// Anything smaller, we can assume to be a mobile phone.
+			setBtnIconSize(Math.floor(0.95 * 20));
+			return "0.95rem";
+		}
+	}
+
 	useEffect(() => {
 		/**
 		 * Our operation for checking browser innerWidth, innerHeight, deviceType and orientation.
 		 */
 		const handleResize = () => {
+			const resizedWidth = window.innerWidth;
+			const resizedHeight = window.innerHeight;
+
       setWindowDimensions({
-        width: window.innerWidth,
-        height: window.innerHeight,
+        width: resizedWidth,
+        height: resizedHeight,
       });
+
+			setBtnFontSettings({ 
+				fontSize: calcFontSettings(resizedWidth),
+				lineHeight: calcFontSettings(resizedWidth) 
+			});
     };
 
     handleResize(); 
 
 		const getDeviceInfo = () => {
       getDeviceInformation().then(({ deviceType, orientation }) => {
-        if (deviceType == DeviceTypes.MOBILE_PHONE) {
-          setDeviceType(deviceType)
-        } else if ((orientation.indexOf("landscape") != -1 && window.innerWidth < 1600) ||
-          (orientation.indexOf("portrait") != -1 && window.innerWidth > 400)) {
-          setDeviceType(DeviceTypes.TABLET);
-        } else {
-					window.addEventListener('resize', handleResize);
-				}
-
-				if (orientation.indexOf("landscape") != -1)
+        if (orientation.indexOf("landscape") != -1)
         	setOrientation("landscape");
 				else
 					setOrientation("portrait");
-      }); 
-    };
+    	});
+		};
 
 		getDeviceInfo();
-    
 
+		window.addEventListener("resize", handleResize);
     window.addEventListener("orientationchange", getDeviceInfo);
 
 		// Get user's sessTheme and focusTime
@@ -227,6 +256,11 @@ export default function Home() {
 		
 		if (isLoading) {
 			setTimeout(() => {
+				setBtnFontSettings({ 
+					fontSize: calcFontSettings(windowDimensions.width),
+					lineHeight: calcFontSettings(windowDimensions.width) 
+				});
+				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
 				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
 				setIsLoading(false);
@@ -275,63 +309,47 @@ export default function Home() {
       if (timerId.current !== null) {
         clearTimeout(timerId.current);
       }
-			
-			if (deviceType === DeviceTypes.PC_LAPTOP) {
-				window.removeEventListener('resize', handleResize);
-			}
-			
+
+			window.removeEventListener('resize', handleResize);
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
 	}, [isRunning, isPaused, timeLeft, focusTime, orientation]);
 
 	return (
-			<div
-				className="flex flex-col items-center justify-center rounded-lg shadow-md p-[2.5%] mx-8 my-[2%]"
-				style={{
-					backgroundColor: "#FAF9F6",
-					height: `${deviceType === DeviceTypes.TABLET 
-						? .8 * windowDimensions.height 
-						: deviceType ==  DeviceTypes.MOBILE_PHONE
-							? .6 * windowDimensions.height
-							: .7 * windowDimensions.height
-					}px`,
-					width: `${deviceType === DeviceTypes.TABLET
-						? .6 * windowDimensions.width
-						: deviceType == DeviceTypes.MOBILE_PHONE
-							? .8 * windowDimensions.width
-							: .7 * windowDimensions.width
-					}px`
-				}}
-			>
-					{/*
-					Our Pomodoro Time and controls will be placed inside this container.
-					Always remember, when we want to layout items vertically inside a container,
-					we need to use flex-col.
+		<div className="flex ff-main-container px-8 py-8 w-full h-full"> {/* Our main app's container. */}
+			<div className="flex left-panel bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
+				{/* Left Panel Content Wrapper */}
+				<div className="flex flex-col items-center justify-center relative w-full h-full">
+					{/* Progress Circle Wrapper */}
+					<div className="flex flex-col items-center justify-center relative w-full h-[60%]">
+						
+						<CircularProgressBar 
+							isPaused={isPaused} 
+							timeLeft={timeLeft} 
+							totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
+							activePeriod={activePeriodType}	
+						/>
+						{/* Timer display */}
+						{isLoading ? (
+							<div className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500" id="timerDisplay">
+								00:00
+							</div>
+						) : (
+							<div className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay">
+								{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+							</div>
+						)}
+					</div>
 
-					Our app container will have a maxWidth of 600px. Height will wrap around contents.
-				*/}
-				
-				{/*
-					A button for the user to set their focus time in minutes.
-				*/}
-				<KRButton
-					id="btnSetFocusTime"
-					fillMode={"outline"}
-					onClick={onSetFocusTimeClicked}
-					className="kr-buttons"
-					style={{
-						width: "300px",
-						height: "100px",
-						borderRadius: "8px",
-					}}
-				>
-					Set Focus Time
-				</KRButton>
-				
-				{/* We will use a <div /> to act as a spacer between our content items. This helps to maintain a consistent layout. */}
-				<div className="w-full h-[5%]" />
-				
+					{/* A custom <div /> to act as a divider to keep our layout consistent. */}
+					<div className="w-full h-4" />
+
+					<TimePeriodIndicators 
+						arrPeriods={periods} 
+						activePeriodIndex={activePeriod} 
+						timeElapsed={timeElapsed} />
+				</div>
 				{/*
 					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
@@ -385,112 +403,155 @@ export default function Home() {
 						</form>
 					</KRWindow>
 				}
-				
-				<div className="flex flex-col items-center justify-center relative w-full h-full">
-					{/* Progress Circle Wrapper */}
-					<CircularProgressBar 
-						isPaused={isPaused} 
-						timeLeft={timeLeft} 
-						totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
-						activePeriod={activePeriodType}	
-					/>
-					{/* Timer display */}
-					{isLoading ? (
-						<div className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500" id="timerDisplay">
-							00:00
-						</div>
-					) : (
-						<div className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay">
-							{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
-						</div>
-					)}
-					
+
+      </div>
+      <div className="flex right-panel mr-0 bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
+				{/* Right Panel Content Wrapper */}
+				<div className="flex 2xl:flex-col xl:flex-row lg:flex-row md:flex-row items-center justify-center relative w-full h-full">
+					{/* Button Wrapper */}
+					<div className="control-buttons items-center justify-center h-full">
+						{/*
+							A button for the user to set their focus time in minutes.
+						*/}
+						<KRButton
+							id="btnSetFocusTime"
+							fillMode={"solid"}
+							themeColor={"secondary"}
+							onClick={onSetFocusTimeClicked}
+							className="kr-buttons"
+							style={{
+								fontSize: `${btnFontSettings.fontSize}`,
+								lineHeight: `${btnFontSettings.fontSize}`,
+								width: "100%",
+								height: "10%",
+								minWidth: "150px",
+								minHeight: "70px",
+								maxWidth: "450px"
+							}}
+						>
+							<div className="flex w-full items-center">
+									<Timer size={btnIconSize} />&nbsp;Set Focus Time
+								</div>
+						</KRButton>
+
+						{
+							!isRunning && 
+							<KRButton 
+								id="btnStart"
+								className="kr-buttons"
+								fillMode={'solid'}
+								themeColor={'primary'}
+								onClick={onStartClicked}
+								style={{
+									fontSize: `${btnFontSettings.fontSize}`,
+									lineHeight: `${btnFontSettings.fontSize}`,
+									width: "100%",
+									height: "10%",
+									minWidth: "150px",
+									minHeight: "70px",
+									maxWidth: "450px"
+								}}
+							>
+								<div className="flex w-full items-center">
+									<CirclePlay size={btnIconSize} />&nbsp;Start
+								</div>
+							</KRButton>
+						}
+
+						{isRunning && !isPaused &&
+							<KRButton 
+								id="btnStart"
+								className="kr-buttons"
+								fillMode={'solid'}
+								themeColor={'light'}
+								onClick={onPauseClicked}
+								style={{
+									fontSize: `${btnFontSettings.fontSize}`,
+									lineHeight: `${btnFontSettings.fontSize}`,
+									width: "100%",
+									height: "10%",
+									minWidth: "150px",
+									minHeight: "70px",
+									maxWidth: "450px"
+								}}
+							>
+								<div className="flex w-full items-center">
+									<CirclePause size={btnIconSize} />&nbsp;Pause
+								</div>
+							</KRButton>
+						}
+
+						{isRunning && isPaused &&
+							<KRButton 
+								id="btnStart"
+								className="kr-buttons"
+								fillMode={'solid'}
+								themeColor={'success'}
+								onClick={onResumeClicked}
+								style={{
+									fontSize: `${btnFontSettings.fontSize}`,
+									lineHeight: `${btnFontSettings.fontSize}`,
+									width: "100%",
+									height: "10%",
+									minWidth: "150px",
+									minHeight: "70px",
+									maxWidth: "450px"
+								}}
+							>
+								<div className="flex w-full items-center">
+									<CirclePlay size={btnIconSize} />&nbsp;Resume
+								</div>
+							</KRButton>
+						}
+
+						<KRButton 
+							id="btnStop"
+							className="kr-buttons"
+							fillMode={'solid'}
+							themeColor={'error'}
+							disabled={!isRunning}
+							iconClass="h-[50%]"
+							onClick={onStopClicked}
+							style={{
+								fontSize: `${btnFontSettings.fontSize}`,
+								lineHeight: `${btnFontSettings.fontSize}`,
+								width: "100%",
+								height: "10%",
+								minWidth: "150px",
+								minHeight: "70px",
+								maxWidth: "450px"
+							}}
+						>
+							<div className="flex w-full items-center">
+								<CircleStop size={btnIconSize} />&nbsp;Stop
+							</div>
+						</KRButton>
+
+						<KRButton 
+							id="btnExitApp"
+							className="kr-buttons"
+							type="button" 
+							fillMode={'solid'}
+							themeColor={"light"}
+							onClick={onExitClicked}
+							style={{
+								fontSize: `${btnFontSettings.fontSize}`,
+								lineHeight: `${btnFontSettings.fontSize}`,
+								width: "100%",
+								height: "10%",
+								minWidth: "150px",
+								minHeight: "70px",
+								maxWidth: "450px"
+							}}
+						>
+							<div className="flex w-full items-center">
+								<DoorOpen size={btnIconSize} />&nbsp;End Session
+							</div>
+						</KRButton>
+
+					</div>
 				</div>
-
-				<div className="w-full h-[5%]" /> {/* Separator */}
-				
-				<TimePeriodIndicators 
-					arrPeriods={periods} 
-					activePeriodIndex={activePeriod} 
-					timeElapsed={timeElapsed} />
-				
-				<div className="w-full h-[8%]" /> {/* Separator */}
-
-				{/* Control Buttons */}
-				<div className="flex items-center justify-center space-x-[5%]"> 
-					{
-						!isRunning && 
-						<KRButton 
-							id="btnStart"
-							className="kr-buttons"
-							fillMode={'solid'}
-							themeColor={'primary'}
-							svgIcon={playSmIcon}
-							onClick={onStartClicked}
-							style={{
-								width: "200px",
-								height: "70px",
-								borderRadius: "8px",
-							}}
-						>
-							Start
-						</KRButton>
-					}
-
-					{isRunning && !isPaused &&
-						<KRButton 
-							id="btnStart"
-							className="kr-buttons"
-							fillMode={'solid'}
-							themeColor={'light'}
-							svgIcon={pauseSmIcon}
-							onClick={onPauseClicked}
-							style={{
-								width: "200px",
-								height: "70px",
-								borderRadius: "8px",
-							}}
-						>
-							Pause
-						</KRButton>
-					}
-
-					{isRunning && isPaused &&
-						<KRButton 
-							id="btnStart"
-							className="kr-buttons"
-							fillMode={'solid'}
-							themeColor={'success'}
-							svgIcon={playSmIcon}
-							onClick={onResumeClicked}
-							style={{
-								width: "200px",
-								height: "70px",
-								borderRadius: "8px",
-							}}
-						>
-							Resume
-						</KRButton>
-					}
-
-					<KRButton 
-						id="btnStop"
-						className="kr-buttons"
-						fillMode={'solid'}
-						themeColor={'error'}
-						disabled={!isRunning}
-						svgIcon={stopSmIcon}
-						onClick={onStopClicked}
-						style={{
-							width: "200px",
-							height: "70px",
-							borderRadius: "8px",
-						}}
-					>
-						Stop
-					</KRButton>
-				</div>
-
-			</div>
+      </div>
+		</div>
 	);
 }

@@ -19,6 +19,10 @@
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
@@ -58,19 +62,35 @@ body {
   text-align: right;
 }
 
-.ff-container {
-  max-width: 75%;
-  max-height: 92%;
-  width: 900px;
-  height: 1000px;
+.ff-main-container {
+  @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col;
+  @apply 2xl:space-y-0 2xl:space-x-8;
+  @apply xl:space-y-8 xl:space-x-0 lg:space-y-8 lg:space-x-0 md:space-y-8 md:space-x-0;
   background-color: #FAF9F6;
+}
+
+.left-panel {
+  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
+  @apply 2xl:h-full xl:h-[65%] lg:h-[65%] md:h-[65%];
+  @apply 2xl:mr-8;
+}
+
+.right-panel {
+  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
+  @apply 2xl:h-full xl:h-[35%] lg:h-[35%] md:h-[35%];
+}
+
+.control-buttons {
+  @apply flex 2xl:flex-col xl:flex-row lg:flex-row md:flex-row 2xl:gap-y-4 xl:gap-x-4 lg:gap-x-2 md:gap-x-1;
+  @apply 2xl:w-[60%] xl:w-[85%] lg:w-[85%] md:w-[85%];
+  @apply 2xl:space-y-4 2xl:space-x-0 xl:space-x-4 lg:space-x-4 md:space-x-4;
 }
 
 .kr-buttons { 
   font-family: "Roboto", sans-serif;
-  font-size: 1.5rem;
   font-weight: 500;
-  line-height: 1.5rem;
   letter-spacing: 1px;
 }
 
@@ -81,19 +101,34 @@ body {
   font-size: 4.5rem;
 }
 
-@media (max-width: 1600px) {
+@media (min-width: 1600px) {
   .countdown-timer {
     font-size: 3.5rem;
   }
+
+  .kr-buttons {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+  }
 }
 
-@media (max-width: 768px) { /* Adjust the breakpoint as needed */
-  .countdown-timer {
-    font-size: 2rem;
-    letter-spacing: 1px;
+@media (max-width: 1440px) {
+  .kr-buttons {
+    font-size: 1.25rem;
+    line-height: 1.25rem;
   }
+}
 
-  .session-id {
-    font-size: .65rem;
+@media (max-width: 1280px) {
+  .kr-buttons {
+    font-size: 1.125rem;
+    line-height: 1.125rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .kr-buttons {
+    font-size: 1rem;
+    line-height: 1rem;
   }
 }

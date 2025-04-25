@@ -203,9 +203,86 @@ radius and the center point of the circle. That way, it will remain centered in 
 - Regardless of whether a user's machine has been scaled by default (Windows does it, sometimes at 150%, sometimes 175%, or even 200%), we need to ensure that our UI is able to handle whatever scaling factor the user is having.
 - Are percentages a possible solution? Gemini did suggest using `rem` as a way to scale font sizes. It's something I'll need to explore tomorrow.
 
-### 23, Wed: Resetting the UI at 100% Magnification
+### 25, Fri: Smooth-Scaling UI Experiment (Success)
 
-- Set all the font sizes to 16px (or 1rem)
+- Implemented a two-column/single-column responsive layout.
+  
+```
+<div className="flex ff-main-container px-8 py-8 w-full h-full"> {/* Our main app's container. */}
+	<div className="flex left-panel bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
+  </div>
+  <div className="flex right-panel mr-0 bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
+  </div>
+</div>
+```
+
+- I have also used tailwindcss's `@apply` directive in my `global.css` file to import the necessary classes.
+
+```
+.ff-main-container {
+  @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col;
+  @apply 2xl:space-y-0 2xl:space-x-8;
+  @apply xl:space-y-8 xl:space-x-0 lg:space-y-8 lg:space-x-0 md:space-y-8 md:space-x-0;
+  background-color: #FAF9F6;
+}
+
+.left-panel {
+  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
+  @apply 2xl:h-full xl:h-[65%] lg:h-[65%] md:h-[65%];
+  @apply 2xl:mr-8;
+}
+
+.right-panel {
+  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
+  @apply 2xl:h-full xl:h-[35%] lg:h-[35%] md:h-[35%];
+}
+```
+
+- Next, I was able to implement a method to calculate the necessary scaling for the button's fontSize.
+
+```
+function  calcFontSettings(width: number): string {
+	if (width >= 1600) {
+		setBtnIconSize(Math.floor(1.65 * 20));
+		return "1.65rem";
+	} else if (width >= 768 && width < 1600) {
+		let currScaleFactor = 1 + (((width - 768) / (1600 - 768)) * .65);  // <- The formula I've been using.
+		setBtnIconSize(Math.round(currScaleFactor * 20));
+		return `${currScaleFactor}rem`;
+	} else {	// Anything smaller, we can assume to be a mobile phone.
+		setBtnIconSize(Math.floor(0.95 * 20));
+		return "0.95rem";
+	}
+	}
+```
+
+- The scaling can be enhanced further, and I also want to ensure that the scaling takes into account mobile phones 
+  in portrait mode.
+
+```
+<KRButton
+	id="btnSetFocusTime"
+	fillMode={"solid"}
+	themeColor={"secondary"}
+	onClick={onSetFocusTimeClicked}
+	className="kr-buttons"
+	style={{
+		fontSize: `${btnFontSettings.fontSize}`,
+		lineHeight: `${btnFontSettings.fontSize}`,
+		width: "100%",
+		height: "10%",
+		minWidth: "150px",
+		minHeight: "70px",
+		maxWidth: "450px"
+	}}
+>
+	<div className="flex w-full items-center">
+		<Timer size={btnIconSize} />&nbsp;Set Focus Time
+	</div>
+</KRButton>
+```
 
 ## Features
 

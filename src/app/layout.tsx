@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Geist, Geist_Mono } from "next/font/google";
-import { DoorOpen } from "lucide-react";
 // import { getDeviceInformation } from "./shared/utils";
 import { KRButton } from "./components/FFComponents";
 import "@progress/kendo-theme-material/dist/material-main.css";
@@ -43,8 +42,6 @@ export default function RootLayout({
 
   //const [userFocusTime, setUserFocusTime] = useState<number>(25);
 
-  const [showOverlay, setShowOverlay] = useState(false);
-
   useEffect(() => {
 
     const storedSessId = localStorage.getItem("userSessId");
@@ -65,13 +62,10 @@ export default function RootLayout({
     }
   }, []);
 
-  function onExitClicked() {
-    setShowOverlay(true);
-  }
-
   return (
     <html lang="en" data-theme={sessTheme}>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
@@ -79,7 +73,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-screen bg-gray-300`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-screen`}
       >
         {/* 
         <div id="dimensions-container" className="dimensions-container">
@@ -99,28 +93,18 @@ export default function RootLayout({
          */}
 
         {/* Page Wrapper */}
-        <div className="relative h-screen w-screen flex items-center justify-center">
-          {/* Exit Button */}
-          <KRButton 
-            id="btnExitApp"
-            type="button" 
-            fillMode={'outline'}
-            onClick={onExitClicked}
-            style={{ position: 'absolute', top: '1rem', right: '1rem' }}
-          >
-            <DoorOpen stroke="#141414" strokeWidth={1.5} />
-          </KRButton>
+        <div className="bg-gray-100 w-full h-full">
           {children}
         </div>
         {/* Display the userSessId */}
-        {userSessId && (
+        {/* {userSessId && (
           <div className="absolute bottom-1 left-1/2 -translate-x-1/2 mb-2 session-id text-center text-sm text-[#141414] width-max">
             Session ID: {userSessId}
           </div>
-        )}
+        )} */}
 
         {/* Overlay */}
-        {showOverlay && (
+        {/* {showOverlay && (
             <div 
               className="fixed top-0 left-0 w-screen h-screen bg-[#FAF9F6] flex items-center justify-center z-50"
               style={{
@@ -131,7 +115,7 @@ export default function RootLayout({
                 Your session has ended. You may now close this tab/window.
               </p>
             </div>
-          )}
+          )} */}
       </body>
     </html>
   );
