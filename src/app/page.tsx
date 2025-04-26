@@ -17,7 +17,7 @@ export default function Home() {
 			height: 0,
 		});
 	
-	const [isMobile, setIsMobile] = useState(false);
+	// const [isMobile, setIsMobile] = useState(false);
 
 	/**
 	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem
@@ -259,10 +259,6 @@ export default function Home() {
 					lineHeight: calcFontSettings(windowDimensions.width) 
 				});
 				
-				if (windowDimensions.width < windowDimensions.height && orientation === "portrait") {
-					setIsMobile(true);
-				}
-				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
 				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
 				setIsLoading(false);
@@ -407,10 +403,6 @@ export default function Home() {
 				}
 
       </div>
-			
-			{isMobile &&
-				<div className="w-full h-8" />
-			}
 			
       <div className="flex right-panel mr-0 bg-white shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
 				{/* Right Panel Content Wrapper */}
