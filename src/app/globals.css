@@ -65,21 +65,19 @@ body {
 .ff-main-container {
   @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col sm:flex-col flex-col;
   @apply p-8;
-  @apply 2xl:gap-x-8 gap-y-8;
+  @apply gap-8;
 }
 
 .left-panel {
   @apply 2xl:flex-col xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col;
   @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full sm:w-full w-full;
   @apply 2xl:h-full xl:h-[65%] h-auto;
-  @apply 2xl:mr-8;
 }
 
 .right-panel {
   @apply 2xl:flex-col xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col;
   @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full sm:w-full w-full;
   @apply 2xl:h-full xl:h-[20%] h-auto;
-  @apply
 }
 
 .control-buttons {
