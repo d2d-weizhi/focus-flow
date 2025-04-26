@@ -20,8 +20,12 @@ export default function Home() {
 	// const [isMobile, setIsMobile] = useState(false);
 	
 	const [cpbStyles, setCpbStyles] = useState({
-		width: "600px",
+		width: "80%",
 		radius: "40"
+	});
+	
+	const [timerStyles, setTimerStyles] = useState({
+		fontSize: "1.8rem",
 	});
 	
 	/**
@@ -225,13 +229,13 @@ export default function Home() {
 	
 	function calcCpbStyles(width: number): {width: string, radius: string } {
 		if (width >= 1600) {
-			return { width: "600px", radius: "40" };
+			return { width: "80%", radius: "40" };
 		} else if (width >= 768 && width < 1600) {
-			const currWidth = 250 + (((width - 768) / (1600 - 768)) * (600 - 250));
+			const currWidth = 70 + (((width - 768) / (1600 - 768)) * 10);
 			const currRadius = 35 + (((width - 768) / (1600 - 768)) * 5);
-			return { width: `${currWidth}px`, radius: currRadius.toString() };
+			return { width: `${currWidth.toFixed(2)}%`, radius: currRadius.toString() };
 		} else {
-			return { width: "250px", radius: "35" };
+			return { width: "70%", radius: "35" };
 		}
 	}
 
@@ -262,7 +266,9 @@ export default function Home() {
 			else
 				setOrientation("portrait");
 		};
-
+		
+		// console.log(window.innerWidth);
+		//setCpbStyles(calcCpbStyles(window.innerWidth));
 		getDeviceInfo();
 
 		window.addEventListener("resize", handleResize);
@@ -278,7 +284,7 @@ export default function Home() {
 					lineHeight: calcFontSettings(windowDimensions.width) 
 				});
 				
-				setCpbStyles(calcCpbStyles(windowDimensions.width));
+				// setCpbStyles(calcCpbStyles(windowDimensions.width));
 				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
 				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
@@ -333,7 +339,7 @@ export default function Home() {
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
-	}, [isRunning, isPaused, timeLeft, focusTime, orientation]);
+	}, [isRunning, isPaused, timeLeft, focusTime, orientation, cpbStyles]);
 
 	return (
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
@@ -341,7 +347,7 @@ export default function Home() {
 				{/* Left Panel Content Wrapper */}
 				<div className="flex flex-col items-center justify-center relative w-full h-full mt-8 mb-8 gap-y-8">
 					{/* Progress Circle Wrapper */}
-					<div className="flex flex-col items-center justify-center relative w-full 2xl:h-[50%] h-auto mb-8">
+					<div className="flex flex-col items-center justify-center relative w-full h-[50%] mb-8">
 						
 						<CircularProgressBar 
 							isPaused={isPaused} 

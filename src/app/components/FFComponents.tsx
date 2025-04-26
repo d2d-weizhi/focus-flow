@@ -75,13 +75,13 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
   const strokeDashoffset = (289 * progressPercent) / 100;
   
   return (
-    <div className={`w-[${styles.width}] aspect-square relative`}>
+    <div className={`w-[60%] min-w-[250px] aspect-square relative`}>
 			<svg className="w-full h-full" viewBox="0 0 110 110">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
           {/* Focus Gradient */}
           <linearGradient id="focusGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#3f51b5" /> {/* Main focus colouur - bottom/end stop */}
+            <stop offset="0%" stopColor="#3f51b5" /> {/* Main focus colour - bottom/end stop */}
             <stop offset="90%" stopColor="#2563eb" /> {/* Lighter shade colour - top/starting stop */}
           </linearGradient>
 
