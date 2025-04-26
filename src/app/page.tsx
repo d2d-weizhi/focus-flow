@@ -264,6 +264,7 @@ export default function Home() {
 				setOrientation("portrait");
 		};
 		
+		handleResize()
 		// console.log(window.innerWidth);
 		//setCpbStyles(calcCpbStyles(window.innerWidth));
 		getDeviceInfo();
@@ -277,7 +278,10 @@ export default function Home() {
 		if (isLoading) {
 			setTimeout(() => {
 				setTimerStyles(calcTimerStyles(window.innerWidth));
-				handleResize();
+				setBtnFontSettings({
+					fontSize: calcFontSettings(windowDimensions.width),
+					lineHeight: calcFontSettings(windowDimensions.width)
+				});
 				// setCpbStyles(calcCpbStyles(windowDimensions.width));
 				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
