@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #e5e7eb;
+  --background: #FAF9F6;
   --foreground: #171717;
 }
 
@@ -14,7 +14,7 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #FAF9F6;
     --foreground: #ededed;
   }
 }
@@ -63,29 +63,28 @@ body {
 }
 
 .ff-main-container {
-  @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col;
-  @apply 2xl:space-y-0 2xl:space-x-8;
-  @apply xl:space-y-8 xl:space-x-0 lg:space-y-8 lg:space-x-0 md:space-y-8 md:space-x-0;
-  background-color: #FAF9F6;
+  @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col sm:flex-col flex-col;
+  @apply p-8;
 }
 
 .left-panel {
-  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
-  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
-  @apply 2xl:h-full xl:h-[65%] lg:h-[65%] md:h-[65%];
+  @apply 2xl:flex-col xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full sm:w-full w-full;
+  @apply 2xl:h-full xl:h-[65%] h-auto;
   @apply 2xl:mr-8;
 }
 
 .right-panel {
-  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
-  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
-  @apply 2xl:h-full xl:h-[35%] lg:h-[35%] md:h-[35%];
+  @apply 2xl:flex-col xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full sm:w-full w-full;
+  @apply 2xl:h-full xl:h-[20%] h-auto;
 }
 
 .control-buttons {
-  @apply flex 2xl:flex-col xl:flex-row lg:flex-row md:flex-row 2xl:gap-y-4 xl:gap-x-4 lg:gap-x-2 md:gap-x-1;
-  @apply 2xl:w-[60%] xl:w-[85%] lg:w-[85%] md:w-[85%];
-  @apply 2xl:space-y-4 2xl:space-x-0 xl:space-x-4 lg:space-x-4 md:space-x-4;
+  @apply flex 2xl:flex-col xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col;
+  @apply 2xl:w-[60%] xl:w-[95%] lg:w-[95%] md:w-[95%] sm:w-[95%] w-[95%];
+  @apply 2xl:space-y-4 2xl:space-x-0 xl:space-y-0 xl:space-x-4 lg:space-y-4 md:space-y-4 sm:space-y-4 space-y-4;
+  @apply m-8;
 }
 
 .kr-buttons { 

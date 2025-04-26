@@ -3,7 +3,7 @@
 import { createRef, useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { DoorOpen, CircleStop, CirclePlay, CirclePause, Timer } from "lucide-react";
-import { DeviceTypes, getDeviceInformation } from "./shared/utils";
+import { getDeviceInformation } from "./shared/utils";
 import { KRNumericTextBox, KRButton, CircularProgressBar, TimePeriodIndicators, TimePeriodType } from "./components/FFComponents";
 // Dynamically import our KRWindow component.
 const KRWindow = dynamic(() => import ('./components/KRWindow'), { ssr: false });
@@ -18,16 +18,16 @@ export default function Home() {
 		});
 
 	/**
-	 * >= 1600px - 1.65rem, >= 1440px - 1.5rem, >= 1280px - 1.25rem, >= 1024px - 1.125rem, >= 768px - 1rem
+	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem
 	 */
 	const [btnFontSettings, setBtnFontSettings] = useState({
-		fontSize: "1rem",
-		lineHeight: "1rem"
+		fontSize: "1.125rem",
+		lineHeight: "1.125rem"
 	});
 
 	const [btnIconSize, setBtnIconSize] = useState<number>(20);
 
-	const [deviceType, setDeviceType] = useState<DeviceTypes>(DeviceTypes.PC_LAPTOP);
+	//const [deviceType, setDeviceType] = useState<DeviceTypes>(DeviceTypes.PC_LAPTOP);
 
   const [orientation, setOrientation] = useState<string>("unknown");
 
@@ -204,15 +204,15 @@ export default function Home() {
 
 	function  calcFontSettings(width: number): string {
 		if (width >= 1600) {
-			setBtnIconSize(Math.floor(1.65 * 20));
-			return "1.65rem";
+			setBtnIconSize(Math.floor(1.8 * 20));
+			return "1.8rem";
 		} else if (width >= 768 && width < 1600) {
-			let currScaleFactor = 1 + (((width - 768) / (1600 - 768)) * .65);
+			const currScaleFactor = 1.125 + (((width - 768) / (1600 - 768)) * .8);
 			setBtnIconSize(Math.round(currScaleFactor * 20));
 			return `${currScaleFactor}rem`;
 		} else {	// Anything smaller, we can assume to be a mobile phone.
-			setBtnIconSize(Math.floor(0.95 * 20));
-			return "0.95rem";
+			setBtnIconSize(Math.floor(1.125 * 20));
+			return "1.125rem";
 		}
 	}
 
@@ -238,12 +238,10 @@ export default function Home() {
     handleResize(); 
 
 		const getDeviceInfo = () => {
-      getDeviceInformation().then(({ deviceType, orientation }) => {
-        if (orientation.indexOf("landscape") != -1)
-        	setOrientation("landscape");
-				else
-					setOrientation("portrait");
-    	});
+      if (getDeviceInformation().indexOf("landscape") != -1)
+				setOrientation("landscape");
+			else
+				setOrientation("portrait");
 		};
 
 		getDeviceInfo();
@@ -317,12 +315,12 @@ export default function Home() {
 	}, [isRunning, isPaused, timeLeft, focusTime, orientation]);
 
 	return (
-		<div className="flex ff-main-container px-8 py-8 w-full h-full"> {/* Our main app's container. */}
-			<div className="flex left-panel bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
+		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
+			<div className="flex left-panel bg-white shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
 				{/* Left Panel Content Wrapper */}
-				<div className="flex flex-col items-center justify-center relative w-full h-full">
+				<div className="flex flex-col items-center justify-center relative w-full h-full mt-8 mb-8 space-y-8">
 					{/* Progress Circle Wrapper */}
-					<div className="flex flex-col items-center justify-center relative w-full h-[60%]">
+					<div className="flex flex-col items-center justify-center relative w-full 2xl:h-[50%] h-auto mb-8">
 						
 						<CircularProgressBar 
 							isPaused={isPaused} 
@@ -343,7 +341,7 @@ export default function Home() {
 					</div>
 
 					{/* A custom <div /> to act as a divider to keep our layout consistent. */}
-					<div className="w-full h-4" />
+					<div className="w-full h-8" />
 
 					<TimePeriodIndicators 
 						arrPeriods={periods} 
@@ -405,7 +403,12 @@ export default function Home() {
 				}
 
       </div>
-      <div className="flex right-panel mr-0 bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
+			
+			{windowDimensions.width <= 1600 &&
+				<div className="h-8" />
+			}
+			
+      <div className="flex right-panel mr-0 bg-white shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
 				{/* Right Panel Content Wrapper */}
 				<div className="flex 2xl:flex-col xl:flex-row lg:flex-row md:flex-row items-center justify-center relative w-full h-full">
 					{/* Button Wrapper */}
@@ -430,7 +433,7 @@ export default function Home() {
 							}}
 						>
 							<div className="flex w-full items-center">
-									<Timer size={btnIconSize} />&nbsp;Set Focus Time
+									<Timer size={btnIconSize} strokeWidth={2} />&nbsp;Set Focus Time
 								</div>
 						</KRButton>
 
@@ -453,7 +456,7 @@ export default function Home() {
 								}}
 							>
 								<div className="flex w-full items-center">
-									<CirclePlay size={btnIconSize} />&nbsp;Start
+									<CirclePlay size={btnIconSize} strokeWidth={2} />&nbsp;Start
 								</div>
 							</KRButton>
 						}
@@ -476,7 +479,7 @@ export default function Home() {
 								}}
 							>
 								<div className="flex w-full items-center">
-									<CirclePause size={btnIconSize} />&nbsp;Pause
+									<CirclePause size={btnIconSize} strokeWidth={2} />&nbsp;Pause
 								</div>
 							</KRButton>
 						}
@@ -499,7 +502,7 @@ export default function Home() {
 								}}
 							>
 								<div className="flex w-full items-center">
-									<CirclePlay size={btnIconSize} />&nbsp;Resume
+									<CirclePlay size={btnIconSize} strokeWidth={2} />&nbsp;Resume
 								</div>
 							</KRButton>
 						}
@@ -523,7 +526,7 @@ export default function Home() {
 							}}
 						>
 							<div className="flex w-full items-center">
-								<CircleStop size={btnIconSize} />&nbsp;Stop
+								<CircleStop size={btnIconSize} strokeWidth={2} />&nbsp;Stop
 							</div>
 						</KRButton>
 
@@ -545,13 +548,27 @@ export default function Home() {
 							}}
 						>
 							<div className="flex w-full items-center">
-								<DoorOpen size={btnIconSize} />&nbsp;End Session
+								<DoorOpen size={btnIconSize} strokeWidth={2} />&nbsp;End Session
 							</div>
 						</KRButton>
 
 					</div>
 				</div>
       </div>
+			
+			{/* Overlay */}
+			{showOverlay && (
+				<div
+					className="fixed top-0 left-0 w-screen h-screen bg-[#FAF9F6] flex items-center justify-center z-50"
+					style={{
+						opacity: 0.95
+					}}
+				>
+					<p className="text-lg text-gray-800 mx-6 align-middle text-center">
+						Your session has ended. You may now close this tab/window.
+					</p>
+				</div>
+			)}
 		</div>
 	);
 }

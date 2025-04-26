@@ -75,25 +75,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased flex items-center justify-center h-screen`}
       >
-        {/* 
-        <div id="dimensions-container" className="dimensions-container">
-          <div className="dimension-tab" id="width-tab">
-            <span className="dimension-text">Width: {windowDimensions.width}px</span>
-          </div>
-          <div className="dimension-tab" id="height-tab">
-            <span className="dimension-text">Height: {windowDimensions.height}px</span>
-          </div>
-          <div className="dimension-tab" id="height-tab">
-            <span className="dimension-text">Device: {deviceType}</span>
-          </div>
-          <div className="dimension-tab" id="height-tab">
-            <span className="dimension-text">Orientation: {orientation}</span>
-          </div>
-        </div>
-         */}
 
         {/* Page Wrapper */}
-        <div className="bg-gray-100 w-full h-full">
+        <div className="bg-gray-100 w-full h-full items-center 2xl:px-[5%]">
           {children}
         </div>
         {/* Display the userSessId */}
@@ -102,20 +86,6 @@ export default function RootLayout({
             Session ID: {userSessId}
           </div>
         )} */}
-
-        {/* Overlay */}
-        {/* {showOverlay && (
-            <div 
-              className="fixed top-0 left-0 w-screen h-screen bg-[#FAF9F6] flex items-center justify-center z-50"
-              style={{
-                opacity: 0.95
-              }}  
-            > 
-              <p className="text-lg text-gray-800 mx-6 align-middle text-center">
-                Your session has ended. You may now close this tab/window.
-              </p>
-            </div>
-          )} */}
       </body>
     </html>
   );

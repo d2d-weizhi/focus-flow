@@ -71,7 +71,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
   const strokeDashoffset = (289 * progressPercent) / 100;
   
   return (
-    <div className="w-[60%] aspect-square relative">
+    <div className="2xl:w-[60%] w-[40%] min-w-[350px] max-w-[600px] aspect-square relative">
 			<svg className="w-full h-full" viewBox="0 0 110 110">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
