@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+//  import { useEffect, useState } from "react";
+// import { v4 as uuidv4 } from "uuid";
 import { Geist, Geist_Mono } from "next/font/google";
 // import { getDeviceInformation } from "./shared/utils";
-import { KRButton } from "./components/FFComponents";
 import "@progress/kendo-theme-material/dist/material-main.css";
 import "./globals.css";
 
@@ -31,18 +30,18 @@ export default function RootLayout({
   /**
    * @description - Acts as a unique identifier for each user's session.
    */
-  const [userSessId, setUserSessId] = useState<string | null>(null);
+  //const [userSessId, setUserSessId] = useState<string | null>(null);
 
   /**
 	 * @description - By default, this app will start in a light material theme.
 	 * @type {string} - Possible values are "light" | "dark"
 	 * @default {"light"}
 	 */
-	const [sessTheme, setSessTheme] = useState<"light" | "dark">("light");
+	//const [sessTheme, setSessTheme] = useState<"light" | "dark">("light");
 
   //const [userFocusTime, setUserFocusTime] = useState<number>(25);
 
-  useEffect(() => {
+  /*useEffect(() => {
 
     const storedSessId = localStorage.getItem("userSessId");
 
@@ -60,10 +59,10 @@ export default function RootLayout({
       localStorage.setItem("userFocusTime", "25");  // default focus time
       //setUserFocusTime(25);
     }
-  }, []);
+  }, []);*/
 
   return (
-    <html lang="en" data-theme={sessTheme}>
+    <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
