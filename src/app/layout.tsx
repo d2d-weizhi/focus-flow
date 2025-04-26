@@ -28,11 +28,6 @@ export default function RootLayout({
   }); */
 
   /**
-   * @description - Acts as a unique identifier for each user's session.
-   */
-  //const [userSessId, setUserSessId] = useState<string | null>(null);
-
-  /**
 	 * @description - By default, this app will start in a light material theme.
 	 * @type {string} - Possible values are "light" | "dark"
 	 * @default {"light"}

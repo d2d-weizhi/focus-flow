@@ -1,6 +1,7 @@
 "use client";
 
 import { createRef, useEffect, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import dynamic from "next/dynamic";
 import { DoorOpen, CircleStop, CirclePlay, CirclePause, Timer } from "lucide-react";
 import { getDeviceInformation } from "./shared/utils";
@@ -41,6 +42,11 @@ export default function Home() {
   const [orientation, setOrientation] = useState<string>("unknown");
 
 	const [showOverlay, setShowOverlay] = useState(false);
+	
+	/**
+	 * @description - Acts as a unique identifier for each user's session.
+	 */
+	const [userSessId, setUserSessId] = useState<string | null>(null);
 
 	/**
 	 * @description - our countdown timer needs time to load.
@@ -213,10 +219,10 @@ export default function Home() {
 
 	function  calcFontSettings(width: number): string {
 		if (width >= 1600) {
-			setBtnIconSize(Math.floor(1.8 * 20));
-			return "1.8rem";
+			setBtnIconSize(Math.floor(2 * 20));
+			return "2rem";
 		} else if (width >= 768 && width < 1600) {
-			const currScaleFactor = 1.125 + (((width - 768) / (1600 - 768)) * .8);
+			const currScaleFactor = 1.125 + ((width - 768) / (1600 - 768));
 			setBtnIconSize(Math.round(currScaleFactor * 20));
 			return `${currScaleFactor}rem`;
 		} else {	// Anything smaller, we can assume to be a mobile phone.
@@ -237,6 +243,23 @@ export default function Home() {
 	}
 
 	useEffect(() => {
+		const storedSessId = localStorage.getItem("userSessId");
+		
+		if (storedSessId) {
+			// continue with last session.
+			setUserSessId(storedSessId);
+			//setSessTheme(localStorage.getItem("sessTheme") === "light" ? "light" : "dark");
+			//setUserFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
+			console.log("userFocusTime is:", parseInt(localStorage.getItem("userFocusTime")!));
+		} else {
+			// new session.
+			const newSessId = uuidv4();
+			localStorage.setItem("userSessId", newSessId);
+			localStorage.setItem("sessTheme", "light");   // default theme
+			localStorage.setItem("userFocusTime", "25");  // default focus time
+			//setUserFocusTime(25);
+		}
+		
 		/**
 		 * Our operation for checking browser innerWidth, innerHeight, deviceType and orientation.
 		 */
@@ -341,9 +364,9 @@ export default function Home() {
 
 	return (
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
-			<div className="flex left-panel bg-white shadow-md rounded-md items-center justify-center gap-y-8"> {/* Left Panel */}
+			<div className="flex left-panel bg-transparent items-center justify-center gap-y-10"> {/* Left Panel */}
 				{/* Left Panel Content Wrapper */}
-				<div className="flex flex-row items-center justify-center relative w-full xl:min-h-[400px] xl:max-h-[600px]">
+				<div className="flex flex-row items-center justify-center relative w-full xl:min-h-[400px] xl:max-h-[750px]">
 					{/* Progress Circle Wrapper */}
 						
 						<CircularProgressBar 
@@ -380,6 +403,10 @@ export default function Home() {
 					activePeriodIndex={activePeriod}
 					timeElapsed={timeElapsed} />
 				
+				<div className="w-[80%] text-center">
+					User Session ID: {userSessId}
+				</div>
+				
 				{/*
 					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
@@ -391,8 +418,10 @@ export default function Home() {
 						resizable={false}
 						onClose={onCloseFocusTimeWindow}
 						title={'Set Focus Time'} 
-						initialHeight={200} 
-						className="flex flex-col">
+						initialHeight={250}
+						initialWidth={500}
+						minWidth={230}
+						className="flex flex-col mx-auto">
 						<form className="k-form">
 							<fieldset>
 								<KRNumericTextBox 
@@ -404,14 +433,17 @@ export default function Home() {
 									id="tbFocusTimeMin" 
 									className="w-full" 
 									style={{
-										fontSize: "1rem",
+										fontSize: `${btnFontSettings.fontSize}`,
+										lineHeight: `${btnFontSettings.fontSize}`,
+										width: "100%",
+										height: "10%",
 										fontWeight: "400",
 										fontFamily: "Roboto",
 										letterSpacing: "1px"
 									}}
 								/>
 							</fieldset>
-							<div className="flex w-full justify-center mt-4">
+							<div className="flex w-full justify-center mt-8">
 								<KRButton 
 									id="btnSaveFocusTime"
 									type="submit" 
@@ -419,6 +451,14 @@ export default function Home() {
 									themeColor={'secondary'} 
 									className="kr-buttons mr-4"
 									onClick={onSaveFocusTimeClicked}
+									style={{
+										fontSize: `${btnFontSettings.fontSize}`,
+										lineHeight: `${btnFontSettings.fontSize}`,
+										width: "100%",
+										height: "10%",
+										minWidth: "100px",
+										minHeight: "70px"
+									}}
 								>
 									Save Time
 								</KRButton>
@@ -426,6 +466,14 @@ export default function Home() {
 									type="button"
 									className="kr-buttons"
 									onClick={onCloseFocusTimeWindow}
+									style={{
+										fontSize: `${btnFontSettings.fontSize}`,
+										lineHeight: `${btnFontSettings.fontSize}`,
+										width: "100%",
+										height: "10%",
+										minWidth: "100px",
+										minHeight: "70px"
+									}}
 								>
 									Cancel
 								</KRButton>
@@ -456,8 +504,7 @@ export default function Home() {
 								width: "100%",
 								height: "10%",
 								minWidth: "150px",
-								minHeight: "70px",
-								maxWidth: "450px"
+								minHeight: "70px"
 							}}
 						>
 							<div className="flex w-full items-center">
@@ -479,8 +526,7 @@ export default function Home() {
 									width: "100%",
 									height: "10%",
 									minWidth: "150px",
-									minHeight: "70px",
-									maxWidth: "450px"
+									minHeight: "70px"
 								}}
 							>
 								<div className="flex w-full items-center">
@@ -502,8 +548,7 @@ export default function Home() {
 									width: "100%",
 									height: "10%",
 									minWidth: "150px",
-									minHeight: "70px",
-									maxWidth: "450px"
+									minHeight: "70px"
 								}}
 							>
 								<div className="flex w-full items-center">
@@ -525,8 +570,7 @@ export default function Home() {
 									width: "100%",
 									height: "10%",
 									minWidth: "150px",
-									minHeight: "70px",
-									maxWidth: "450px"
+									minHeight: "70px"
 								}}
 							>
 								<div className="flex w-full items-center">
@@ -549,8 +593,7 @@ export default function Home() {
 								width: "100%",
 								height: "10%",
 								minWidth: "150px",
-								minHeight: "70px",
-								maxWidth: "450px"
+								minHeight: "70px"
 							}}
 						>
 							<div className="flex w-full items-center">
@@ -571,15 +614,13 @@ export default function Home() {
 								width: "100%",
 								height: "10%",
 								minWidth: "150px",
-								minHeight: "70px",
-								maxWidth: "450px"
+								minHeight: "70px"
 							}}
 						>
 							<div className="flex w-full items-center">
 								<DoorOpen size={btnIconSize} strokeWidth={2} />&nbsp;End Session
 							</div>
 						</KRButton>
-
 					</div>
 				</div>
       </div>

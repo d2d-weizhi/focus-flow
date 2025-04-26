@@ -68,11 +68,11 @@ export function KRWindow({ children, ...rest }: WindowProps) {
 
 export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePeriod }: CircularProgressBarProps) {
   const progressPercent = 100 - (timeLeft / totalTime) * 100;
-  const strokeDashoffset = (289 * progressPercent) / 100;
+  const strokeDashoffset = (315 * progressPercent) / 100;
   
   return (
-    <div className={`w-[60%] 2xl:min-w-[600px] xl:max-w-[600px] xl:min-w-[400px] min-w-[250px] aspect-square relative`}>
-			<svg className="w-full h-full" viewBox="0 0 110 110">
+    <div className={`w-[60%] 2xl:min-w-[600px] xl:max-w-[750px] xl:min-w-[400px] min-w-[250px] aspect-square relative`}>
+			<svg className="w-full h-full" viewBox="0 0 120 120">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
           {/* Focus Gradient */}
@@ -87,15 +87,15 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
             <stop offset="90%" stopColor="#facc15" /> {/* Lighter shade colour */}
           </linearGradient>
         </defs>
-        <circle cx="55" cy="55" r="40" stroke="#D1D5DC" strokeWidth="15" style={{ opacity: 0.4 }} fill="none" />
+        <circle cx="60" cy="60" r="50" stroke="#D1D5DC" strokeWidth="15" style={{ opacity: 0.4 }} fill="none" />
         <circle
-					cx="55"
-					cy="55"
-					r="40"
+					cx="60"
+					cy="60"
+					r="50"
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
 					strokeWidth="15"
 					fill="none"
-					strokeDasharray="289"
+					strokeDasharray="315"
 					strokeDashoffset={strokeDashoffset}
 					style={{ 
             transform: 'rotate(-90deg)', 
@@ -124,7 +124,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
 */
 export function TimePeriodIndicators({ arrPeriods, activePeriodIndex, timeElapsed }: TimePeriodIndicatorsProps) {
   return (
-    <div className="flex w-[75%] h-2 max-w-[650px] min-w-[260px]">
+    <div className="flex w-[75%] h-3 max-w-[650px] min-w-[260px]">
       {arrPeriods.map((period, index) => {
         // 1. Determine if this is the active period
         const isActive = index === activePeriodIndex;
