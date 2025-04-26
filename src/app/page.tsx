@@ -16,6 +16,8 @@ export default function Home() {
 			width: 0,
 			height: 0,
 		});
+	
+	const [isMobile, setIsMobile] = useState(false);
 
 	/**
 	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem
@@ -235,8 +237,6 @@ export default function Home() {
 			});
     };
 
-    handleResize(); 
-
 		const getDeviceInfo = () => {
       if (getDeviceInformation().indexOf("landscape") != -1)
 				setOrientation("landscape");
@@ -258,6 +258,10 @@ export default function Home() {
 					fontSize: calcFontSettings(windowDimensions.width),
 					lineHeight: calcFontSettings(windowDimensions.width) 
 				});
+				
+				if (windowDimensions.width < windowDimensions.height && orientation === "portrait") {
+					setIsMobile(true);
+				}
 				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
 				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
@@ -404,7 +408,7 @@ export default function Home() {
 
       </div>
 			
-			{window.innerWidth <= 1600 &&
+			{isMobile &&
 				<div className="h-8" />
 			}
 			
