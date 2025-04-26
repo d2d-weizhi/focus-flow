@@ -19,10 +19,10 @@ export default function Home() {
 	
 	// const [isMobile, setIsMobile] = useState(false);
 	
-	/**
-	 * The CircularProgressBar's dynamic width.
-	 */
-	const [cpbWidth, setCpbWidth] = useState<string>("600px");
+	const [cpbStyles, setCpbStyles] = useState({
+		width: "600px",
+		radius: "40"
+	});
 	
 	/**
 	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem
@@ -223,14 +223,15 @@ export default function Home() {
 		}
 	}
 	
-	function calcCpbWidth(width: number): string {
+	function calcCpbStyles(width: number): {width: string, radius: string } {
 		if (width >= 1600) {
-			return "600px";
+			return { width: "600px", radius: "40" };
 		} else if (width >= 768 && width < 1600) {
 			const currWidth = 250 + (((width - 768) / (1600 - 768)) * (600 - 250));
-			return `${Math.round(currWidth)}px`;
+			const currRadius = 35 + (((width - 768) / (1600 - 768)) * 5);
+			return { width: `${currWidth}px`, radius: currRadius.toString() };
 		} else {
-			return "250px";
+			return { width: "250px", radius: "35" };
 		}
 	}
 
@@ -252,7 +253,7 @@ export default function Home() {
 				lineHeight: calcFontSettings(resizedWidth) 
 			});
 			
-			setCpbWidth(calcCpbWidth(resizedWidth));
+			setCpbStyles(calcCpbStyles(resizedWidth));
     };
 
 		const getDeviceInfo = () => {
@@ -277,7 +278,7 @@ export default function Home() {
 					lineHeight: calcFontSettings(windowDimensions.width) 
 				});
 				
-				setCpbWidth(calcCpbWidth(windowDimensions.width));
+				setCpbStyles(calcCpbStyles(windowDimensions.width));
 				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
 				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
@@ -347,7 +348,7 @@ export default function Home() {
 							timeLeft={timeLeft} 
 							totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
 							activePeriod={activePeriodType}
-							width={cpbWidth}
+							styles={cpbStyles}
 						/>
 						{/* Timer display */}
 						{isLoading ? (

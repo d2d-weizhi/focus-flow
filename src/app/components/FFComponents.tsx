@@ -18,7 +18,10 @@ interface CircularProgressBarProps {
   timeLeft: number;     // This is in seconds, taken from the timeLeft state variable.
   totalTime: number;
   activePeriod: "focus" | "break";
-	width: string;
+	styles: {
+		width: string;
+		radius: string;
+	};
 }
 
 interface TimePeriodType {
@@ -67,13 +70,13 @@ export function KRWindow({ children, ...rest }: WindowProps) {
   );
 }
 
-export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePeriod, width }: CircularProgressBarProps) {
+export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePeriod, styles }: CircularProgressBarProps) {
   const progressPercent = 100 - (timeLeft / totalTime) * 100;
   const strokeDashoffset = (289 * progressPercent) / 100;
   
   return (
-    <div className={`w-[${width}] aspect-square relative`}>
-			<svg className="w-full h-full" viewBox="0 0 100 100">
+    <div className={`w-[${styles.width}] aspect-square relative`}>
+			<svg className="w-full h-full" viewBox="0 0 110 110">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
           {/* Focus Gradient */}
@@ -88,11 +91,11 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
             <stop offset="90%" stopColor="#facc15" /> {/* Lighter shade colour */}
           </linearGradient>
         </defs>
-        <circle cx="50" cy="50" r="35" stroke="#D1D5DC" strokeWidth="15" style={{ opacity: 0.4 }} fill="none" />
+        <circle cx="55" cy="55" r={styles.radius} stroke="#D1D5DC" strokeWidth="15" style={{ opacity: 0.4 }} fill="none" />
         <circle
-					cx="50"
-					cy="50"
-					r="35"
+					cx="55"
+					cy="55"
+					r={styles.radius}
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
 					strokeWidth="15"
 					fill="none"
