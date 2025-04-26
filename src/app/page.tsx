@@ -449,14 +449,14 @@ export default function Home() {
 									type="submit" 
 									fillMode={'solid'} 
 									themeColor={'secondary'} 
-									className="kr-buttons mr-4"
+									className="kr-buttons mr-4 px-4"
 									onClick={onSaveFocusTimeClicked}
 									style={{
 										fontSize: `${btnFontSettings.fontSize}`,
 										lineHeight: `${btnFontSettings.fontSize}`,
 										width: "100%",
 										height: "10%",
-										minWidth: "100px",
+										minWidth: "150px",
 										minHeight: "70px"
 									}}
 								>
