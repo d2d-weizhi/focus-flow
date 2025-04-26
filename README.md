@@ -284,6 +284,16 @@ function  calcFontSettings(width: number): string {
 </KRButton>
 ```
 
+### 26, Sat: Complete Smooth-Scaling Implementation
+
+- Used `gap-x-8` for specifying gaps between layout elements.
+- Modified the horizontal flow for the right panel to a vertical layout in smaller screen sizes.
+- Updated the outer `<div>` of the `CircularProgressBar` component with `max-w-` and `min-w-`.
+
+```
+<div className="2xl:w-[60%] w-[40%] min-w-[260px] max-w-[600px] aspect-square relative">
+```
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 
