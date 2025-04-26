@@ -20,12 +20,9 @@ export default function Home() {
 	// const [isMobile, setIsMobile] = useState(false);
 	
 	/**
-	 * This state variable is used to set the styling properties for the circular progress bar.
+	 * The CircularProgressBar's dynamic width.
 	 */
-	// const [cpbStyles, setCpbStyles] = useState({
-	// 	width: "60%",    /* range from 250px to 600px */
-	// 	strokeWidth: "15"
-	// });
+	const [cpbWidth, setCpbWidth] = useState<string>("600px");
 	
 	/**
 	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem
@@ -225,6 +222,17 @@ export default function Home() {
 			return "1.125rem";
 		}
 	}
+	
+	function calcCpbWidth(width: number): string {
+		if (width >= 1600) {
+			return "600px";
+		} else if (width >= 768 && width < 1600) {
+			const currWidth = 250 + (((width - 768) / (1600 - 768)) * (600 - 250));
+			return `${Math.round(currWidth)}px`;
+		} else {
+			return "250px";
+		}
+	}
 
 	useEffect(() => {
 		/**
@@ -243,6 +251,8 @@ export default function Home() {
 				fontSize: calcFontSettings(resizedWidth),
 				lineHeight: calcFontSettings(resizedWidth) 
 			});
+			
+			setCpbWidth(calcCpbWidth(resizedWidth));
     };
 
 		const getDeviceInfo = () => {
@@ -266,6 +276,8 @@ export default function Home() {
 					fontSize: calcFontSettings(windowDimensions.width),
 					lineHeight: calcFontSettings(windowDimensions.width) 
 				});
+				
+				setCpbWidth(calcCpbWidth(windowDimensions.width));
 				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
 				setTimeLeft(focusTimeInSec(parseInt(localStorage.getItem("userFocusTime")!)));
@@ -334,7 +346,8 @@ export default function Home() {
 							isPaused={isPaused} 
 							timeLeft={timeLeft} 
 							totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
-							activePeriod={activePeriodType}	
+							activePeriod={activePeriodType}
+							width={cpbWidth}
 						/>
 						{/* Timer display */}
 						{isLoading ? (
