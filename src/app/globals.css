@@ -65,7 +65,7 @@ body {
 .ff-main-container {
   @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col sm:flex-col flex-col;
   @apply p-8;
-  @apply 2xl:space-x-8 space-y-8;
+  @apply 2xl:gap-x-8 gap-y-8;
 }
 
 .left-panel {
