@@ -276,13 +276,8 @@ export default function Home() {
 		
 		if (isLoading) {
 			setTimeout(() => {
-				setBtnFontSettings({ 
-					fontSize: calcFontSettings(windowDimensions.width),
-					lineHeight: calcFontSettings(windowDimensions.width) 
-				});
-				
 				setTimerStyles(calcTimerStyles(window.innerWidth));
-				
+				handleResize();
 				// setCpbStyles(calcCpbStyles(windowDimensions.width));
 				
 				setFocusTime(parseInt(localStorage.getItem("userFocusTime")!));
