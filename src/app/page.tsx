@@ -26,11 +26,17 @@ export default function Home() {
 	const [timerStyles, setTimerStyles] = useState({
 		fontSize: "2.5rem",
 	});
+
+	const [winBtnsStyles, setWinBtnsStyles] = useState({
+		fontSize: "1rem",
+		lineHeight: "1rem",
+		height: "60px"
+	});
 	
 	/**
 	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem
 	 */
-	const [btnFontSettings, setBtnFontSettings] = useState({
+	const [ctrlBtnsStyles, setCtrlBtnsStyles] = useState({
 		fontSize: "1.125rem",
 		lineHeight: "1.125rem"
 	});
@@ -217,6 +223,18 @@ export default function Home() {
 		clearTimeout(timerId.current!); 
 	}
 
+	function calcWinBtnsSettings(width: number): { fontSize: string, buttonHeight: string } {
+		if (width >= 1600) {
+			return { fontSize: "1.8rem", buttonHeight: "65px" };
+		} else if (width >= 768 && width < 1600) {
+			const currScaleFactor = 1 + (((width - 768) / (1600 - 768)) * .8);
+			const currBtnHeight = 50 + (((width - 768) / (1600 - 768)) * 15);
+			return { fontSize: `${currScaleFactor.toFixed(3)}rem`, buttonHeight: `${Math.floor(currBtnHeight)}px` };
+		} else {	// Anything smaller, we can assume to be a mobile phone.
+			return { fontSize: "1rem", buttonHeight: "50px" };
+		}
+	}
+
 	function  calcFontSettings(width: number): string {
 		if (width >= 1600) {
 			setBtnIconSize(Math.floor(2 * 20));
@@ -272,7 +290,13 @@ export default function Home() {
         height: resizedHeight,
       });
 
-			setBtnFontSettings({ 
+			setWinBtnsStyles({
+				fontSize: calcWinBtnsSettings(resizedWidth).fontSize,
+				lineHeight: calcWinBtnsSettings(resizedWidth).fontSize,
+				height: calcWinBtnsSettings(resizedHeight).buttonHeight
+			});
+
+			setCtrlBtnsStyles({ 
 				fontSize: calcFontSettings(resizedWidth),
 				lineHeight: calcFontSettings(resizedWidth) 
 			});
@@ -301,7 +325,14 @@ export default function Home() {
 		if (isLoading) {
 			setTimeout(() => {
 				setTimerStyles(calcTimerStyles(window.innerWidth));
-				setBtnFontSettings({
+
+				setWinBtnsStyles({
+					fontSize: calcWinBtnsSettings(windowDimensions.width).fontSize,
+					lineHeight: calcWinBtnsSettings(windowDimensions.width).fontSize,
+					height: calcWinBtnsSettings(windowDimensions.width).buttonHeight
+				});
+
+				setCtrlBtnsStyles({
 					fontSize: calcFontSettings(windowDimensions.width),
 					lineHeight: calcFontSettings(windowDimensions.width)
 				});
@@ -360,7 +391,7 @@ export default function Home() {
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
-	}, [isRunning, isPaused, timeLeft, focusTime, orientation, timerStyles, btnFontSettings]);
+	}, [isRunning, isPaused, timeLeft, focusTime, orientation, timerStyles, winBtnsStyles, ctrlBtnsStyles]);
 
 	return (
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
@@ -433,10 +464,9 @@ export default function Home() {
 									id="tbFocusTimeMin" 
 									className="w-full" 
 									style={{
-										fontSize: `${btnFontSettings.fontSize}`,
-										lineHeight: `${btnFontSettings.fontSize}`,
+										fontSize: `${ctrlBtnsStyles.fontSize}`,
+										lineHeight: `${ctrlBtnsStyles.lineHeight}`,
 										width: "100%",
-										height: "10%",
 										fontWeight: "400",
 										fontFamily: "Roboto",
 										letterSpacing: "1px"
@@ -452,12 +482,11 @@ export default function Home() {
 									className="kr-buttons mr-4 px-4"
 									onClick={onSaveFocusTimeClicked}
 									style={{
-										fontSize: `${btnFontSettings.fontSize}`,
-										lineHeight: `${btnFontSettings.fontSize}`,
+										fontSize: `${winBtnsStyles.fontSize}`,
+										lineHeight: `${winBtnsStyles.lineHeight}`,
 										width: "100%",
-										height: "10%",
-										minWidth: "150px",
-										minHeight: "70px"
+										height: `${winBtnsStyles.height}`,
+										minWidth: "150px"
 									}}
 								>
 									Save Time
@@ -467,12 +496,11 @@ export default function Home() {
 									className="kr-buttons"
 									onClick={onCloseFocusTimeWindow}
 									style={{
-										fontSize: `${btnFontSettings.fontSize}`,
-										lineHeight: `${btnFontSettings.fontSize}`,
+										fontSize: `${ctrlBtnsStyles.fontSize}`,
+										lineHeight: `${ctrlBtnsStyles.fontSize}`,
 										width: "100%",
-										height: "10%",
-										minWidth: "100px",
-										minHeight: "70px"
+										height: `${winBtnsStyles.height}`,
+										minWidth: "100px"
 									}}
 								>
 									Cancel
@@ -499,8 +527,8 @@ export default function Home() {
 							onClick={onSetFocusTimeClicked}
 							className="kr-buttons"
 							style={{
-								fontSize: `${btnFontSettings.fontSize}`,
-								lineHeight: `${btnFontSettings.fontSize}`,
+								fontSize: `${ctrlBtnsStyles.fontSize}`,
+								lineHeight: `${ctrlBtnsStyles.fontSize}`,
 								width: "100%",
 								height: "10%",
 								minWidth: "150px",
@@ -521,8 +549,8 @@ export default function Home() {
 								themeColor={'primary'}
 								onClick={onStartClicked}
 								style={{
-									fontSize: `${btnFontSettings.fontSize}`,
-									lineHeight: `${btnFontSettings.fontSize}`,
+									fontSize: `${ctrlBtnsStyles.fontSize}`,
+									lineHeight: `${ctrlBtnsStyles.fontSize}`,
 									width: "100%",
 									height: "10%",
 									minWidth: "150px",
@@ -543,8 +571,8 @@ export default function Home() {
 								themeColor={'light'}
 								onClick={onPauseClicked}
 								style={{
-									fontSize: `${btnFontSettings.fontSize}`,
-									lineHeight: `${btnFontSettings.fontSize}`,
+									fontSize: `${ctrlBtnsStyles.fontSize}`,
+									lineHeight: `${ctrlBtnsStyles.fontSize}`,
 									width: "100%",
 									height: "10%",
 									minWidth: "150px",
@@ -565,8 +593,8 @@ export default function Home() {
 								themeColor={'success'}
 								onClick={onResumeClicked}
 								style={{
-									fontSize: `${btnFontSettings.fontSize}`,
-									lineHeight: `${btnFontSettings.fontSize}`,
+									fontSize: `${ctrlBtnsStyles.fontSize}`,
+									lineHeight: `${ctrlBtnsStyles.fontSize}`,
 									width: "100%",
 									height: "10%",
 									minWidth: "150px",
@@ -588,8 +616,8 @@ export default function Home() {
 							iconClass="h-[50%]"
 							onClick={onStopClicked}
 							style={{
-								fontSize: `${btnFontSettings.fontSize}`,
-								lineHeight: `${btnFontSettings.fontSize}`,
+								fontSize: `${ctrlBtnsStyles.fontSize}`,
+								lineHeight: `${ctrlBtnsStyles.fontSize}`,
 								width: "100%",
 								height: "10%",
 								minWidth: "150px",
@@ -609,8 +637,8 @@ export default function Home() {
 							themeColor={"light"}
 							onClick={onExitClicked}
 							style={{
-								fontSize: `${btnFontSettings.fontSize}`,
-								lineHeight: `${btnFontSettings.fontSize}`,
+								fontSize: `${ctrlBtnsStyles.fontSize}`,
+								lineHeight: `${ctrlBtnsStyles.fontSize}`,
 								width: "100%",
 								height: "10%",
 								minWidth: "150px",
