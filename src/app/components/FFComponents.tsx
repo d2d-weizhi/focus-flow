@@ -91,7 +91,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
         <circle
 					cx="55"
 					cy="55"
-					r="50"
+					r="45"
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
 					strokeWidth="10"
 					fill="none"
