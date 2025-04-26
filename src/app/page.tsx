@@ -318,7 +318,7 @@ export default function Home() {
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
 			<div className="flex left-panel bg-white shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
 				{/* Left Panel Content Wrapper */}
-				<div className="flex flex-col items-center justify-center relative w-full h-full mt-8 mb-8 space-y-8">
+				<div className="flex flex-col items-center justify-center relative w-full h-full mt-8 mb-8 gap-y-8">
 					{/* Progress Circle Wrapper */}
 					<div className="flex flex-col items-center justify-center relative w-full 2xl:h-[50%] h-auto mb-8">
 						
@@ -339,9 +339,6 @@ export default function Home() {
 							</div>
 						)}
 					</div>
-
-					{/* A custom <div /> to act as a divider to keep our layout consistent. */}
-					<div className="w-full h-8" />
 
 					<TimePeriodIndicators 
 						arrPeriods={periods} 
