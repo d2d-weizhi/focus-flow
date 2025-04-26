@@ -69,9 +69,9 @@ body {
 }
 
 .left-panel {
-  @apply 2xl:flex-col xl:flex-row lg:flex-col md:flex-col sm:flex-col flex-col;
+  @apply flex-col;
   @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full sm:w-full w-full;
-  @apply 2xl:h-full xl:h-[65%] h-auto;
+  @apply 2xl:h-full xl:h-[65%] h-auto p-8;
 }
 
 .right-panel {
@@ -97,14 +97,9 @@ body {
   font-family: 'Roboto Condensed', sans-serif;
   letter-spacing: 2px;
   font-weight: 300;
-  font-size: 7rem;
 }
 
 @media (min-width: 1600px) {
-  .countdown-timer {
-    font-size: 3.5rem;
-  }
-
   .kr-buttons {
     font-size: 1.5rem;
     line-height: 1.5rem;

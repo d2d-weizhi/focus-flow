@@ -19,13 +19,11 @@ export default function Home() {
 	
 	// const [isMobile, setIsMobile] = useState(false);
 	
-	const [cpbStyles, setCpbStyles] = useState({
-		width: "80%",
-		radius: "40"
-	});
-	
+	/**
+	 * The maximum font size for the timer is 6.8rem;
+	 */
 	const [timerStyles, setTimerStyles] = useState({
-		fontSize: "1.8rem",
+		fontSize: "2.5rem",
 	});
 	
 	/**
@@ -227,15 +225,14 @@ export default function Home() {
 		}
 	}
 	
-	function calcCpbStyles(width: number): {width: string, radius: string } {
+	function calcTimerStyles(width: number): { fontSize: string } {
 		if (width >= 1600) {
-			return { width: "80%", radius: "40" };
+			return { fontSize: "6.8rem" };
 		} else if (width >= 768 && width < 1600) {
-			const currWidth = 70 + (((width - 768) / (1600 - 768)) * 10);
-			const currRadius = 35 + (((width - 768) / (1600 - 768)) * 5);
-			return { width: `${currWidth.toFixed(2)}%`, radius: currRadius.toString() };
-		} else {
-			return { width: "70%", radius: "35" };
+			const currScaleFactor = 2.5 + (((width - 768) / (1600 - 768)) * 4.3);
+			return { fontSize: `${currScaleFactor.toFixed(3)}rem` };
+		} else {	// Anything smaller, we can assume to be a mobile phone.
+			return { fontSize: "2.5rem" };
 		}
 	}
 
@@ -257,7 +254,7 @@ export default function Home() {
 				lineHeight: calcFontSettings(resizedWidth) 
 			});
 			
-			setCpbStyles(calcCpbStyles(resizedWidth));
+			setTimerStyles(calcTimerStyles(resizedWidth));
     };
 
 		const getDeviceInfo = () => {
@@ -283,6 +280,8 @@ export default function Home() {
 					fontSize: calcFontSettings(windowDimensions.width),
 					lineHeight: calcFontSettings(windowDimensions.width) 
 				});
+				
+				setTimerStyles(calcTimerStyles(window.innerWidth));
 				
 				// setCpbStyles(calcCpbStyles(windowDimensions.width));
 				
@@ -339,40 +338,49 @@ export default function Home() {
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
-	}, [isRunning, isPaused, timeLeft, focusTime, orientation, cpbStyles]);
+	}, [isRunning, isPaused, timeLeft, focusTime, orientation, timerStyles]);
 
 	return (
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
-			<div className="flex left-panel bg-white shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
+			<div className="flex left-panel bg-white shadow-md rounded-md items-center justify-center gap-y-8"> {/* Left Panel */}
 				{/* Left Panel Content Wrapper */}
-				<div className="flex flex-col items-center justify-center relative w-full h-full mt-8 mb-8 gap-y-8">
+				<div className="flex flex-row items-center justify-center relative w-full xl:min-h-[400px] xl:max-h-[600px]">
 					{/* Progress Circle Wrapper */}
-					<div className="flex flex-col items-center justify-center relative w-full h-[50%] mb-8">
 						
 						<CircularProgressBar 
 							isPaused={isPaused} 
 							timeLeft={timeLeft} 
 							totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
 							activePeriod={activePeriodType}
-							styles={cpbStyles}
 						/>
 						{/* Timer display */}
 						{isLoading ? (
-							<div className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500" id="timerDisplay">
+							<div
+								className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500"
+								id="timerDisplay"
+								style={{
+									fontSize: `${timerStyles.fontSize}`,
+								}}
+							>
 								00:00
 							</div>
 						) : (
-							<div className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay">
+							<div
+								className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay"
+								style={{
+									fontSize: `${timerStyles.fontSize}`,
+								}}
+							>
 								{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
 							</div>
 						)}
-					</div>
-
-					<TimePeriodIndicators 
-						arrPeriods={periods} 
-						activePeriodIndex={activePeriod} 
-						timeElapsed={timeElapsed} />
 				</div>
+				
+				<TimePeriodIndicators
+					arrPeriods={periods}
+					activePeriodIndex={activePeriod}
+					timeElapsed={timeElapsed} />
+				
 				{/*
 					A modal dialog/window for the user to set their focus time in minutes.
 					We will later replace this with a KendoReact Dialog component.
