@@ -409,7 +409,7 @@ export default function Home() {
       </div>
 			
 			{isMobile &&
-				<div className="h-8" />
+				<div className="w-full h-8" />
 			}
 			
       <div className="flex right-panel mr-0 bg-white shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
