@@ -404,7 +404,7 @@ export default function Home() {
 
       </div>
 			
-			{windowDimensions.width <= 1600 &&
+			{window.innerWidth <= 1600 &&
 				<div className="h-8" />
 			}
 			
