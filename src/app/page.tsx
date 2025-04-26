@@ -22,10 +22,10 @@ export default function Home() {
 	/**
 	 * This state variable is used to set the styling properties for the circular progress bar.
 	 */
-	// const [cpbStyles, setCpbStyles] = useState({
-	// 	width: "60%",    /* range from 250px to 600px */
-	// 	strokeWidth: "15"
-	// });
+	const [cpbStyles, setCpbStyles] = useState({
+		width: "60%",    /* range from 250px to 600px */
+		strokeWidth: "15"
+	});
 	
 	/**
 	 * >= 1600px - 1.8rem, >= 1440px - 1.65rem, >= 1280px - 1.5rem, >= 1024px - 1.25rem, >= 768px - 1.125rem

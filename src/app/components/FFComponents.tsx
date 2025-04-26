@@ -72,7 +72,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
   
   return (
     <div className="2xl:w-[60%] w-[40%] min-w-[250px] max-w-[600px] aspect-square relative">
-			<svg className="w-full h-full" viewBox="0 0 110 110">
+			<svg className="w-full h-full" viewBox="0 0 100 100">
 				{/* Conic Gradient for Stroke */}
         <defs> {/* Define the gradient within the circle element */}
           {/* Focus Gradient */}
@@ -87,10 +87,10 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
             <stop offset="90%" stopColor="#facc15" /> {/* Lighter shade colour */}
           </linearGradient>
         </defs>
-        <circle cx="55" cy="55" r="45" stroke="#D1D5DC" strokeWidth="10" style={{ opacity: 0.4 }} fill="none" />
+        <circle cx="50" cy="50" r="40" stroke="#D1D5DC" strokeWidth="10" style={{ opacity: 0.4 }} fill="none" />
         <circle
-					cx="55"
-					cy="55"
+					cx="50"
+					cy="50"
 					r="45"
 					stroke={`url(#${activePeriod === 'focus' ? 'focusGradient' : 'breakGradient'})`}
 					strokeWidth="10"
