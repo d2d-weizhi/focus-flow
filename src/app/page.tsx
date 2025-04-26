@@ -338,7 +338,7 @@ export default function Home() {
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
-	}, [isRunning, isPaused, timeLeft, focusTime, orientation, timerStyles]);
+	}, [isRunning, isPaused, timeLeft, focusTime, orientation, timerStyles, btnFontSettings]);
 
 	return (
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
