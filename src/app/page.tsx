@@ -450,7 +450,7 @@ export default function Home() {
 						onClose={onCloseFocusTimeWindow}
 						title={'Set Focus Time'} 
 						initialHeight={250}
-						initialWidth={500}
+						initialWidth={.5 * windowDimensions.width}
 						minWidth={230}
 						className="flex flex-col mx-auto">
 						<form className="k-form">
