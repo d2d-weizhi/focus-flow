@@ -290,7 +290,7 @@ export default function Home() {
         height: resizedHeight,
       });
 
-			setWinBtnsStyles({
+			/* setWinBtnsStyles({
 				fontSize: calcWinBtnsSettings(resizedWidth).fontSize,
 				lineHeight: calcWinBtnsSettings(resizedWidth).fontSize,
 				height: calcWinBtnsSettings(resizedHeight).buttonHeight
@@ -301,7 +301,7 @@ export default function Home() {
 				lineHeight: calcFontSettings(resizedWidth) 
 			});
 			
-			setTimerStyles(calcTimerStyles(resizedWidth));
+			setTimerStyles(calcTimerStyles(resizedWidth)); */
     };
 
 		const getDeviceInfo = () => {
@@ -395,8 +395,11 @@ export default function Home() {
 			window.removeEventListener('orientationchange', getDeviceInfo);
     };
 
-	}, [isRunning, isPaused, timeLeft, focusTime, orientation, timerStyles, winBtnsStyles, ctrlBtnsStyles]);
-
+	}, [isRunning, isPaused, timeLeft, focusTime, orientation]);
+	/**
+	 * I have removed the custom smooth-scaling effect because it does prevent the app from working normally.
+	 */
+	// timerStyles, winBtnsStyles, ctrlBtnsStyles
 	return (
 		<div className="flex ff-main-container items-center w-full h-full"> {/* Our main app's container. */}
 			<div className="flex left-panel bg-transparent items-center justify-center gap-y-10"> {/* Left Panel */}
