@@ -24,6 +24,17 @@ dark mode.
 controls.
 - Start by using the included tailwindcss and standard HTML input and buttons.
 
+## Key Objectives/Tasks
+
+1. Prototype a Simple UI (minus interation and application logic). Status: **COMPLETED**
+2. Add in interaction (event handling). Status: **COMPLETED**
+3. Work on application logic (work it feature by feature). Status: **COMPLETED**
+4. Implement Dynamic, Smooth-Scaling Design (True Responsive Design). Status: **COMPLETED**
+5. Theming & Styles. Status: **PENDING**
+
+Notes:
+- For me to begin the final Theming & Styling stage, I'm waiting for my access of ThemeBuilder Pro to come through from the Progress Telerik team. I've already submitted a request, I know they could be process it right now. But I should do another follow-up later this week.
+
 ## Daily Progress & Recap
 
 ### 18th, Fri
