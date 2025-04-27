@@ -294,6 +294,8 @@ function  calcFontSettings(width: number): string {
 <div className="2xl:w-[60%] w-[40%] min-w-[260px] max-w-[600px] aspect-square relative">
 ```
 
+- I have also added the orientation detection, so it would trigger the `handleResize()` event handler.
+
 ## Features
 
 - App will start with an off-white background. Unlike the KendoReact default theme's 
