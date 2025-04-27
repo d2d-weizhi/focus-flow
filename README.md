@@ -34,6 +34,7 @@ controls.
 
 Notes:
 - For me to begin the final Theming & Styling stage, I'm waiting for my access of ThemeBuilder Pro to come through from the Progress Telerik team. I've already submitted a request, I know they could be process it right now. But I should do another follow-up later this week.
+- **I have to temporarily disable the smooth-scaling functionality. The related coding has been commented for those reasons so the app can still function as intended.**
 
 ## Daily Progress & Recap
 
@@ -161,7 +162,7 @@ function onSaveFocusTimeClicked() {
   **Solution:** Inverted the percentage calculation to `100 - (timeLeft / totalTime) * 100`
 
 
-1. Progress Bar Starting Empty:
+2. Progress Bar Starting Empty:
   **Problem:** The progress bar was completely empty at the beginning of a time period.
   **Solution:**  Gemini, the AI tool's answers were not 100% wrong, they were mostly half right. The answers were spread out across a few of the responses, so I used a manual output/desired results to test and work backwards. Found the proper solution: `const strokeDashoffset = (283 * progressPercent) / 100;`
 
