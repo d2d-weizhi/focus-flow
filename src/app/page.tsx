@@ -456,7 +456,13 @@ export default function Home() {
 						initialHeight={250}
 						initialWidth={.95 * windowDimensions.width}
 						minWidth={230}
-						className="flex flex-col mx-auto">
+						className="flex flex-col mx-auto"
+						style={{
+							maxWidth: "320px",
+							marginLeft: "auto",
+							marginRight: "auto"
+						}}	
+					>
 						<form className="k-form">
 							<fieldset>
 								<KRNumericTextBox 
