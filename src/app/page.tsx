@@ -309,6 +309,9 @@ export default function Home() {
 				setOrientation("landscape");
 			else
 				setOrientation("portrait");
+
+			// Due to orientation change, we should determine the new page dimensions.
+			handleResize();
 		};
 		
 		handleResize()
@@ -324,6 +327,7 @@ export default function Home() {
 		
 		if (isLoading) {
 			setTimeout(() => {
+
 				setTimerStyles(calcTimerStyles(window.innerWidth));
 
 				setWinBtnsStyles({
