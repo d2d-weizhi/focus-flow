@@ -404,33 +404,33 @@ export default function Home() {
 				<div className="flex flex-row items-center justify-center relative w-full xl:min-h-[400px] xl:max-h-[750px]">
 					{/* Progress Circle Wrapper */}
 						
-						<CircularProgressBar 
-							isPaused={isPaused} 
-							timeLeft={timeLeft} 
-							totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
-							activePeriod={activePeriodType}
-						/>
-						{/* Timer display */}
-						{isLoading ? (
-							<div
-								className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500"
-								id="timerDisplay"
-								style={{
-									fontSize: `${timerStyles.fontSize}`,
-								}}
-							>
-								00:00
-							</div>
-						) : (
-							<div
-								className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay"
-								style={{
-									fontSize: `${timerStyles.fontSize}`,
-								}}
-							>
-								{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
-							</div>
-						)}
+					<CircularProgressBar 
+						isPaused={isPaused} 
+						timeLeft={timeLeft} 
+						totalTime={activePeriodType === "focus" ? focusTimeInSec(focusTime) : breakTimeInSec(focusTime)}
+						activePeriod={activePeriodType}
+					/>
+					{/* Timer display */}
+					{isLoading ? (
+						<div
+							className="animate-pulse absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold text-gray-500"
+							id="timerDisplay"
+							style={{
+								fontSize: `${timerStyles.fontSize}`,
+							}}
+						>
+							00:00
+						</div>
+					) : (
+						<div
+							className="absolute inset-0 countdown-timer flex items-center justify-center text-5xl font-bold" id="timerDisplay"
+							style={{
+								fontSize: `${timerStyles.fontSize}`,
+							}}
+						>
+							{minutes.toString().padStart(2, '0')}:{seconds.toString().padStart(2, '0')}
+						</div>
+					)}
 				</div>
 				
 				<TimePeriodIndicators
@@ -513,7 +513,6 @@ export default function Home() {
 						</form>
 					</KRWindow>
 				}
-
       </div>
 			
       <div className="flex right-panel mr-0 bg-white shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
