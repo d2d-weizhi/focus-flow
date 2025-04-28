@@ -36,23 +36,179 @@ Notes:
 - For me to begin the final Theming & Styling stage, I'm waiting for my access of ThemeBuilder Pro to come through from the Progress Telerik team. I've already submitted a request, I know they could be process it right now. But I should do another follow-up later this week.
 - **I have to temporarily disable the smooth-scaling functionality. The related coding has been commented for those reasons so the app can still function as intended.**
 
-## Daily Progress & Recap
+## Daily Progress & Recap (Latest to Oldest)
 
-### 18th, Fri
+### 28th, Mon: Audio Notification Added
 
-- Started laying out the contents of the app.
-- Centered our app's main container inside the `<body></body>` tag.
-- Set the container's fixed width to 600px.
-- Don't have to set the height because it will automatically wrap our contents.
-- Made the app container a flex-column in order to achieve a top-down layout.
-- Created a `<div />` tag as a separator between the contents for consistency.
-- Added our circular progress bar and timer. I manually set the offset so I can 
-visualize the progress bar in motion when the timer starts counting down.
-- Replaced the buttons in the UI with KendoReact Buttons.
-- Identified potential issues/workarounds especially when we need to toggle the colour of the "Start/Pause/Resume" button. The `themeColor={''}` prop doesn't have an option for grey background. So we will need to cater for that in our coding logic later.
-- Added the KendoReact Window control (part of the dialog library).
-- Still need to replace the input field, perhaps use a NumericTextBox for 
-entering and setting the minutes.
+- Added a ding.mp3 file to the project.
+- When a focus period ends, the audio notification will play once.
+- When a break period ends, the audio notification will play twice.
+- **TODO**: I need to test it again just to be sure that it works as intended.
+
+### 26, Sat: Complete Smooth-Scaling Implementation
+
+- Used `gap-x-8` for specifying gaps between layout elements.
+- Modified the horizontal flow for the right panel to a vertical layout in smaller screen sizes.
+- Updated the outer `<div>` of the `CircularProgressBar` component with `max-w-` and `min-w-`.
+
+```
+<div className="2xl:w-[60%] w-[40%] min-w-[260px] max-w-[600px] aspect-square relative">
+```
+
+- I have also added the orientation detection, so it would trigger the `handleResize()` event handler.
+
+### 25, Fri: Smooth-Scaling UI Experiment (Success)
+
+- Implemented a two-column/single-column responsive layout.
+  
+```
+<div className="flex ff-main-container px-8 py-8 w-full h-full"> {/* Our main app's container. */}
+	<div className="flex left-panel bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
+  </div>
+  <div className="flex right-panel mr-0 bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
+  </div>
+</div>
+```
+
+- I have also used tailwindcss's `@apply` directive in my `global.css` file to import the necessary classes.
+
+```
+.ff-main-container {
+  @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col;
+  @apply 2xl:space-y-0 2xl:space-x-8;
+  @apply xl:space-y-8 xl:space-x-0 lg:space-y-8 lg:space-x-0 md:space-y-8 md:space-x-0;
+  background-color: #FAF9F6;
+}
+
+.left-panel {
+  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
+  @apply 2xl:h-full xl:h-[65%] lg:h-[65%] md:h-[65%];
+  @apply 2xl:mr-8;
+}
+
+.right-panel {
+  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
+  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
+  @apply 2xl:h-full xl:h-[35%] lg:h-[35%] md:h-[35%];
+}
+```
+
+- Next, I was able to implement a method to calculate the necessary scaling for the button's fontSize.
+
+```
+function  calcFontSettings(width: number): string {
+	if (width >= 1600) {
+		setBtnIconSize(Math.floor(1.65 * 20));
+		return "1.65rem";
+	} else if (width >= 768 && width < 1600) {
+		let currScaleFactor = 1 + (((width - 768) / (1600 - 768)) * .65);  // <- The formula I've been using.
+		setBtnIconSize(Math.round(currScaleFactor * 20));
+		return `${currScaleFactor}rem`;
+	} else {	// Anything smaller, we can assume to be a mobile phone.
+		setBtnIconSize(Math.floor(0.95 * 20));
+		return "0.95rem";
+	}
+	}
+```
+
+- The scaling can be enhanced further, and I also want to ensure that the scaling takes into account mobile phones 
+  in portrait mode.
+
+```
+<KRButton
+	id="btnSetFocusTime"
+	fillMode={"solid"}
+	themeColor={"secondary"}
+	onClick={onSetFocusTimeClicked}
+	className="kr-buttons"
+	style={{
+		fontSize: `${btnFontSettings.fontSize}`,
+		lineHeight: `${btnFontSettings.fontSize}`,
+		width: "100%",
+		height: "10%",
+		minWidth: "150px",
+		minHeight: "70px",
+		maxWidth: "450px"
+	}}
+>
+	<div className="flex w-full items-center">
+		<Timer size={btnIconSize} />&nbsp;Set Focus Time
+	</div>
+</KRButton>
+```
+
+### 22nd, Tue: Setting Unique User Sessions
+
+- Implemented unique user-specific sessions without the use of a user account, or logins.
+- Used `localStorage` technique because it's the simplest for the current use-case.
+- Added `isLoading` state variable in the `Home` component.
+- Created a `timeout` of 3s within the `useEffect` hook so that the UI has time to load the `userFocusTime` from `localStorage`.
+- When user saves a new focus time, it will be updated to the `userFocusTime` storage.
+- Added the pulsing animation to the countdown timer "00:00" when `isLoading==true`.
+- Display new countdown timer once loading is finished.
+- When user presses the exit button (top-left), display a translucant white overlay that says the session has ended and they can close the tab/window.
+- Injected "Roboto" font via Google fonts CDN. So the UI now has a consistent font family.
+
+#### Part Two: Laying Some Groundwork for Tomorrow
+
+- I've decided to add a new (but temporary) dimension tabs at the top-left corner of the web page.
+- My goal and mission when it comes to creating a truly responsive design is to make all the dimensions of UI elements relative to the actual page/screen estate size.
+- media queries may have been the way to create responsive web design in the early days, but they are not the best way to create a seamless UX these days.
+- I've been testing this web app at 150% magnification for days (it is my browser's default mode).
+- It also made me realize that my assumptions are not going to be a reliable way to make decision in the ideal dimensions.
+- I need to default my magnification to 100% and use it as the baseline for everything that I want to achieve.
+- Regardless of whether a user's machine has been scaled by default (Windows does it, sometimes at 150%, sometimes 175%, or even 200%), we need to ensure that our UI is able to handle whatever scaling factor the user is having.
+- Are percentages a possible solution? Gemini did suggest using `rem` as a way to scale font sizes. It's something I'll need to explore tomorrow.
+
+### 20th, Sun
+
+#### Part One: Implementing Circular Progress Bar Animation
+
+**Key Learnings:**
+
+- Decided to externalize the Circular Progress Bar as a distinct component because this would be inline with reusability best practice.
+- For simpler animations, it is more performant to use CSS animation.
+- Took a few tries before we could figure out the correct way to calculate the value for animating the progress bar in a counterclockwise direction.
+- Added a single level ternary operation for feeding the total focus/break time to the component.
+- **TODO:** I will need to set up another test for making sure that the circular progress bar is working and behaving correctly (i.e. when switching between focus and break time periods).
+
+**Challenges & Solutions:**
+
+1. Initial `strokeDashoffset` Calculation: 
+  **Problem:** The first calculation was inverting the progress.
+  **Solution:** Inverted the percentage calculation to `100 - (timeLeft / totalTime) * 100`
+
+
+2. Progress Bar Starting Empty:
+  **Problem:** The progress bar was completely empty at the beginning of a time period.
+  **Solution:**  Gemini, the AI tool's answers were not 100% wrong, they were mostly half right. The answers were spread out across a few of the responses, so I used a manual output/desired results to test and work backwards. Found the proper solution: `const strokeDashoffset = (283 * progressPercent) / 100;`
+
+
+3. Incorrect `totalTime` Unit: 
+  **Problem:** The `totalTime` prop was being passed in minutes, not seconds.
+  **Solution:** Converted focusTime to seconds within the `CircularProgressBar` component:  `totalTime={activePeriod === "focus" ? focusTime * 60 : calcBreakTime(focusTime)}`
+
+#### Part Two: Circular Progress Bar + Time Period Cycles Indicator
+
+- We picked a good secondary colour, `#F59E0B` to signify our "break time" period.
+- Named the secondary colour as "Spiced Honey".
+- To simplify and prevent potential error when it comes to calculating the time period in seconds, I have renamed and added `breakTimeInSec(focusTime)` and `focusTimeInSec(focusTime)` functions.
+- Refactored part of the code to make calculating the timeElapse simpler. All that is needed is `setTimeElapsed(timeElapsed => timeElapsed + 1);`
+- We only reset our `timeElapsed` state variable to 0 whenever a time period switches between 'focus' and 'break'.
+- Learned that `timerId` serves as a unique identifier for each instance of `setTimeout()`. The "coat checking" analogy helps. We store its value as a reference using `timerId.current`. 
+- Remember to always clear the timeout when it is no longer needed (stopping or pausing it).Use the `clearTimeout(timerId)` function.
+- Added two separate gradient effects for our `CircularProgressBar` with a 45% diagonal effect. This provides a natural lighting effect in accordance to material design guidelines.
+- When working with gradient effects within SVGs, we need to remember the following steps:
+    1. Identify your colour to start with (`offset="0%"`)
+    2. Where does the colour begin, coordinate-wise (e.g. `x1="100%", y1="0%"`, that is bottom-right)
+    3. Identify your next colour stop (`offset="100%"`)
+    4. Finally, where does this colour end (e.g. `x2="0%", y2="100%"`, that is top-left)
+- Additional note on gradient manipulation, when `offset="0%"`, it refers to the bottom of your SVG. `offset="100%"` is the top.
+- If for some reason you need to rotate your gradient, you use `gradientTransform="rotate(angle/degrees)"`.
+- Added a slight animation to the `CircularProgressBar` so it will have a "refilling" CSS animation when a time period finishes and transitions, `transition-all duration-500`.
+- When tweaking the dimensions of the `CircularProgressBar`, I also realized that I need to adjust both the 
+radius and the center point of the circle. That way, it will remain centered in the `viewPort`.
 
 ### 19th, Sat
 
@@ -143,170 +299,21 @@ function onSaveFocusTimeClicked() {
 - When deploying to Vercel, there were linting issues. Current workaround is to use the commenting statement `// eslint-disable-next-line  @typescript-eslint/no-explicit-any`.
 - Note: Only use it when we know the exact types that we're trying to pass.
 
-### 20th, Sun
+### 18th, Fri
 
-#### Part One: Implementing Circular Progress Bar Animation
-
-**Key Learnings:**
-
-- Decided to externalize the Circular Progress Bar as a distinct component because this would be inline with reusability best practice.
-- For simpler animations, it is more performant to use CSS animation.
-- Took a few tries before we could figure out the correct way to calculate the value for animating the progress bar in a counterclockwise direction.
-- Added a single level ternary operation for feeding the total focus/break time to the component.
-- **TODO:** I will need to set up another test for making sure that the circular progress bar is working and behaving correctly (i.e. when switching between focus and break time periods).
-
-**Challenges & Solutions:**
-
-1. Initial `strokeDashoffset` Calculation: 
-  **Problem:** The first calculation was inverting the progress.
-  **Solution:** Inverted the percentage calculation to `100 - (timeLeft / totalTime) * 100`
-
-
-2. Progress Bar Starting Empty:
-  **Problem:** The progress bar was completely empty at the beginning of a time period.
-  **Solution:**  Gemini, the AI tool's answers were not 100% wrong, they were mostly half right. The answers were spread out across a few of the responses, so I used a manual output/desired results to test and work backwards. Found the proper solution: `const strokeDashoffset = (283 * progressPercent) / 100;`
-
-
-3. Incorrect `totalTime` Unit: 
-  **Problem:** The `totalTime` prop was being passed in minutes, not seconds.
-  **Solution:** Converted focusTime to seconds within the `CircularProgressBar` component:  `totalTime={activePeriod === "focus" ? focusTime * 60 : calcBreakTime(focusTime)}`
-
-#### Part Two: Circular Progress Bar + Time Period Cycles Indicator
-
-- We picked a good secondary colour, `#F59E0B` to signify our "break time" period.
-- Named the secondary colour as "Spiced Honey".
-- To simplify and prevent potential error when it comes to calculating the time period in seconds, I have renamed and added `breakTimeInSec(focusTime)` and `focusTimeInSec(focusTime)` functions.
-- Refactored part of the code to make calculating the timeElapse simpler. All that is needed is `setTimeElapsed(timeElapsed => timeElapsed + 1);`
-- We only reset our `timeElapsed` state variable to 0 whenever a time period switches between 'focus' and 'break'.
-- Learned that `timerId` serves as a unique identifier for each instance of `setTimeout()`. The "coat checking" analogy helps. We store its value as a reference using `timerId.current`. 
-- Remember to always clear the timeout when it is no longer needed (stopping or pausing it).Use the `clearTimeout(timerId)` function.
-- Added two separate gradient effects for our `CircularProgressBar` with a 45% diagonal effect. This provides a natural lighting effect in accordance to material design guidelines.
-- When working with gradient effects within SVGs, we need to remember the following steps:
-    1. Identify your colour to start with (`offset="0%"`)
-    2. Where does the colour begin, coordinate-wise (e.g. `x1="100%", y1="0%"`, that is bottom-right)
-    3. Identify your next colour stop (`offset="100%"`)
-    4. Finally, where does this colour end (e.g. `x2="0%", y2="100%"`, that is top-left)
-- Additional note on gradient manipulation, when `offset="0%"`, it refers to the bottom of your SVG. `offset="100%"` is the top.
-- If for some reason you need to rotate your gradient, you use `gradientTransform="rotate(angle/degrees)"`.
-- Added a slight animation to the `CircularProgressBar` so it will have a "refilling" CSS animation when a time period finishes and transitions, `transition-all duration-500`.
-- When tweaking the dimensions of the `CircularProgressBar`, I also realized that I need to adjust both the 
-radius and the center point of the circle. That way, it will remain centered in the `viewPort`.
-
-### 22nd, Tue: Setting Unique User Sessions
-
-- Implemented unique user-specific sessions without the use of a user account, or logins.
-- Used `localStorage` technique because it's the simplest for the current use-case.
-- Added `isLoading` state variable in the `Home` component.
-- Created a `timeout` of 3s within the `useEffect` hook so that the UI has time to load the `userFocusTime` from `localStorage`.
-- When user saves a new focus time, it will be updated to the `userFocusTime` storage.
-- Added the pulsing animation to the countdown timer "00:00" when `isLoading==true`.
-- Display new countdown timer once loading is finished.
-- When user presses the exit button (top-left), display a translucant white overlay that says the session has ended and they can close the tab/window.
-- Injected "Roboto" font via Google fonts CDN. So the UI now has a consistent font family.
-
-#### Part Two: Laying Some Groundwork for Tomorrow
-
-- I've decided to add a new (but temporary) dimension tabs at the top-left corner of the web page.
-- My goal and mission when it comes to creating a truly responsive design is to make all the dimensions of UI elements relative to the actual page/screen estate size.
-- media queries may have been the way to create responsive web design in the early days, but they are not the best way to create a seamless UX these days.
-- I've been testing this web app at 150% magnification for days (it is my browser's default mode).
-- It also made me realize that my assumptions are not going to be a reliable way to make decision in the ideal dimensions.
-- I need to default my magnification to 100% and use it as the baseline for everything that I want to achieve.
-- Regardless of whether a user's machine has been scaled by default (Windows does it, sometimes at 150%, sometimes 175%, or even 200%), we need to ensure that our UI is able to handle whatever scaling factor the user is having.
-- Are percentages a possible solution? Gemini did suggest using `rem` as a way to scale font sizes. It's something I'll need to explore tomorrow.
-
-### 25, Fri: Smooth-Scaling UI Experiment (Success)
-
-- Implemented a two-column/single-column responsive layout.
-  
-```
-<div className="flex ff-main-container px-8 py-8 w-full h-full"> {/* Our main app's container. */}
-	<div className="flex left-panel bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Left Panel */}
-  </div>
-  <div className="flex right-panel mr-0 bg-white p-4 shadow-md rounded-md items-center justify-center"> {/* Right Panel */}
-  </div>
-</div>
-```
-
-- I have also used tailwindcss's `@apply` directive in my `global.css` file to import the necessary classes.
-
-```
-.ff-main-container {
-  @apply 2xl:flex-row xl:flex-col lg:flex-col md:flex-col;
-  @apply 2xl:space-y-0 2xl:space-x-8;
-  @apply xl:space-y-8 xl:space-x-0 lg:space-y-8 lg:space-x-0 md:space-y-8 md:space-x-0;
-  background-color: #FAF9F6;
-}
-
-.left-panel {
-  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
-  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
-  @apply 2xl:h-full xl:h-[65%] lg:h-[65%] md:h-[65%];
-  @apply 2xl:mr-8;
-}
-
-.right-panel {
-  @apply 2xl:flex-col xl:flex-row lg:flex-row md:flex-row;
-  @apply 2xl:w-[50%] xl:w-full lg:w-full md:w-full;
-  @apply 2xl:h-full xl:h-[35%] lg:h-[35%] md:h-[35%];
-}
-```
-
-- Next, I was able to implement a method to calculate the necessary scaling for the button's fontSize.
-
-```
-function  calcFontSettings(width: number): string {
-	if (width >= 1600) {
-		setBtnIconSize(Math.floor(1.65 * 20));
-		return "1.65rem";
-	} else if (width >= 768 && width < 1600) {
-		let currScaleFactor = 1 + (((width - 768) / (1600 - 768)) * .65);  // <- The formula I've been using.
-		setBtnIconSize(Math.round(currScaleFactor * 20));
-		return `${currScaleFactor}rem`;
-	} else {	// Anything smaller, we can assume to be a mobile phone.
-		setBtnIconSize(Math.floor(0.95 * 20));
-		return "0.95rem";
-	}
-	}
-```
-
-- The scaling can be enhanced further, and I also want to ensure that the scaling takes into account mobile phones 
-  in portrait mode.
-
-```
-<KRButton
-	id="btnSetFocusTime"
-	fillMode={"solid"}
-	themeColor={"secondary"}
-	onClick={onSetFocusTimeClicked}
-	className="kr-buttons"
-	style={{
-		fontSize: `${btnFontSettings.fontSize}`,
-		lineHeight: `${btnFontSettings.fontSize}`,
-		width: "100%",
-		height: "10%",
-		minWidth: "150px",
-		minHeight: "70px",
-		maxWidth: "450px"
-	}}
->
-	<div className="flex w-full items-center">
-		<Timer size={btnIconSize} />&nbsp;Set Focus Time
-	</div>
-</KRButton>
-```
-
-### 26, Sat: Complete Smooth-Scaling Implementation
-
-- Used `gap-x-8` for specifying gaps between layout elements.
-- Modified the horizontal flow for the right panel to a vertical layout in smaller screen sizes.
-- Updated the outer `<div>` of the `CircularProgressBar` component with `max-w-` and `min-w-`.
-
-```
-<div className="2xl:w-[60%] w-[40%] min-w-[260px] max-w-[600px] aspect-square relative">
-```
-
-- I have also added the orientation detection, so it would trigger the `handleResize()` event handler.
+- Started laying out the contents of the app.
+- Centered our app's main container inside the `<body></body>` tag.
+- Set the container's fixed width to 600px.
+- Don't have to set the height because it will automatically wrap our contents.
+- Made the app container a flex-column in order to achieve a top-down layout.
+- Created a `<div />` tag as a separator between the contents for consistency.
+- Added our circular progress bar and timer. I manually set the offset so I can 
+visualize the progress bar in motion when the timer starts counting down.
+- Replaced the buttons in the UI with KendoReact Buttons.
+- Identified potential issues/workarounds especially when we need to toggle the colour of the "Start/Pause/Resume" button. The `themeColor={''}` prop doesn't have an option for grey background. So we will need to cater for that in our coding logic later.
+- Added the KendoReact Window control (part of the dialog library).
+- Still need to replace the input field, perhaps use a NumericTextBox for 
+entering and setting the minutes.
 
 ## Features
 
@@ -317,6 +324,8 @@ for the user.
 - We will set these values now, so we don't have to change many things later on.
 - I want an exit button (just an icon with outlined button) at the top-right corner of the page. It 
 always sticks to that corner.
+
+
 
 ## Colour Scheme:
 

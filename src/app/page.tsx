@@ -262,6 +262,7 @@ export default function Home() {
 
 	useEffect(() => {
 		const storedSessId = localStorage.getItem("userSessId");
+		const dingAudio = new Audio("/ding.mp3");
 		
 		if (storedSessId) {
 			// continue with last session.
@@ -362,6 +363,8 @@ export default function Home() {
 		// Handle cycle or timer completion
 		if (timeLeft == 0) {
 			if (activePeriodType === 'focus') {
+				// When a focus period has ended, we will play the ding.mp3 file once as a notification.
+				dingAudio.play();
 				setActivePeriodType('break');
 				setTimeLeft(breakTimeInSec(focusTime));
 
@@ -371,6 +374,10 @@ export default function Home() {
 					setTimeElapsed(0);	// Reset with each period switch.
 				}
 			} else if (activePeriodType === 'break' && currCycle < TOTAL_CYCLES) {
+				// When a break has ended, we will play the ding.mp3 file twice as a notification.
+				dingAudio.play();
+				dingAudio.onended = () => dingAudio.play();
+
 				setActivePeriodType('focus');
 				setCurrCycle(prevCycle => prevCycle + 1);
 				setTimeLeft(focusTimeInSec(focusTime));
@@ -381,6 +388,9 @@ export default function Home() {
 					setTimeElapsed(0);	// Reset with each period switch.
 				} 
 			} else {
+				// Last break period has ended.
+				dingAudio.play();
+				dingAudio.onended = () => dingAudio.play();
 				appReset();
 			}
 		}
@@ -457,11 +467,10 @@ export default function Home() {
 						onClose={onCloseFocusTimeWindow}
 						title={'Set Focus Time'} 
 						initialHeight={250}
-						initialWidth={.95 * windowDimensions.width}
-						minWidth={230}
+						initialWidth={.30 * windowDimensions.width}
 						className="flex flex-col mx-auto"
 						style={{
-							maxWidth: "320px",
+							minWidth: "320px",
 							marginLeft: "auto",
 							marginRight: "auto"
 						}}	
