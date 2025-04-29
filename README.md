@@ -8,7 +8,7 @@ My main mission and top priority for working on this projects is to focus on pro
 
 ---
 
-# FocusFlow: A Pomodoro-inspired Showcase
+# FocusFlow (v 1.1.0): A Pomodoro-inspired Showcase
 
 To avoid losing focus, I will explain the core features of this simple app in point form. I have also been using Gemini, the AI tool to assist me with building this showcase project. So everything here also serves as our daily recap and notes.
 
