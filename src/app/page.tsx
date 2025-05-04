@@ -263,7 +263,7 @@ export default function Home() {
 	useEffect(() => {
 		const storedSessId = localStorage.getItem("userSessId");
 		const dingAudio = new Audio("/ding.mp3");
-		dingAudio.playbackRate = 1.5;		// Set the default playbackRate to 1.5. Will tweak this with further testing.
+		dingAudio.playbackRate = 2;		// Set the default playbackRate to 1.5. Will tweak this with further testing.
 		
 		if (storedSessId) {
 			// continue with last session.
