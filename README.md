@@ -40,7 +40,7 @@ Notes:
 
 ### 4th May, Sun: Tweak Audio Notification + Time Period Indicator height
 
-- Found that the `playbackRate` is most ideal at 1.75 speed.
+- Found that the `playbackRate` is most ideal at 2.0 speed.
 - Also added the media queries for handling the height of the `TimePeriodIndicator` component.
 
 ### 28th Apr, Mon: Audio Notification Added
