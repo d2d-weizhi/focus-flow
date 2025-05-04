@@ -42,6 +42,7 @@ Notes:
 
 - Found that the `playbackRate` is most ideal at 2.0 speed.
 - Also added the media queries for handling the height of the `TimePeriodIndicator` component.
+- Added Vercel's Analytics tracking.
 
 ### 28th Apr, Mon: Audio Notification Added
 

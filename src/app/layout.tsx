@@ -3,6 +3,7 @@
 //  import { useEffect, useState } from "react";
 // import { v4 as uuidv4 } from "uuid";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react"
 // import { getDeviceInformation } from "./shared/utils";
 import "@progress/kendo-theme-material/dist/material-main.css";
 import "./globals.css";
@@ -80,6 +81,7 @@ export default function RootLayout({
             Session ID: {userSessId}
           </div>
         )} */}
+        <Analytics />
       </body>
     </html>
   );
