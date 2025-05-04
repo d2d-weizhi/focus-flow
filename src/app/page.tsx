@@ -377,8 +377,8 @@ export default function Home() {
 			} else if (activePeriodType === 'break' && currCycle < TOTAL_CYCLES) {
 				// When a break has ended, we will play the ding.mp3 file twice as a notification.
 				dingAudio.play();
-				dingAudio.onended = () => dingAudio.play();
-				dingAudio.onended = null;	// Tested, the "ding" sound won't stop. So we will stop it here.
+				// Tested, the "ding" sound won't stop. So we will stop it here.
+				dingAudio.onended = () => dingAudio.play().then(() => dingAudio.onended = null);
 
 				setActivePeriodType('focus');
 				setCurrCycle(prevCycle => prevCycle + 1);
