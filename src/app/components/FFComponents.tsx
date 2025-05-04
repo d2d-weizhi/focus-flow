@@ -124,7 +124,7 @@ export function CircularProgressBar({ isPaused, timeLeft, totalTime, activePerio
 */
 export function TimePeriodIndicators({ arrPeriods, activePeriodIndex, timeElapsed }: TimePeriodIndicatorsProps) {
   return (
-    <div className="flex w-[75%] h-3 max-w-[650px] min-w-[260px]">
+    <div className="flex w-[75%] time-period-indicators max-w-[650px] min-w-[260px]">
       {arrPeriods.map((period, index) => {
         // 1. Determine if this is the active period
         const isActive = index === activePeriodIndex;

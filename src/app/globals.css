@@ -100,6 +100,10 @@ body {
   font-weight: 300;
 }
 
+.time-period-indicators {
+  @apply h-3;
+}
+
 @media (min-width: 1600px) {
   .kr-buttons {
     font-size: 1.5rem;
@@ -125,5 +129,9 @@ body {
   .kr-buttons {
     font-size: 1rem;
     line-height: 1rem;
+  }
+
+  .time-period-indicators {
+    @apply h-2;
   }
 }

@@ -8,7 +8,7 @@ My main mission and top priority for working on this projects is to focus on pro
 
 ---
 
-# FocusFlow (v 1.1.1): A Pomodoro-inspired Showcase
+# FocusFlow (v 1.1.2): A Pomodoro-inspired Showcase
 
 To avoid losing focus, I will explain the core features of this simple app in point form. I have also been using Gemini, the AI tool to assist me with building this showcase project. So everything here also serves as our daily recap and notes.
 
@@ -38,14 +38,19 @@ Notes:
 
 ## Daily Progress & Recap (Latest to Oldest)
 
-### 28th, Mon: Audio Notification Added
+### 4th May, Sun: Tweak Audio Notification + Time Period Indicator height
+
+- Found that the `playbackRate` is most ideal at 1.75 speed.
+- Also added the media queries for handling the height of the `TimePeriodIndicator` component.
+
+### 28th Apr, Mon: Audio Notification Added
 
 - Added a ding.mp3 file to the project.
 - When a focus period ends, the audio notification will play once.
 - When a break period ends, the audio notification will play twice.
 - **TODO**: I need to test it again just to be sure that it works as intended.
 
-### 26, Sat: Complete Smooth-Scaling Implementation
+### 26 Apr, Sat: Complete Smooth-Scaling Implementation
 
 - Used `gap-x-8` for specifying gaps between layout elements.
 - Modified the horizontal flow for the right panel to a vertical layout in smaller screen sizes.
@@ -57,7 +62,7 @@ Notes:
 
 - I have also added the orientation detection, so it would trigger the `handleResize()` event handler.
 
-### 25, Fri: Smooth-Scaling UI Experiment (Success)
+### 25 Apr, Fri: Smooth-Scaling UI Experiment (Success)
 
 - Implemented a two-column/single-column responsive layout.
   
@@ -138,7 +143,7 @@ function  calcFontSettings(width: number): string {
 </KRButton>
 ```
 
-### 22nd, Tue: Setting Unique User Sessions
+### 22nd Apr, Tue: Setting Unique User Sessions
 
 - Implemented unique user-specific sessions without the use of a user account, or logins.
 - Used `localStorage` technique because it's the simplest for the current use-case.
@@ -161,7 +166,7 @@ function  calcFontSettings(width: number): string {
 - Regardless of whether a user's machine has been scaled by default (Windows does it, sometimes at 150%, sometimes 175%, or even 200%), we need to ensure that our UI is able to handle whatever scaling factor the user is having.
 - Are percentages a possible solution? Gemini did suggest using `rem` as a way to scale font sizes. It's something I'll need to explore tomorrow.
 
-### 20th, Sun
+### 20th Apr, Sun
 
 #### Part One: Implementing Circular Progress Bar Animation
 
@@ -210,7 +215,7 @@ function  calcFontSettings(width: number): string {
 - When tweaking the dimensions of the `CircularProgressBar`, I also realized that I need to adjust both the 
 radius and the center point of the circle. That way, it will remain centered in the `viewPort`.
 
-### 19th, Sat
+### 19th Apr, Sat
 
 #### Part One: Finishing up the UI prototyping
 
@@ -299,7 +304,7 @@ function onSaveFocusTimeClicked() {
 - When deploying to Vercel, there were linting issues. Current workaround is to use the commenting statement `// eslint-disable-next-line  @typescript-eslint/no-explicit-any`.
 - Note: Only use it when we know the exact types that we're trying to pass.
 
-### 18th, Fri
+### 18th Apr, Fri
 
 - Started laying out the contents of the app.
 - Centered our app's main container inside the `<body></body>` tag.
